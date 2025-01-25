@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: #f4f4f9;
+        }
+        .image-container {
+            margin: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .image-container img {
+            width: 300px;
+            height: auto;
+            display: block;
+        }
+    </style>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        // Fetch images from Firebase Storage
+        const storageRef = ref(storage, '1001_NOTES');
+        const galleryDiv = document.getElementById('gallery');
+
+        listAll(storageRef)
+            .then((res) => {
+                res.items.forEach((itemRef) => {
+                    getDownloadURL(itemRef).then((url) => {
+                        const container = document.createElement('div');
+                        container.className = 'image-container';
+
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.alt = "Note Image";
+
+                        container.appendChild(img);
+                        galleryDiv.appendChild(container);
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching images: ", error);
+            });
+    </script>
+</head>
+<body>
+    <div id="gallery"></div>
+</body>
+</html>
