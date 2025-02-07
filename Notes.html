@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load All Data into Alerts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+    <style>
+        .alert img { 
+            border: 2px solid black; 
+            cursor: pointer; 
+            margin-right: 10px; 
+        }
+        .alert { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 10px; 
+            background-color: #f8f9fa; /* Off-white color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+            padding: 10px; 
+        }
+        .modal img { width: 100%; }
+        .modal-dialog { max-height: calc(100% * 4); } /* Increase height by 4 times */
+        @media (max-width: 768px) {
+            .modal-dialog {
+                max-width: 90%;
+                margin: 1.75rem auto;
+            }
+            .modal img {
+                width: 100%;
+                height: auto;
+            }
+        }
+        .modal-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (min-width: 769px) {
+            .alert img {
+                height: 200px; /* Larger size for laptop */
+                width: 200px;
+            }
+            .modal img {
+                height: 80vh; /* Increase height for laptop */
+                width: auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .alert img {
+                height: 100px; /* Normal size for mobile */
+                width: 100px;
+            }
+            .modal img {
+                height: 60vh; /* Increase height for mobile */
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body onload="readData()">
+    <div class="container">
+        <h2 class="mt-4 text-center">Uploaded Notes</h2>
+        <div id="notesContainer"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Image Preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //------------------------------------------CONFIGURATIONS-----------------------
+        var firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
+        function readData() {
+            var storageFolder = localStorage.getItem('storage_folder');
+            if (!storageFolder) {
+                console.error('No storage folder found in localStorage');
+                return;
+            }
+
+            var itemsRef = firebase.database().ref(storageFolder);
+            var notesContainer = document.getElementById('notesContainer');
+
+            itemsRef.once('value', function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(item_snapshot) {
+                    items.push(item_snapshot.val());
+                });
+
+                // Sort items by ID in descending order
+                items.sort(function(a, b) {
+                    return b.ID - a.ID;
+                });
+
+                items.forEach(function(item) {
+                    var alertDiv = document.createElement("div");
+                    alertDiv.className = "alert";
+                    alertDiv.setAttribute("role", "alert");
+
+                    var img = document.createElement("img");
+                    img.src = item.Link;
+                    img.onclick = function() {
+                        document.getElementById('modalImage').src = item.Link;
+                        $('#imageModal').modal('show');
+                    };
+                    alertDiv.appendChild(img);
+
+                    var detailsDiv = document.createElement("div");
+
+                    var nameSpan = document.createElement("span");
+                    nameSpan.innerText = item.ID + ".png";
+                    detailsDiv.appendChild(nameSpan);
+
+                    var br = document.createElement("br");
+                    detailsDiv.appendChild(br);
+
+                    var dateSpan = document.createElement("span");
+                    var date = new Date(item.Time);
+                    dateSpan.innerText = date.toLocaleString();
+                    detailsDiv.appendChild(dateSpan);
+
+                    alertDiv.appendChild(detailsDiv);
+                    notesContainer.appendChild(alertDiv);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

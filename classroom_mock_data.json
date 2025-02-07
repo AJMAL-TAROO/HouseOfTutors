@@ -1,0 +1,31 @@
+{
+  "CLASSROOMS": {
+    "CLASSROOM_1": {
+      "1001_STORAGE_FOLDER": "1001_NOTES",
+      "1001_VR_LINK": "https://mindtech.daily.co/ENGLISH_VR_LINK",
+      "TITLE": "ENGLISH",
+      "TEACHER_ADDRESS": "Belle Rose",
+      "TEACHER_FULL_NAME": "Mohamade Ajmal Taroo",
+      "CLASSROOM_ID": 1001,
+      "TEACHER_TEL": 59185657
+    },
+    "CLASSROOM_2": {
+      "1002_STORAGE_FOLDER": "1002_NOTES",
+      "1002_VR_LINK": "https://mindtech.daily.co/ENGLISH_VR_LINK",
+      "TITLE": "FRENCH",
+      "TEACHER_ADDRESS": "Chemin Grenier",
+      "TEACHER_FULL_NAME": "Nandinee Bistonauth",
+      "CLASSROOM_ID": 1002,
+      "TEACHER_TEL": 58505488
+    },
+    "CLASSROOM_3": {
+      "1003_STORAGE_FOLDER": "1003_NOTES",
+      "1003_LINK": "https://mindtech.daily.co/ENGLISH_VR_LINK",
+      "TITLE": "HISTORY",
+      "TEACHER_ADDRESS": "Belle Rose",
+      "TEACHER_FULL_NAME": "Taslima Taroo",
+      "CLASSROOM_ID": 1003,
+      "TEACHER_TEL": 51234567
+    }
+  }
+}
