@@ -32,7 +32,7 @@
         var ImgName, ImgUrl;
         var files = [];
         var reader;
-        var id_number;
+        var classroomId = localStorage.getItem('CLASSROOM_ID'); // Retrieve CLASSROOM_ID from local storage
 
         //------------------------------------------CONFIGURATIONS-----------------------
         var firebaseConfig = {
@@ -61,13 +61,14 @@
                     document.getElementById("myimg").src = reader.result;
                 }
                 reader.readAsDataURL(files[0]);
+                ImgName = files[0].name; // Get the original file name
             }
             input.click();
         }
 
         //------------------------------------------UPLOAD PROCESS-----------------------
         document.getElementById('upload').onclick = function(){
-            var uploadTask = firebase.storage().ref('1001_NOTES/' + id_number + ".png").put(files[0]);
+            var uploadTask = firebase.storage().ref(classroomId + '_NOTES/' + id_classroom_notes).put(files[0]);
 
             uploadTask.on('state_changed', function(snapshot){
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -80,14 +81,15 @@
                 uploadTask.snapshot.ref.getDownloadURL().then(function(url){
                     ImgUrl = url;
 
-                    firebase.database().ref('1001_NOTES/'+ id_number).set({
-                        ID: id_number,
+                    firebase.database().ref(classroomId + '_NOTES/' + id_classroom_notes).set({
+                        Name: ImgName,
+                        ID: id_classroom_notes,
                         Link: ImgUrl,
                         Time: Date.now()
                     });
 
-                    firebase.database().ref('NUMBERS/ID_NUMBER').set({
-                        NUMBER: id_number
+                    firebase.database().ref("NUMBERS/ID_CLASSROOM_" + classroomId + '_NOTES/').set({
+                        NUMBER: id_classroom_notes
                     });
 
                     nativeToast({
@@ -112,6 +114,11 @@
             firebase.database().ref('NUMBERS/ID_NUMBER/NUMBER').on('value', (snap) => {
                 id_number = snap.val();
                 id_number = id_number + 1;
+            });
+
+            firebase.database().ref('NUMBERS/ID_CLASSROOM_' + classroomId + '_NOTES/NUMBER').on('value', (snap) => {
+                id_classroom_notes = snap.val();
+                id_classroom_notes = id_classroom_notes + 1;
             });
         }
 
