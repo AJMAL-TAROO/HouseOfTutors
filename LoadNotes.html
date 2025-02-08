@@ -13,7 +13,8 @@
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
     <style>
         .alert img { 
-            border: 2px solid black; 
+            border: 2px solid gray; 
+            border-radius: 8px; /* Rounded corners */
             cursor: pointer; 
             margin-right: 10px; 
         }
@@ -62,6 +63,28 @@
                 height: 60vh; /* Increase height for mobile */
                 width: auto;
             }
+        }
+        .details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 10px;
+        }
+        .details span {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .details .name {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .details .date {
+            color: gray;
+            font-size: 0.9em;
+        }
+        .details .separator {
+            border-top: 1px solid #ddd;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -140,17 +163,21 @@
                     alertDiv.appendChild(img);
 
                     var detailsDiv = document.createElement("div");
+                    detailsDiv.className = "details";
 
                     var nameSpan = document.createElement("span");
-                    nameSpan.innerText = item.ID + ".png";
+                    nameSpan.className = "name";
+                    nameSpan.innerText = "Image Name: " + item.ID + ".png";
                     detailsDiv.appendChild(nameSpan);
 
-                    var br = document.createElement("br");
-                    detailsDiv.appendChild(br);
+                    var separator = document.createElement("div");
+                    separator.className = "separator";
+                    detailsDiv.appendChild(separator);
 
                     var dateSpan = document.createElement("span");
+                    dateSpan.className = "date";
                     var date = new Date(item.Time);
-                    dateSpan.innerText = date.toLocaleString();
+                    dateSpan.innerText = "Uploaded on: " + date.toLocaleString();
                     detailsDiv.appendChild(dateSpan);
 
                     alertDiv.appendChild(detailsDiv);
