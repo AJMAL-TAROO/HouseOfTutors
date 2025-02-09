@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <title>Add Student</title>
+</head>
+
+<body style="padding: 10px;">
+    <div class="container mx-auto">
+        <h2 class="text-2xl mb-4">Add Student</h2>
+        <form id="addStudentForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="fullName">Full Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fullName" type="text" placeholder="Full Name">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="tel">Telephone</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tel" type="text" placeholder="Telephone">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="rParty">Responsible Party</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rParty" type="text" placeholder="Responsible Party">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="rPartyTel">Responsible Party Telephone</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rPartyTel" type="text" placeholder="Responsible Party Telephone">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="text" readonly>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="btn btn-primary" type="button" onclick="generatePassword()">Generate Password</button>
+                <button class="btn btn-primary" type="button" onclick="uploadStudentData()">Upload</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Retrieve the student ID number from Firebase and increment it
+        let studentId;
+        window.onload = function() {
+            const studentIdRef = ref(database, "NUMBERS/ID_STUDENT/NUMBER");
+            get(studentIdRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    studentId = snapshot.val();
+                    console.log("Retrieved student ID:", studentId);
+                } else {
+                    console.error("No data available");
+                }
+            }).catch((error) => {
+                console.error("Error retrieving student ID:", error);
+            });
+        };
+
+        // Generate a 6-digit password
+        window.generatePassword = function() {
+            const password = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('password').value = password;
+        };
+
+        // Upload student data to Firebase
+        window.uploadStudentData = function() {
+            const fullName = document.getElementById('fullName').value;
+            const tel = document.getElementById('tel').value;
+            const rParty = document.getElementById('rParty').value;
+            const rPartyTel = document.getElementById('rPartyTel').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const studentData = {
+                FULL_NAME: fullName,
+                TEL: tel,
+                R_PARTY: rParty,
+                R_PARTY_TEL: rPartyTel,
+                VIRTUAL_ROOMS: "",
+                EMAIL: email,
+                PASSWORD: password
+            };
+
+            const newStudentRef = ref(database, `STUDENTS/STUDENTS_${studentId}`);
+            set(newStudentRef, studentData).then(() => {
+                console.log("Student data uploaded successfully");
+                alert("Student data uploaded successfully");
+                // Increment the student ID number in Firebase
+                set(ref(database, "NUMBERS/ID_STUDENT/NUMBER"), parseInt(studentId) + 1);
+            }).catch((error) => {
+                console.error("Error uploading student data:", error);
+            });
+        };
+    </script>
+
+</body>
+
+</html>
