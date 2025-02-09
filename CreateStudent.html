@@ -112,6 +112,9 @@
                 alert("Student data uploaded successfully");
                 // Increment the student ID number in Firebase
                 set(ref(database, "NUMBERS/ID_STUDENT/NUMBER"), parseInt(studentId) + 1);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000); // 2 seconds delay before reloading
             }).catch((error) => {
                 console.error("Error uploading student data:", error);
             });

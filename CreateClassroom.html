@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <title>Add Classroom</title>
+</head>
+
+<body style="padding: 10px;">
+    <div class="container mx-auto">
+        <h2 class="text-2xl mb-4">Add Classroom</h2>
+        <form id="addClassroomForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Title">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherFullName">Teacher Full Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherFullName" type="text" placeholder="Teacher Full Name">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherAddress">Teacher Address</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherAddress" type="text" placeholder="Teacher Address">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherTel">Teacher Telephone</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherTel" type="text" placeholder="Teacher Telephone">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="vrLink">VR Link</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="vrLink" type="text" placeholder="VR Link">
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="btn btn-primary" type="button" onclick="uploadClassroomData()">Upload</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Retrieve the current classroom ID number from Firebase and increment it
+        let classroomId;
+        window.onload = function() {
+            const classroomIdRef = ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER");
+            get(classroomIdRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    classroomId = snapshot.val();
+                    console.log("Retrieved classroom ID:", classroomId);
+                    classroomId++; // Increment the classroom ID
+                } else {
+                    console.error("No data available");
+                }
+            }).catch((error) => {
+                console.error("Error retrieving classroom ID:", error);
+            });
+        };
+
+        // Upload classroom data to Firebase
+        window.uploadClassroomData = function() {
+            const title = document.getElementById('title').value;
+            const teacherFullName = document.getElementById('teacherFullName').value;
+            const teacherAddress = document.getElementById('teacherAddress').value;
+            const teacherTel = document.getElementById('teacherTel').value;
+            const vrLink = document.getElementById('vrLink').value;
+
+            const classroomData = {
+                CLASSROOM_ID: classroomId,
+                STORAGE_FOLDER: `${classroomId}_NOTES`,
+                TEACHER_ADDRESS: teacherAddress,
+                TEACHER_FULL_NAME: teacherFullName,
+                TEACHER_TEL: teacherTel,
+                TITLE: title,
+                VR_LINK: vrLink
+            };
+
+            const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
+            set(newClassroomRef, classroomData).then(() => {
+                console.log("Classroom data uploaded successfully");
+                alert("Classroom data uploaded successfully");
+                // Increment the classroom ID number in Firebase
+                set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
+                // Create a new node for the classroom notes
+                set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
+                // Reload the page after successful upload
+                setTimeout(() => {
+                    location.reload();
+                }, 2000); // 2 seconds delay before reloading
+            }).catch((error) => {
+                console.error("Error uploading classroom data:", error);
+            });
+        };
+    </script>
+
+</body>
+
+</html>
