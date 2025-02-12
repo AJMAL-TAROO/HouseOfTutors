@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <title>Remove Student from Classroom</title>
+</head>
+
+<body style="padding: 10px;">
+    <div class="container mx-auto">
+        <h2 class="text-2xl mb-4">Remove Student from Classroom</h2>
+        <form id="removeStudentFromClassroomForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
+                <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onchange="populateClassrooms()">
+                    <option value="">Select a student</option>
+                </select>
+            </div>
+            <div id="classroomList" class="mb-4"></div>
+        </form>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-box">
+            <h2 class="text-xl">Do you want to remove the student from this classroom?</h2>
+            <div class="modal-action">
+                <button class="btn btn-primary" onclick="confirmRemove()">Yes</button>
+                <button class="btn" onclick="closeModal()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        let selectedStudentId = null;
+        let selectedClassroomId = null;
+
+        // Populate the student dropdown
+        async function populateStudents() {
+            const studentsRef = ref(database, "STUDENTS");
+            const snapshot = await get(studentsRef);
+            if (snapshot.exists()) {
+                const students = snapshot.val();
+                const studentSelect = document.getElementById('studentSelect');
+                for (const key in students) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.text = students[key].FULL_NAME;
+                    studentSelect.appendChild(option);
+                }
+            } else {
+                console.error("No student data available");
+            }
+        }
+
+        // Populate the classroom list based on the selected student's VIRTUAL_ROOMS
+        window.populateClassrooms = async function() {
+            const studentId = document.getElementById('studentSelect').value;
+            selectedStudentId = studentId;
+            if (studentId) {
+                const studentRef = ref(database, `STUDENTS/${studentId}`);
+                const snapshot = await get(studentRef);
+                if (snapshot.exists()) {
+                    const studentData = snapshot.val();
+                    const virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
+                    const classroomList = document.getElementById('classroomList');
+                    classroomList.innerHTML = '';
+
+                    for (const roomId of virtualRooms) {
+                        const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
+                        const classroomSnapshot = await get(classroomRef);
+                        if (classroomSnapshot.exists()) {
+                            const classroom = classroomSnapshot.val();
+                            const row = document.createElement('div');
+                            row.className = 'flex items-center justify-between mb-2';
+                            row.innerHTML = `
+                                <span>${classroom.TITLE}</span>
+                                <button class="btn btn-error btn-sm" onclick="showModal('${roomId}')">Remove</button>
+                            `;
+                            classroomList.appendChild(row);
+                        }
+                    }
+                } else {
+                    console.error("No student data available");
+                }
+            }
+        }
+
+        // Show confirmation modal
+        window.showModal = function(classroomId) {
+            selectedClassroomId = classroomId;
+            document.getElementById('confirmationModal').classList.add('modal-open');
+        };
+
+        // Close confirmation modal
+        window.closeModal = function() {
+            document.getElementById('confirmationModal').classList.remove('modal-open');
+        };
+
+        // Confirm removal of student from classroom
+        window.confirmRemove = async function() {
+            if (selectedStudentId && selectedClassroomId) {
+                const studentRef = ref(database, `STUDENTS/${selectedStudentId}`);
+                const snapshot = await get(studentRef);
+                if (snapshot.exists()) {
+                    const studentData = snapshot.val();
+                    let virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
+                    virtualRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId);
+                    await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
+
+                    nativeToast({
+                        message: 'Student removed from classroom successfully!',
+                        position: 'center',
+                        rounded: true,
+                        timeout: 2000,
+                        type: 'success',
+                        icon: false,
+                        edge: true,
+                        closeOnClick: false
+                    });
+
+                    // Refresh the classroom list
+                    populateClassrooms();
+                } else {
+                    console.error("No student data available");
+                }
+            }
+            closeModal();
+        };
+
+        // Populate students dropdown on page load
+        window.onload = function() {
+            populateStudents();
+        };
+    </script>
+
+</body>
+
+</html>
