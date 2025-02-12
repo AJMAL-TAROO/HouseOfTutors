@@ -42,7 +42,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -62,9 +62,10 @@
 
         // Retrieve the current classroom ID number from Firebase and increment it
         let classroomId;
-        window.onload = function() {
-            const classroomIdRef = ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER");
-            get(classroomIdRef).then((snapshot) => {
+        window.onload = async function() {
+            try {
+                const classroomIdRef = ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER");
+                const snapshot = await get(classroomIdRef);
                 if (snapshot.exists()) {
                     classroomId = snapshot.val();
                     console.log("Retrieved classroom ID:", classroomId);
@@ -72,13 +73,13 @@
                 } else {
                     console.error("No data available");
                 }
-            }).catch((error) => {
+            } catch (error) {
                 console.error("Error retrieving classroom ID:", error);
-            });
+            }
         };
 
         // Upload classroom data to Firebase
-        window.uploadClassroomData = function() {
+        window.uploadClassroomData = async function() {
             const title = document.getElementById('title').value;
             const teacherFullName = document.getElementById('teacherFullName').value;
             const teacherAddress = document.getElementById('teacherAddress').value;
@@ -95,21 +96,56 @@
                 VR_LINK: vrLink
             };
 
-            const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
-            set(newClassroomRef, classroomData).then(() => {
+            try {
+                const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
+                await set(newClassroomRef, classroomData);
                 console.log("Classroom data uploaded successfully");
                 alert("Classroom data uploaded successfully");
+
                 // Increment the classroom ID number in Firebase
-                set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
+                await set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
                 // Create a new node for the classroom notes
-                set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
-                // Reload the page after successful upload
-                setTimeout(() => {
-                    location.reload();
-                }, 2000); // 2 seconds delay before reloading
-            }).catch((error) => {
+                await set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
+
+                // Retrieve the email from local storage
+                const email = localStorage.getItem('userEmail');
+                if (email) {
+                    // Find the admin with the matching email
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        let adminKey = null;
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === email) {
+                                adminKey = key;
+                                break;
+                            }
+                        }
+
+                        if (adminKey) {
+                            const adminData = admins[adminKey];
+                            const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.toString().split(',') : [];
+                            virtualRooms.push(classroomId.toString());
+                            await update(ref(database, `ADMIN/${adminKey}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
+                            console.log("VIRTUAL_ROOMS updated successfully");
+
+                            // Reload the page after successful upload
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000); // 2 seconds delay before reloading
+                        } else {
+                            console.error("Admin with the specified email not found");
+                        }
+                    } else {
+                        console.error("No admin data available");
+                    }
+                } else {
+                    console.error("No email found in local storage");
+                }
+            } catch (error) {
                 console.error("Error uploading classroom data:", error);
-            });
+            }
         };
     </script>
 
