@@ -1,0 +1,204 @@
+{
+  "1001_NOTES": [
+    {
+      "ID": 1,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F11?alt=media&token=b6906474-4016-4cec-8842-ebfb657a0caa",
+      "Name": "1_image.png",
+      "Time": 1739019952284
+    },
+    {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F2?alt=media&token=bfa903c2-fd8f-483f-ae18-ab276440574f",
+      "Name": "1_image.png",
+      "Time": 1739299368482
+    },
+    {
+      "ID": 3,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F3?alt=media&token=368220d3-d5f3-4d9a-996b-5095e03edd34",
+      "Name": "2image.png",
+      "Time": 1739299444823
+    },
+    {
+      "ID": 4,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F4?alt=media&token=93fa2f84-83cd-45e3-a594-d49b9c093f53",
+      "Name": "3_image.png",
+      "Time": 1739299556496
+    }
+  ],
+  "1002_NOTES": {
+    "2": {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F2?alt=media&token=7a79138f-ddae-4f27-924f-7f7ee45c0187",
+      "Name": "3_image.png",
+      "Time": 1739299892809
+    }
+  },
+  "1003_NOTES": [
+    {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1003_NOTES%2F2?alt=media&token=d71f4178-c4b0-4fd9-9e55-a16e5a431535",
+      "Name": "3_image.png",
+      "Time": 1739300801707
+    },
+    {
+      "ID": 3,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1003_NOTES%2F3?alt=media&token=0875d3bb-91e7-454d-9390-324516f98bec",
+      "Name": "2image.png",
+      "Time": 1739300916646
+    }
+  ],
+  "1004_NOTES": [
+    {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1004_NOTES%2F2?alt=media&token=c06a9395-9983-41b1-961b-ee064bfbca24",
+      "Name": "1_image.png",
+      "Time": 1739301331141
+    },
+    {
+      "ID": 3,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1004_NOTES%2F3?alt=media&token=b5561f23-7f86-4521-a88a-149612c7736d",
+      "Name": "3_image.png",
+      "Time": 1739301413662
+    },
+    {
+      "ID": 4,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1004_NOTES%2F4?alt=media&token=7ec82747-26d1-405b-bd4e-608b539510e3",
+      "Name": "2image.png",
+      "Time": 1739301439295
+    },
+    {
+      "ID": 5,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1004_NOTES%2F5?alt=media&token=bbd82e93-761d-4afa-a422-8882552e1030",
+      "Name": "2image.png",
+      "Time": 1739301480330
+    }
+  ],
+  "ADMIN": {
+    "ADMIN_1": {
+      "EMAIL": "ajtaroo@gmail.com",
+      "FULL_NAME": "Ajmal Taroo",
+      "PASSWORD": "585054",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001,1002,1003"
+    },
+    "ADMIN_2": {
+      "EMAIL": "shalini@gmail.com",
+      "FULL_NAME": "Shalini Ramful",
+      "PASSWORD": "123456",
+      "R_PARTY": "Joe Jean",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "58505488",
+      "VIRTUAL_ROOMS": "1001,1004"
+    }
+  },
+  "CLASSROOMS": {
+    "CLASSROOM_1001": {
+      "CLASSROOM_ID": 1001,
+      "STORAGE_FOLDER": "1001_NOTES",
+      "TEACHER_ADDRESS": "Belle Rose",
+      "TEACHER_FULL_NAME": "Mohamade Ajmal Taroo",
+      "TEACHER_TEL": 59185657,
+      "TITLE": "ENGLISH",
+      "VR_LINK": "https://mindtech.daily.co/ENGLISH_VR_LINK"
+    },
+    "CLASSROOM_1002": {
+      "CLASSROOM_ID": 1002,
+      "STORAGE_FOLDER": "1002_NOTES",
+      "TEACHER_ADDRESS": "Belle Rose",
+      "TEACHER_FULL_NAME": "Ajmal Taroo",
+      "TEACHER_TEL": "58505488",
+      "TITLE": "Mathematics",
+      "VR_LINK": "maths.mu"
+    },
+    "CLASSROOM_1003": {
+      "CLASSROOM_ID": 1003,
+      "STORAGE_FOLDER": "1003_NOTES",
+      "TEACHER_ADDRESS": "Belle Rose",
+      "TEACHER_FULL_NAME": "Mohamade Ajmal Taroo",
+      "TEACHER_TEL": "58505488",
+      "TITLE": "Computer Science",
+      "VR_LINK": "computer.mu"
+    },
+    "CLASSROOM_1004": {
+      "CLASSROOM_ID": 1004,
+      "STORAGE_FOLDER": "1004_NOTES",
+      "TEACHER_ADDRESS": "rose hill",
+      "TEACHER_FULL_NAME": "Shalini Ramful",
+      "TEACHER_TEL": "58505488",
+      "TITLE": "French",
+      "VR_LINK": "french.mu"
+    }
+  },
+  "NUMBERS": {
+    "CURRENT_ID_CLASSROOM": {
+      "NUMBER": 1004
+    },
+    "ID_CLASSROOM_1001_NOTES": {
+      "NUMBER": 4
+    },
+    "ID_CLASSROOM_1002_NOTES": {
+      "NUMBER": 2
+    },
+    "ID_CLASSROOM_1003_NOTES": {
+      "NUMBER": 3
+    },
+    "ID_CLASSROOM_1004_NOTES": {
+      "NUMBER": 5
+    },
+    "ID_NUMBER": {
+      "NUMBER": 100
+    },
+    "ID_STUDENT": {
+      "NUMBER": 6
+    }
+  },
+  "STUDENTS": {
+    "STUDENTS_1": {
+      "EMAIL": "ajtaroo@gmail.com",
+      "FULL_NAME": "Shaheena Taroo",
+      "PASSWORD": "585054",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "STUDENTS_2": {
+      "EMAIL": "po@gmail.com",
+      "FULL_NAME": "kungfu panda",
+      "PASSWORD": "695206",
+      "R_PARTY": "chifu",
+      "R_PARTY_TEL": "999",
+      "TEL": "57882383",
+      "VIRTUAL_ROOMS": ""
+    },
+    "STUDENTS_3": {
+      "EMAIL": "joe@gmail.com",
+      "FULL_NAME": "joe jean",
+      "PASSWORD": "250265",
+      "R_PARTY": "chachi",
+      "R_PARTY_TEL": "41234567",
+      "TEL": "5123456",
+      "VIRTUAL_ROOMS": ""
+    },
+    "STUDENTS_4": {
+      "EMAIL": "tanweer@gmail.com",
+      "FULL_NAME": "tanweer taroo",
+      "PASSWORD": "817099",
+      "R_PARTY": "ahmed taroo",
+      "R_PARTY_TEL": "4957082",
+      "TEL": "57146952",
+      "VIRTUAL_ROOMS": ""
+    },
+    "STUDENTS_5": {
+      "EMAIL": "azhaar@gmail.com",
+      "FULL_NAME": "azhaar taroo",
+      "PASSWORD": "890872",
+      "R_PARTY": "ajmal taroo",
+      "R_PARTY_TEL": "59185657",
+      "TEL": "45123456",
+      "VIRTUAL_ROOMS": ""
+    }
+  }
+}
