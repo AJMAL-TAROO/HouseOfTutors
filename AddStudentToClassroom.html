@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <title>Add Student to Classroom</title>
+</head>
+
+<body style="padding: 10px;">
+    <div class="container mx-auto">
+        <h2 class="text-2xl mb-4">Add Student to Classroom</h2>
+        <form id="addStudentToClassroomForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
+                <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <option value="">Select a student</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="classroomSelect">Select Classroom</label>
+                <select id="classroomSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <option value="">Select a classroom</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="btn btn-primary" type="button" onclick="addStudentToClassroom()">Add Student to Classroom</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Retrieve the email from local storage
+        const email = localStorage.getItem('userEmail');
+
+        // Populate the student dropdown
+        async function populateStudents() {
+            const studentsRef = ref(database, "STUDENTS");
+            const snapshot = await get(studentsRef);
+            if (snapshot.exists()) {
+                const students = snapshot.val();
+                const studentSelect = document.getElementById('studentSelect');
+                for (const key in students) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.text = students[key].FULL_NAME;
+                    studentSelect.appendChild(option);
+                }
+            } else {
+                console.error("No student data available");
+            }
+        }
+
+        // Populate the classroom dropdown based on admin's VIRTUAL_ROOMS
+        async function populateClassrooms() {
+            if (email) {
+                const adminRef = ref(database, "ADMIN");
+                const snapshot = await get(adminRef);
+                if (snapshot.exists()) {
+                    const admins = snapshot.val();
+                    let virtualRooms = [];
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email) {
+                            virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            break;
+                        }
+                    }
+
+                    const classroomSelect = document.getElementById('classroomSelect');
+                    for (const roomId of virtualRooms) {
+                        const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
+                        const classroomSnapshot = await get(classroomRef);
+                        if (classroomSnapshot.exists()) {
+                            const classroom = classroomSnapshot.val();
+                            const option = document.createElement('option');
+                            option.value = roomId;
+                            option.text = classroom.TITLE;
+                            classroomSelect.appendChild(option);
+                        }
+                    }
+                } else {
+                    console.error("No admin data available");
+                }
+            } else {
+                console.error("No email found in local storage");
+            }
+        }
+
+        // Add student to classroom
+        window.addStudentToClassroom = async function() {
+            const studentId = document.getElementById('studentSelect').value;
+            const classroomId = document.getElementById('classroomSelect').value;
+
+            if (studentId && classroomId) {
+                const studentRef = ref(database, `STUDENTS/${studentId}`);
+                const snapshot = await get(studentRef);
+                if (snapshot.exists()) {
+                    const studentData = snapshot.val();
+                    const virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
+                    if (!virtualRooms.includes(classroomId)) {
+                        virtualRooms.push(classroomId);
+                        await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
+                        nativeToast({
+                            message: 'Student added to classroom successfully!',
+                            position: 'center',
+                            rounded: true,
+                            timeout: 2000,
+                            type: 'success',
+                            icon: false,
+                            edge: true,
+                            closeOnClick: false
+                        });
+
+                        // Refresh the page after the toast appears
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000); // 2 seconds delay before reloading
+                    } else {
+                        nativeToast({
+                            message: 'Student is already in the selected classroom',
+                            position: 'center',
+                            rounded: true,
+                            timeout: 2000,
+                            type: 'warning',
+                            icon: false,
+                            edge: true,
+                            closeOnClick: false
+                        });
+                    }
+                } else {
+                    console.error("No student data available");
+                }
+            } else {
+                nativeToast({
+                    message: 'Please select both a student and a classroom',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+            }
+        }
+
+        // Populate dropdowns on page load
+        window.onload = function() {
+            populateStudents();
+            populateClassrooms();
+        };
+    </script>
+
+</body>
+
+</html>
