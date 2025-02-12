@@ -22,8 +22,8 @@
                 </div>
                 <ul style="color:black" tabindex="0"
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a href="UploadNotes.html">Upload notes</a></li>
-                    <li><a>Add students</a></li>
+                    <li><a href="CreateClassroom.html">Create new classroom</a></li>
+                    <li><a href="AddStudentToClassroom.html">Add student to classroom</a></li>
                 </ul>
             </div>
         </div>
@@ -67,7 +67,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -85,52 +85,76 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Reference to the CLASSROOMS node
-        const classroomsRef = ref(database, "CLASSROOMS");
+        // Retrieve the email from local storage
+        const email = localStorage.getItem('userEmail');
 
-        // Retrieve VIRTUAL_ROOMS from localStorage and split into an array
-        const virtualRooms = localStorage.getItem("VIRTUAL_ROOMS");
-        const allowedClassroomIds = virtualRooms ? virtualRooms.split(",").map(Number) : []; // Convert to numbers
+        if (email) {
+            // Find the admin with the matching email and retrieve VIRTUAL_ROOMS
+            const adminRef = ref(database, "ADMIN");
+            get(adminRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const admins = snapshot.val();
+                    let virtualRooms = [];
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email) {
+                            virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            break;
+                        }
+                    }
 
-        // Fetch data and populate cards
-        const classroomContainer = document.getElementById("classroomContainer");
+                    // Convert virtualRooms to numbers
+                    const allowedClassroomIds = virtualRooms.map(Number);
 
-        onValue(classroomsRef, (snapshot) => {
-            const classrooms = snapshot.val();
+                    // Reference to the CLASSROOMS node
+                    const classroomsRef = ref(database, "CLASSROOMS");
 
-            // Clear existing content
-            classroomContainer.innerHTML = "";
+                    // Fetch data and populate cards
+                    const classroomContainer = document.getElementById("classroomContainer");
 
-            // Iterate over classrooms and filter by allowed IDs
-            Object.values(classrooms).forEach((classroom) => {
-                if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
-                    // Generate the VR link dynamically
-                    const classroomLinkKey = `VR_LINK`;
-                    const classroomLink = classroom[classroomLinkKey] || "#";
-                    // Create the card
-                    const card = document.createElement("div");
-                    card.className = "card bg-primary text-primary-content w-96";
-                    card.innerHTML = `
-                        <div class="card-body">
-                            <h2 class="card-title">${classroom.TITLE}</h2>
-                            <p>Teacher: ${classroom.TEACHER_FULL_NAME}</p>
-                            <p>Address: ${classroom.TEACHER_ADDRESS}</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn" onclick="openModal('${classroomLink}')">Join VR Class</button>
-                            </div>
-                            <div class="card-actions justify-end">
-                                <button class="btn" onclick="storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>
-                            </div>
-                            <div class="card-actions justify-end">
-                                <button class="btn btn-circle btn-outline" onclick="redirectToUploadNotes(${classroom.CLASSROOM_ID})">+</button>
-                            </div>
-                        </div>
-                    `;
-                    classroomContainer.appendChild(card);
+                    onValue(classroomsRef, (snapshot) => {
+                        const classrooms = snapshot.val();
+
+                        // Clear existing content
+                        classroomContainer.innerHTML = "";
+
+                        // Iterate over classrooms and filter by allowed IDs
+                        Object.values(classrooms).forEach((classroom) => {
+                            if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
+                                // Generate the VR link dynamically
+                                const classroomLinkKey = `VR_LINK`;
+                                const classroomLink = classroom[classroomLinkKey] || "#";
+                                // Create the card
+                                const card = document.createElement("div");
+                                card.className = "card bg-primary text-primary-content w-96";
+                                card.innerHTML = `
+                                    <div class="card-body">
+                                        <h2 class="card-title">${classroom.TITLE}</h2>
+                                        <p>Teacher: ${classroom.TEACHER_FULL_NAME}</p>
+                                        <p>Address: ${classroom.TEACHER_ADDRESS}</p>
+                                        <div class="card-actions justify-end">
+                                            <button class="btn" onclick="openModal('${classroomLink}')">Join VR Class</button>
+                                        </div>
+                                        <div class="card-actions justify-end">
+                                            <button class="btn" onclick="storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>
+                                        </div>
+                                        <div class="card-actions justify-end">
+                                            <button class="btn btn-circle btn-outline" onclick="redirectToUploadNotes(${classroom.CLASSROOM_ID})">+</button>
+                                        </div>
+                                    </div>
+                                `;
+                                classroomContainer.appendChild(card);
+                            }
+                        });
+                    });
+                } else {
+                    console.error("No admin data available");
                 }
+            }).catch((error) => {
+                console.error("Error retrieving admin data:", error);
             });
-
-        });
+        } else {
+            console.error("No email found in local storage");
+        }
 
         // Define the function in the global scope
         window.storeStorageFolder = function(storageFolder) {
@@ -164,8 +188,6 @@
             localStorage.setItem('CLASSROOM_ID', classroomId);
             window.location.href = 'UploadNotes.html';
         };
-
-        console.log("Allowed Classroom IDs:", allowedClassroomIds);
     </script>
 
 </body>
