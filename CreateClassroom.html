@@ -31,10 +31,6 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherTel">Teacher Telephone</label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherTel" type="text" placeholder="Teacher Telephone">
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="vrLink">VR Link</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="vrLink" type="text" placeholder="VR Link">
-            </div>
             <div class="flex items-center justify-between">
                 <button class="btn btn-primary" type="button" onclick="uploadClassroomData()">Upload</button>
             </div>
@@ -86,10 +82,10 @@
             const teacherFullName = document.getElementById('teacherFullName').value;
             const teacherAddress = document.getElementById('teacherAddress').value;
             const teacherTel = document.getElementById('teacherTel').value;
-            const vrLink = document.getElementById('vrLink').value;
+            const vrLink = "https://mindtech.daily.co/HouseOfTutors";
 
             // Validate all fields
-            if (!title || !teacherFullName || !teacherAddress || !teacherTel || !vrLink) {
+            if (!title || !teacherFullName || !teacherAddress || !teacherTel) {
                 nativeToast({
                     message: 'All fields must be filled!',
                     position: 'center',
