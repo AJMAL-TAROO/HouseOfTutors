@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            border: none;
+            height: calc(100% - 56px); /* Adjust for navbar height */
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='dashboardadmin.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
+        </div>
+    </nav>
+    <iframe src="https://www.whiteboard.team/app/board/aI7kaY6e"></iframe>
+</body>
+</html>

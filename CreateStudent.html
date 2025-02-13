@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <title>Add Student</title>
 </head>
 
@@ -96,6 +98,21 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
+            // Validate all fields
+            if (!fullName || !tel || !rParty || !rPartyTel || !email || !password) {
+                nativeToast({
+                    message: 'All fields must be filled!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+                return;
+            }
+
             const studentData = {
                 FULL_NAME: fullName,
                 TEL: tel,
@@ -109,7 +126,16 @@
             const newStudentRef = ref(database, `STUDENTS/STUDENTS_${studentId}`);
             set(newStudentRef, studentData).then(() => {
                 console.log("Student data uploaded successfully");
-                alert("Student data uploaded successfully");
+                nativeToast({
+                    message: 'Student data uploaded successfully!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'success',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
                 // Increment the student ID number in Firebase
                 set(ref(database, "NUMBERS/ID_STUDENT/NUMBER"), parseInt(studentId) + 1);
                 setTimeout(() => {

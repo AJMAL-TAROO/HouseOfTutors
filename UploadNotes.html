@@ -5,27 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Save and load image from firebase</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
-    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <style>
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 56px); /* Adjust for navbar height */
+        }
+    </style>
 </head>
 
-<body onload="readData()" class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="container mx-auto p-4 bg-white rounded-lg shadow-lg">
-        <div class="text-center mb-4">
-            <img id="myimg" class="mx-auto border-2 border-black" style="max-height: 540px; max-width: 320px;">
-            <label id="upProgress" class="block mt-2 text-gray-700"></label>
+<body onload="readData()" class="bg-gray-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='dashboardadmin.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
-        <div class="text-center">
-            <button id="select" class="btn btn-primary m-2">Select Image</button>
-            <button id="upload" class="btn btn-success m-2">Send</button>
+    </nav>
+
+    <div class="container centered-content">
+        <div class="p-4 bg-white rounded-lg shadow-lg">
+            <div class="text-center mb-4">
+                <img id="myimg" class="mx-auto border-2 border-black" style="max-height: 540px; max-width: 320px;">
+                <label id="upProgress" class="block mt-2 text-gray-700"></label>
+            </div>
+            <div class="text-center">
+                <button id="select" class="btn btn-primary m-2">Select Image</button>
+                <button id="upload" class="btn btn-success m-2">Send</button>
+            </div>
         </div>
     </div>
 

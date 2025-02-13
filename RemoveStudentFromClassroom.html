@@ -14,7 +14,7 @@
 <body style="padding: 10px;">
     <div class="container mx-auto">
         <h2 class="text-2xl mb-4">Remove Student from Classroom</h2>
-        <form id="removeStudentFromClassroomForm">
+        <form id="removeStudentFromClassroomForm" onsubmit="return false;">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
                 <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onchange="populateClassrooms()">
@@ -97,10 +97,10 @@
                         if (classroomSnapshot.exists()) {
                             const classroom = classroomSnapshot.val();
                             const row = document.createElement('div');
-                            row.className = 'flex items-center justify-between mb-2';
+                            row.className = 'flex items-center justify-between mb-2 p-2 bg-gray-100 rounded shadow';
                             row.innerHTML = `
-                                <span>${classroom.TITLE}</span>
-                                <button class="btn btn-error btn-sm" onclick="showModal('${roomId}')">Remove</button>
+                                <span class="text-gray-700">${classroom.TITLE}</span>
+                                <button type="button" class="btn btn-error btn-sm" onclick="showModal('${roomId}')">Remove</button>
                             `;
                             classroomList.appendChild(row);
                         }
@@ -144,8 +144,10 @@
                         closeOnClick: false
                     });
 
-                    // Refresh the classroom list
-                    populateClassrooms();
+                    // Refresh the page after the toast appears
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000); // 2 seconds delay before reloading
                 } else {
                     console.error("No student data available");
                 }

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <title>Add Classroom</title>
 </head>
 
@@ -86,6 +88,21 @@
             const teacherTel = document.getElementById('teacherTel').value;
             const vrLink = document.getElementById('vrLink').value;
 
+            // Validate all fields
+            if (!title || !teacherFullName || !teacherAddress || !teacherTel || !vrLink) {
+                nativeToast({
+                    message: 'All fields must be filled!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+                return;
+            }
+
             const classroomData = {
                 CLASSROOM_ID: classroomId,
                 STORAGE_FOLDER: `${classroomId}_NOTES`,
@@ -100,7 +117,16 @@
                 const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
                 await set(newClassroomRef, classroomData);
                 console.log("Classroom data uploaded successfully");
-                alert("Classroom data uploaded successfully");
+                nativeToast({
+                    message: 'Classroom data uploaded successfully!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'success',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
 
                 // Increment the classroom ID number in Firebase
                 await set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
