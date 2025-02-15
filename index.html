@@ -1,9 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script
-        src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <title>Login Page</title>
 </head>
 
@@ -42,7 +44,7 @@
                             class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign
                             in</button>
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Don’t have an account yet? <a href="#"
+                            Don’t have an account yet? <a href="#" id="signUpLink"
                                 class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
                         </p>
                     </div>
@@ -50,6 +52,15 @@
             </div>
         </div>
     </section>
+
+    <!-- Sign Up Modal -->
+    <div id="signUpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+            <h2 class="text-xl font-bold mb-4">Contact Information</h2>
+            <p>You need to contact your teacher to get your login credentials.</p>
+            <button id="closeModalBtn" class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg">Close</button>
+        </div>
+    </div>
 
     <script type="module">
         //------------------------------------------FIREBASE INITIALIZATION PROCESS-----------------------
@@ -125,6 +136,15 @@
                 );
             });
         }
+
+        //------------------------------------------SIGN UP MODAL-----------------------
+        document.getElementById('signUpLink').addEventListener('click', () => {
+            document.getElementById('signUpModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('signUpModal').classList.add('hidden');
+        });
     </script>
 
 </body>
