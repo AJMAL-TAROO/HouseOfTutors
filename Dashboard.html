@@ -96,15 +96,16 @@
                     const classroomLink = classroom[classroomLinkKey] || "#";
                     // Create the card
                     const card = document.createElement("div");
-                    card.className = "card bg-primary text-primary-content w-96";
+                    card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg";
                     card.innerHTML = `
-                        <div class="card-body">
-                            <h1 class="card-title">${classroom.TITLE}</h1>
+                        <div class="card-body flex flex-col justify-between">
+                            <h1 class="card-title text-3xl">${classroom.TITLE}</h1>
                             <div class="card-actions justify-end">
-                                <button class="btn" onclick="openModal('${classroomLink}')">Join VR Class</button>
+                                <button class="btn btn-outline text-white border-white" onclick="openModal('${classroomLink}')">Join VR Class</button>
                             </div>
                             <div class="card-actions justify-end">
-                            <button class="btn" onclick="storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>                            </div>
+                                <button class="btn btn-outline text-white border-white" onclick="storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>
+                            </div>
                         </div>
                     `;
                     classroomContainer.appendChild(card);
