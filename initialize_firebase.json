@@ -1,0 +1,39 @@
+{
+  "ADMIN": {
+    "ADMIN_1": {
+      "EMAIL": "ajtaroo@gmail.com",
+      "FULL_NAME": "Ajmal Taroo",
+      "PASSWORD": "585054",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "ADMIN_2": {
+      "EMAIL": "house.of.tutors.48@gmail.com",
+      "FULL_NAME": "Shalini Ramful",
+      "PASSWORD": "890555",
+      "R_PARTY": "ajmal taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "58505488",
+      "VIRTUAL_ROOMS": ""
+    }
+  },
+  "CLASSROOMS": {
+    "def_classroom": "default"
+  },
+  "NUMBERS": {
+    "CURRENT_ID_CLASSROOM": {
+      "NUMBER": 1000
+    },
+    "ID_NUMBER": {
+      "NUMBER": 100
+    },
+    "ID_STUDENT": {
+      "NUMBER": 1
+    }
+  },
+  "STUDENTS": {
+    "def_student": "default"
+  }
+}
