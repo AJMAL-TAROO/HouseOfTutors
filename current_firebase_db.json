@@ -1,0 +1,63 @@
+{
+  "ADMIN": {
+    "ADMIN_1": {
+      "EMAIL": "ajtaroo@gmail.com",
+      "FULL_NAME": "Ajmal Taroo",
+      "PASSWORD": "585054",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "ADMIN_2": {
+      "EMAIL": "house.of.tutors.48@gmail.com",
+      "FULL_NAME": "Shalini Ramful",
+      "PASSWORD": "890555",
+      "R_PARTY": "ajmal taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "58505488",
+      "VIRTUAL_ROOMS": "1001,1002"
+    }
+  },
+  "CLASSROOMS": {
+    "CLASSROOM_1001": {
+      "CLASSROOM_ID": 1001,
+      "STORAGE_FOLDER": "1001_NOTES",
+      "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
+      "TEACHER_FULL_NAME": "Shalini Lara Ramful",
+      "TEACHER_TEL": "+230 5797 2469",
+      "TITLE": "Alishah's Individual Class",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
+    "CLASSROOM_1002": {
+      "CLASSROOM_ID": 1002,
+      "STORAGE_FOLDER": "1002_NOTES",
+      "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
+      "TEACHER_FULL_NAME": "Shalini Lara Ramful",
+      "TEACHER_TEL": "+230 5797 2469",
+      "TITLE": "Shahbaz's Individual Class",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
+    "def_classroom": "default"
+  },
+  "NUMBERS": {
+    "CURRENT_ID_CLASSROOM": {
+      "NUMBER": 1002
+    },
+    "ID_CLASSROOM_1001_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_CLASSROOM_1002_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_NUMBER": {
+      "NUMBER": 100
+    },
+    "ID_STUDENT": {
+      "NUMBER": 1
+    }
+  },
+  "STUDENTS": {
+    "def_student": "default"
+  }
+}
