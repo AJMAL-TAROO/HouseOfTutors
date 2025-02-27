@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Time Table</title>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
+        <div class="navbar bg-purple-800 text-white rounded-t-lg p-4">
+            <div class="navbar-start">
+                <button class="btn btn-ghost btn-circle" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="navbar-center">
+                <a class="btn btn-ghost text-xl">House Of Tutors</a>
+            </div>
+        </div>
+
+        <div class="container mx-auto mt-5">
+            <h1 class="text-3xl font-bold mb-4 text-center">Time Table Form</h1>
+            <form id="timeTableForm" class="space-y-4">
+                <div>
+                    <label for="daySelect" class="block mb-2 text-sm font-medium text-gray-900">Select Day</label>
+                    <select id="daySelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="7">Sunday</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="classroomSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Classroom</label>
+                    <select id="classroomSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Time</label>
+                    <div class="flex space-x-4">
+                        <select id="startTime" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-24 p-2.5">
+                            <!-- Options for start time will be populated dynamically -->
+                        </select>
+                        <span class="self-center">to</span>
+                        <select id="endTime" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-24 p-2.5">
+                            <!-- Options for end time will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full text-white bg-purple-800 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
+            </form>
+
+            <h2 class="text-2xl font-bold mt-8 mb-4 text-center">Time Table Overview</h2>
+            <div id="timeTableOverview" class="bg-white shadow-md rounded-lg p-4">
+                <!-- Time table overview will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Populate classroom dropdown
+        const classroomSelect = document.getElementById('classroomSelect');
+        const classroomsRef = ref(database, 'CLASSROOMS');
+        const classrooms = {};
+        onValue(classroomsRef, (snapshot) => {
+            const data = snapshot.val();
+            for (const key in data) {
+                if (data.hasOwnProperty(key) && key.startsWith('CLASSROOM_')) {
+                    classrooms[key] = data[key].TITLE;
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = data[key].TITLE;
+                    classroomSelect.appendChild(option);
+                }
+            }
+        });
+
+        // Populate time dropdowns
+        const startTimeSelect = document.getElementById('startTime');
+        const endTimeSelect = document.getElementById('endTime');
+        for (let hour = 0; hour < 24; hour++) {
+            const time = `${hour.toString().padStart(2, '0')}:00`;
+            const startOption = document.createElement('option');
+            startOption.value = time;
+            startOption.textContent = time;
+            startTimeSelect.appendChild(startOption);
+
+            const endOption = document.createElement('option');
+            endOption.value = time;
+            endOption.textContent = time;
+            endTimeSelect.appendChild(endOption);
+        }
+
+        // Handle form submission
+        document.getElementById('timeTableForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const day = document.getElementById('daySelect').value;
+            const classroomId = classroomSelect.value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const time = `${startTime} - ${endTime}`;
+
+            const timeTableRef = ref(database, `TIME_TABLE/VALUE/${day}`);
+            update(timeTableRef, { [time]: classrooms[classroomId] })
+                .then(() => {
+                    alert('Time table updated successfully!');
+                    updateTimeTableOverview();
+                })
+                .catch((error) => {
+                    console.error('Error updating time table:', error);
+                });
+        });
+
+        // Map day numbers to day names
+        const dayMap = {
+            1: 'Monday',
+            2: 'Tuesday',
+            3: 'Wednesday',
+            4: 'Thursday',
+            5: 'Friday',
+            6: 'Saturday',
+            7: 'Sunday'
+        };
+
+        // Update time table overview
+        function updateTimeTableOverview() {
+            const timeTableOverview = document.getElementById('timeTableOverview');
+            const timeTableRef = ref(database, 'TIME_TABLE/VALUE');
+
+            onValue(timeTableRef, (snapshot) => {
+                const timeTable = snapshot.val();
+                timeTableOverview.innerHTML = '';
+
+                for (const day in timeTable) {
+                    if (timeTable.hasOwnProperty(day)) {
+                        const daySection = document.createElement('div');
+                        daySection.classList.add('mb-4');
+                        const dayTitle = document.createElement('h3');
+                        dayTitle.classList.add('text-xl', 'font-bold', 'mb-2');
+                        dayTitle.textContent = dayMap[day];
+                        daySection.appendChild(dayTitle);
+
+                        const table = document.createElement('table');
+                        table.classList.add('table-auto', 'w-full', 'text-center');
+                        const thead = document.createElement('thead');
+                        thead.innerHTML = `
+                            <tr class="bg-purple-800 text-white">
+                                <th class="px-4 py-2">Time</th>
+                                <th class="px-4 py-2">Classroom</th>
+                            </tr>
+                        `;
+                        table.appendChild(thead);
+
+                        const tbody = document.createElement('tbody');
+                        for (const time in timeTable[day]) {
+                            if (timeTable[day].hasOwnProperty(time)) {
+                                const classroom = timeTable[day][time];
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${time}</td>
+                                    <td class="border px-4 py-2">${classroom}</td>
+                                `;
+                                tbody.appendChild(row);
+                            }
+                        }
+                        table.appendChild(tbody);
+                        daySection.appendChild(table);
+                        timeTableOverview.appendChild(daySection);
+                    }
+                }
+            });
+        }
+
+        // Initial load of time table overview
+        updateTimeTableOverview();
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>
