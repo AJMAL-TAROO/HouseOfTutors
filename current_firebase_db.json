@@ -16,7 +16,7 @@
       "R_PARTY": "ajmal taroo",
       "R_PARTY_TEL": "57882383",
       "TEL": "58505488",
-      "VIRTUAL_ROOMS": "1001,1002"
+      "VIRTUAL_ROOMS": "1001,1002,1003,1004"
     }
   },
   "CLASSROOMS": {
@@ -38,11 +38,29 @@
       "TITLE": "Shahbaz's Individual Class",
       "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
     },
+    "CLASSROOM_1003": {
+      "CLASSROOM_ID": 1003,
+      "STORAGE_FOLDER": "1003_NOTES",
+      "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
+      "TEACHER_FULL_NAME": "Shalini Lara Ramful",
+      "TEACHER_TEL": "+230 5797 2469",
+      "TITLE": "Izel's Individual Class",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
+    "CLASSROOM_1004": {
+      "CLASSROOM_ID": 1004,
+      "STORAGE_FOLDER": "1004_NOTES",
+      "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
+      "TEACHER_FULL_NAME": "Shalini Lara Ramful",
+      "TEACHER_TEL": "+230 5797 2469",
+      "TITLE": "Leah's Individual Class",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
     "def_classroom": "default"
   },
   "NUMBERS": {
     "CURRENT_ID_CLASSROOM": {
-      "NUMBER": 1002
+      "NUMBER": 1004
     },
     "ID_CLASSROOM_1001_NOTES": {
       "NUMBER": 1
@@ -50,14 +68,87 @@
     "ID_CLASSROOM_1002_NOTES": {
       "NUMBER": 1
     },
+    "ID_CLASSROOM_1003_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_CLASSROOM_1004_NOTES": {
+      "NUMBER": 1
+    },
     "ID_NUMBER": {
       "NUMBER": 100
     },
     "ID_STUDENT": {
-      "NUMBER": 1
+      "NUMBER": 6
     }
   },
   "STUDENTS": {
+    "STUDENTS_1": {
+      "EMAIL": "ajtaroo@gmail.com",
+      "FULL_NAME": "Mohamade Ajmal Taroo",
+      "PASSWORD": "585054",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "57882383",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001,1002"
+    },
+    "STUDENTS_2": {
+      "EMAIL": "alishahhymambaccus@icloud.com",
+      "FULL_NAME": "Alishah",
+      "PASSWORD": "777005",
+      "R_PARTY": "Dr Outim",
+      "R_PARTY_TEL": "58215553",
+      "TEL": "52737686",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "STUDENTS_3": {
+      "EMAIL": "shahbazhymambaccus@icloud.com",
+      "FULL_NAME": "Shahbaz",
+      "PASSWORD": "597951",
+      "R_PARTY": "Dr Outim",
+      "R_PARTY_TEL": "58215553",
+      "TEL": "55085804",
+      "VIRTUAL_ROOMS": "1002"
+    },
+    "STUDENTS_4": {
+      "EMAIL": "izelpww@gmail.com",
+      "FULL_NAME": "Izel Poon Wai Wam",
+      "PASSWORD": "983398",
+      "R_PARTY": "Mr Des ",
+      "R_PARTY_TEL": "+44 7940 966984",
+      "TEL": "+44 7391 055772",
+      "VIRTUAL_ROOMS": "1003"
+    },
+    "STUDENTS_5": {
+      "EMAIL": "leahkpww@gmail.com",
+      "FULL_NAME": "Leah Poon Wai Wam",
+      "PASSWORD": "961837",
+      "R_PARTY": "Mr Des ",
+      "R_PARTY_TEL": "+44 7940 966984",
+      "TEL": "+44 7379 092857",
+      "VIRTUAL_ROOMS": "1004"
+    },
     "def_student": "default"
+  },
+  "TIME_TABLE": {
+    "VALUE": [
+      null,
+      {
+        "00:00 - 00:00": "Leah's Individual Class",
+        "08:00 - 09:00": "Leah's Individual Class",
+        "08:00 - 12:00": "Izel's Individual Class",
+        "10:00 - 11:00": "Shahbaz's Individual Class",
+        "14:00 - 15:00": "Alishah's Individual Class"
+      },
+      {
+        "09:00 - 12:00": "Shahbaz's Individual Class"
+      },
+      null,
+      {
+        "14:00 - 15:00": "Alishah's Individual Class"
+      },
+      {
+        "00:00 - 00:00": "Alishah's Individual Class"
+      }
+    ]
   }
 }
