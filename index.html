@@ -97,6 +97,7 @@
 
             if (result.exists) {
                 if (result.password === loginPassword) {
+                    localStorage.setItem('student_email', loginEmail); // Store the email in local storage
                     window.location.replace("Dashboard.html");
                 } else {
                     alert("Incorrect password.");
