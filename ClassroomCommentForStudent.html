@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Classroom Comments</title>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='Dashboard.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
+        </div>
+    </nav>
+
+    <div class="container flex items-center justify-center min-h-screen mt-5">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
+            <h1 class="text-3xl font-bold mb-4 text-center">Classroom Comments</h1>
+            <div id="commentsContainer" class="space-y-4">
+                <!-- Comments will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Retrieve the classroom ID from local storage
+        const classroomId = localStorage.getItem('CLASSROOM_ID');
+
+        if (classroomId) {
+            // Reference to the COMMENTS node for the specific classroom
+            const commentsRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}/COMMENTS`);
+
+            // Fetch data and populate comments
+            const commentsContainer = document.getElementById("commentsContainer");
+
+            onValue(commentsRef, (snapshot) => {
+                const comments = snapshot.val();
+
+                // Clear existing content
+                commentsContainer.innerHTML = "";
+
+                // Iterate over comments and display them
+                if (comments) {
+                    Object.values(comments).forEach((comment) => {
+                        const commentDiv = document.createElement("div");
+                        commentDiv.className = "p-4 border border-gray-300 rounded-lg";
+                        commentDiv.innerHTML = `
+                            <h3 class="text-lg font-bold">Date: ${comment.DATE}</h3>
+                            <p>${comment.COMMENT}</p>
+                        `;
+                        commentsContainer.appendChild(commentDiv);
+                    });
+                } else {
+                    commentsContainer.innerHTML = "<p class='text-gray-500'>No comments available.</p>";
+                }
+            });
+        } else {
+            console.error("No classroom ID found in local storage");
+        }
+    </script>
+</body>
+
+</html>
