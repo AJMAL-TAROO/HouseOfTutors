@@ -7,6 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <title>Dashboard</title>
+    <style>
+        .card:hover {
+            background-color: #4c1d95; /* Darker shade of purple */
+        }
+    </style>
 </head>
 
 <body style="padding: 10px;">
@@ -146,7 +151,7 @@
                                 const classroomLink = classroom[classroomLinkKey] || "#";
                                 // Create the card
                                 const card = document.createElement("div");
-                                card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg";
+                                card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
                                 card.innerHTML = `
                                     <div class="card-body flex flex-col justify-between">
                                         <h2 class="card-title text-3xl">${classroom.TITLE}</h2>
@@ -159,7 +164,7 @@
                                             </button>
                                             <button class="btn btn-outline text-white border-white" onclick="storeStorageFolder('${classroom.STORAGE_FOLDER}')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8m8 4H8" />
                                                 </svg>
                                                 View Notes
                                             </button>
@@ -167,6 +172,9 @@
                                         </div>
                                     </div>
                                 `;
+                                card.addEventListener('click', () => {
+                                    redirectToClassroomCommentAdmin(classroom.CLASSROOM_ID);
+                                });
                                 classroomContainer.appendChild(card);
                             }
                         });
@@ -211,6 +219,11 @@
         window.redirectToUploadNotes = function(classroomId) {
             localStorage.setItem('CLASSROOM_ID', classroomId);
             window.location.href = 'UploadNotes.html';
+        };
+
+        window.redirectToClassroomCommentAdmin = function(classroomId) {
+            localStorage.setItem('CLASSROOM_ID', classroomId);
+            window.location.href = 'ClassroomCommentAdmin.html';
         };
     </script>
 
