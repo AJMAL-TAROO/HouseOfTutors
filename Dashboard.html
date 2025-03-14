@@ -7,11 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <title>Dashboard</title>
-    <style>
-        .card:hover {
-            background-color: #4c1d95; /* Darker shade of purple */
-        }
-    </style>
 </head>
 
 <body style="padding: 10px;">
@@ -103,7 +98,7 @@
                     const classroomLink = classroom[classroomLinkKey] || "#";
                     // Create the card
                     const card = document.createElement("div");
-                    card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
+                    card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg";
                     card.innerHTML = `
                         <div class="card-body flex flex-col justify-between">
                             <h1 class="card-title text-3xl">${classroom.TITLE}</h1>
@@ -115,9 +110,6 @@
                             </div>
                         </div>
                     `;
-                    card.addEventListener('click', () => {
-                        redirectToClassroomCommentForStudent(classroom.CLASSROOM_ID);
-                    });
                     classroomContainer.appendChild(card);
                 }
             });
@@ -150,11 +142,6 @@
 
         window.confirmLogout = function() {
             window.location.replace("index.html");
-        };
-
-        window.redirectToClassroomCommentForStudent = function(classroomId) {
-            localStorage.setItem('CLASSROOM_ID', classroomId);
-            window.location.href = 'ClassroomCommentForStudent.html';
         };
 
         console.log("Allowed Classroom IDs:", allowedClassroomIds);
