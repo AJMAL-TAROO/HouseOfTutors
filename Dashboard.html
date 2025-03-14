@@ -115,9 +115,6 @@
                             </div>
                         </div>
                     `;
-                    card.addEventListener('click', () => {
-                        redirectToClassroomCommentForStudent(classroom.CLASSROOM_ID);
-                    });
                     classroomContainer.appendChild(card);
                 }
             });
@@ -150,11 +147,6 @@
 
         window.confirmLogout = function() {
             window.location.replace("index.html");
-        };
-
-        window.redirectToClassroomCommentForStudent = function(classroomId) {
-            localStorage.setItem('CLASSROOM_ID', classroomId);
-            window.location.href = 'ClassroomCommentForStudent.html';
         };
 
         console.log("Allowed Classroom IDs:", allowedClassroomIds);
