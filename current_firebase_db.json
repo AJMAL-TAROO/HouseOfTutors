@@ -172,7 +172,7 @@
       "R_PARTY": "Ajmal Taroo",
       "R_PARTY_TEL": "57882383",
       "TEL": "59185657",
-      "VIRTUAL_ROOMS": "1001"
+      "VIRTUAL_ROOMS": "1001,1005"
     },
     "ADMIN_2": {
       "EMAIL": "house.of.tutors.48@gmail.com",
@@ -229,8 +229,7 @@
       "TEACHER_TEL": "+230 5797 2469",
       "TITLE": "Traditional Massage School",
       "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
-    },
-    "def_classroom": "default"
+    }
   },
   "NUMBERS": {
     "CURRENT_ID_CLASSROOM": {
@@ -276,20 +275,10 @@
       "R_PARTY": "Ajmal Taroo",
       "R_PARTY_TEL": "57882383",
       "TEL": "59185657",
-      "VIRTUAL_ROOMS": "1001,1002"
+      "VIRTUAL_ROOMS": "1001,1002,1005"
     },
     "STUDENTS_2": {
       "EMAIL": "alishahhymambaccus@icloud.com",
-      "FEEDBACK": {
-        "FEEDBACK_1741509953898": {
-          "DATE": "2025-03-09",
-          "FEEDBACK": "feedback 1"
-        },
-        "FEEDBACK_1741510197840": {
-          "DATE": "2025-03-09",
-          "FEEDBACK": "bla bla"
-        }
-      },
       "FULL_NAME": "Alishah Hymambaccus",
       "PASSWORD": "777005",
       "R_PARTY": "Dr Outim",
