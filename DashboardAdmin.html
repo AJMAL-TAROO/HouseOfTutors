@@ -55,6 +55,18 @@
                 </div>
             </div>
 
+            <!-- Edit Classroom Modal -->
+            <div id="editClassroomModal" class="modal modal-close">
+                <div class="modal-box">
+                    <h2 class="text-xl">Edit Classroom Name</h2>
+                    <input type="text" id="newClassroomName" class="input input-bordered w-full mt-4" placeholder="New Classroom Name">
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="confirmEditClassroom()">Done</button>
+                        <button class="btn" onclick="closeEditClassroomModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Logout Confirmation Modal -->
             <div id="logoutModal" class="modal">
                 <div class="modal-box">
@@ -93,7 +105,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -110,6 +122,8 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+
+        let selectedClassroomId = null;
 
         // Retrieve the email from local storage
         const email = localStorage.getItem('userEmail');
@@ -153,8 +167,8 @@
                                 const card = document.createElement("div");
                                 card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
                                 card.innerHTML = `
-                                    <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID})">
-                                        <h2 class="card-title text-3xl">${classroom.TITLE}</h2>
+                                    <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID}, '${email}')">
+                                        <h2 class="card-title text-3xl" onclick="event.stopPropagation(); openEditClassroomModal(${classroom.CLASSROOM_ID}, '${classroom.TITLE}')">${classroom.TITLE}</h2>
                                         <div class="card-actions justify-center space-x-2 mt-4 flex flex-col items-center sm:flex-row sm:items-start">
                                             <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); openModal('${classroomLink}')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,7 +178,7 @@
                                             </button>
                                             <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); storeStorageFolder('${classroom.STORAGE_FOLDER}')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8m8 4H8" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8m8 4H8m8 4H8" />
                                                 </svg>
                                                 View Notes
                                             </button>
@@ -218,9 +232,35 @@
             window.location.href = 'UploadNotes.html';
         };
 
-        window.redirectToClassroomCommentAdmin = function(classroomId) {
+        window.redirectToClassroomCommentAdmin = function(classroomId, email) {
             localStorage.setItem('CLASSROOM_ID', classroomId);
+            localStorage.setItem('userEmail', email);
             window.location.href = 'ClassroomCommentAdmin.html';
+        };
+
+        window.openEditClassroomModal = function(classroomId, currentTitle) {
+            selectedClassroomId = classroomId;
+            document.getElementById('newClassroomName').value = currentTitle;
+            document.getElementById('editClassroomModal').classList.add('modal-open');
+        };
+
+        window.closeEditClassroomModal = function() {
+            document.getElementById('editClassroomModal').classList.remove('modal-open');
+        };
+
+        window.confirmEditClassroom = function() {
+            const newClassroomName = document.getElementById('newClassroomName').value;
+            if (selectedClassroomId && newClassroomName) {
+                const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
+                update(classroomRef, {
+                    TITLE: newClassroomName
+                }).then(() => {
+                    alert('Classroom name updated successfully!');
+                    closeEditClassroomModal();
+                }).catch((error) => {
+                    console.error('Error updating classroom name:', error);
+                });
+            }
         };
     </script>
 
