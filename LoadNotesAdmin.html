@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
     <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <style>
-        .alert img { 
+                .alert img { 
             border: 2px solid gray; 
             border-radius: 8px; /* Rounded corners */
             cursor: pointer; 
@@ -205,10 +205,19 @@
 
                     var img = document.createElement("img");
                     img.src = item.Link;
-                    img.onclick = function() {
-                        document.getElementById('modalImage').src = item.Link;
-                        $('#imageModal').modal('show');
-                    };
+
+                    // Check if the file is a PDF
+                    if (item.Name.endsWith(".pdf")) {
+                        img.onclick = function() {
+                            localStorage.setItem('pdf_link', item.Link);
+                            window.location.href = 'PdfViewer.html';
+                        };
+                    } else {
+                        img.onclick = function() {
+                            document.getElementById('modalImage').src = item.Link;
+                            $('#imageModal').modal('show');
+                        };
+                    }
                     alertDiv.appendChild(img);
 
                     var detailsDiv = document.createElement("div");
