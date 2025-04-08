@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Delete Session From Timetable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-full">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
+        </div>
+    </nav>
+
+    <div class="container flex items-center justify-center min-h-screen">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
+            <h1 class="text-3xl font-bold mb-4 text-center">Delete Session From Timetable</h1>
+            <form id="deleteSessionForm" class="space-y-4">
+                <div>
+                    <label for="daySelect" class="block mb-2 text-sm font-medium text-gray-900">Select Day</label>
+                    <select id="daySelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="7">Sunday</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sessionSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Session</label>
+                    <select id="sessionSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <button type="submit" class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Populate sessions dropdown based on the selected day
+        const daySelect = document.getElementById('daySelect');
+        const sessionSelect = document.getElementById('sessionSelect');
+
+        daySelect.addEventListener('change', () => {
+            const selectedDay = daySelect.value;
+            const timeTableRef = ref(database, `TIME_TABLE/VALUE/${selectedDay}`);
+
+            // Clear existing options
+            sessionSelect.innerHTML = '';
+
+            // Fetch sessions for the selected day
+            onValue(timeTableRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    for (const time in data) {
+                        const option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = `${time} - ${data[time]}`;
+                        sessionSelect.appendChild(option);
+                    }
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No sessions available';
+                    sessionSelect.appendChild(option);
+                }
+            }, { onlyOnce: true });
+        });
+
+        // Handle form submission
+        document.getElementById('deleteSessionForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const selectedDay = daySelect.value;
+            const selectedSession = sessionSelect.value;
+
+            if (!selectedSession) {
+                nativeToast({
+                    message: 'Please select a valid session to delete!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 5000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+                return;
+            }
+
+            const sessionRef = ref(database, `TIME_TABLE/VALUE/${selectedDay}/${selectedSession}`);
+
+            // Delete the selected session
+            remove(sessionRef)
+                .then(() => {
+                    nativeToast({
+                        message: 'Session deleted successfully!',
+                        position: 'center',
+                        rounded: true,
+                        timeout: 5000,
+                        type: 'success',
+                        icon: false,
+                        edge: true,
+                        closeOnClick: false
+                    });
+
+                    // Refresh the session dropdown
+                    daySelect.dispatchEvent(new Event('change'));
+                })
+                .catch((error) => {
+                    console.error('Error deleting session:', error);
+                    nativeToast({
+                        message: 'Error deleting session!',
+                        position: 'center',
+                        rounded: true,
+                        timeout: 5000,
+                        type: 'error',
+                        icon: false,
+                        edge: true,
+                        closeOnClick: false
+                    });
+                });
+        });
+
+        // Trigger initial population of sessions
+        daySelect.dispatchEvent(new Event('change'));
+    </script>
+</body>
+
+</html>
