@@ -33,7 +33,7 @@
 
     <!-- Attendance Popup Modal -->
     <div id="attendanceModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Mark Attendance</h5>
@@ -43,26 +43,19 @@
                 </div>
                 <div class="modal-body">
                     <form id="attendanceForm">
-                        <div class="form-group">
-                            <label for="studentSelect">Select Student</label>
-                            <select id="studentSelect" class="form-control">
-                                <!-- Options will be populated dynamically -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Attendance</label>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="attendance" id="present" value="present">
-                                    <label class="form-check-label" for="present">Present</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="attendance" id="absent" value="absent">
-                                    <label class="form-check-label" for="absent">Absent</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Present</th>
+                                    <th>Absent</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <!-- Rows will be populated dynamically -->
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
                     </form>
                 </div>
             </div>
@@ -100,18 +93,28 @@
         });
         calendar.render();
 
-        // Populate student dropdown
-        const studentSelect = document.getElementById('studentSelect');
+        // Populate student table
+        const attendanceTableBody = document.getElementById('attendanceTableBody');
         const studentsRef = ref(database, 'STUDENTS');
+        let students = {};
+
         onValue(studentsRef, (snapshot) => {
-            const students = snapshot.val();
-            studentSelect.innerHTML = ''; // Clear existing options
+            students = snapshot.val();
+            attendanceTableBody.innerHTML = ''; // Clear existing rows
             for (const key in students) {
                 if (students.hasOwnProperty(key)) {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.textContent = students[key].FULL_NAME;
-                    studentSelect.appendChild(option);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${students[key].FULL_NAME}</td>
+                        <td>
+                            <input type="radio" name="attendance_${key}" value="present" />
+                        </td>
+                        <td>
+                            <input type="radio" name="attendance_${key}" value="absent" />
+                        </td>
+                    `;
+                    row.setAttribute('data-student-id', key);
+                    attendanceTableBody.appendChild(row);
                 }
             }
         });
@@ -120,6 +123,36 @@
         function openAttendanceModal(date) {
             const modal = document.getElementById('attendanceModal');
             modal.setAttribute('data-date', date);
+
+            // Extract year, month, and day from the selected date
+            const [year, month, day] = date.split('-');
+
+            // Fetch attendance data for the selected date
+            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            onValue(attendanceRef, (snapshot) => {
+                const attendanceData = snapshot.val();
+
+                // Update radio buttons based on attendance data
+                Array.from(attendanceTableBody.children).forEach((row) => {
+                    const studentId = row.getAttribute('data-student-id');
+                    const presentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="present"]`);
+                    const absentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="absent"]`);
+
+                    if (attendanceData && attendanceData[studentId]) {
+                        const status = attendanceData[studentId].attendance;
+                        if (status === 'present') {
+                            presentRadio.checked = true;
+                        } else if (status === 'absent') {
+                            absentRadio.checked = true;
+                        }
+                    } else {
+                        // Uncheck all radio buttons if no data is available
+                        presentRadio.checked = false;
+                        absentRadio.checked = false;
+                    }
+                });
+            });
+
             $(modal).modal('show'); // Use jQuery to show the modal
         }
 
@@ -128,28 +161,31 @@
             event.preventDefault();
 
             const date = document.getElementById('attendanceModal').getAttribute('data-date');
-            const studentId = studentSelect.value;
-            const attendance = document.querySelector('input[name="attendance"]:checked')?.value;
-
-            if (!studentId || !attendance) {
-                alert('Please select a student and attendance status.');
-                return;
-            }
-
-            // Extract year, month, and day from the selected date
             const [year, month, day] = date.split('-');
 
-            // Reference to the attendance node in Firebase
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}/${studentId}`);
+            // Prepare attendance data
+            const attendanceData = {};
+            Array.from(attendanceTableBody.children).forEach((row) => {
+                const studentId = row.getAttribute('data-student-id');
+                const presentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="present"]`);
+                const absentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="absent"]`);
 
-            // Get the student's full name from the dropdown
-            const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+                if (presentRadio.checked) {
+                    attendanceData[studentId] = {
+                        full_name: students[studentId].FULL_NAME,
+                        attendance: 'present'
+                    };
+                } else if (absentRadio.checked) {
+                    attendanceData[studentId] = {
+                        full_name: students[studentId].FULL_NAME,
+                        attendance: 'absent'
+                    };
+                }
+            });
 
-            // Upload attendance data
-            set(attendanceRef, {
-                full_name: studentName,
-                attendance: attendance
-            })
+            // Upload attendance data to Firebase
+            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            set(attendanceRef, attendanceData)
                 .then(() => {
                     alert('Attendance recorded successfully!');
                     $('#attendanceModal').modal('hide'); // Use jQuery to hide the modal
