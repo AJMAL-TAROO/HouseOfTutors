@@ -188,7 +188,7 @@
                                 card.innerHTML = `
                                     <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID}, '${email}')">
                                         <div class="flex justify-between items-center">
-                                            <h3 class="card-title text-3xl" onclick="event.stopPropagation(); openEditClassroomModal(${classroom.CLASSROOM_ID}, '${classroom.TITLE}')">${classroom.TITLE}</h3>
+                                            <h3 class="card-title text-3xl" onclick="event.stopPropagation(); openEditClassroomModal(${classroom.CLASSROOM_ID})">${classroom.TITLE}</h3>
                                             <div class="dropdown dropdown-end">
                                                 <label tabindex="0" class="btn btn-ghost btn-circle" onclick="event.stopPropagation();">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
@@ -269,9 +269,9 @@
             window.location.href = 'ClassroomCommentAdmin.html';
         };
 
-        window.openEditClassroomModal = function(classroomId, currentTitle) {
+        window.openEditClassroomModal = function(classroomId) {
             selectedClassroomId = classroomId;
-            document.getElementById('newClassroomName').value = currentTitle;
+            document.getElementById('newClassroomName').value = ''; // Clear the input field
             document.getElementById('editClassroomModal').classList.add('modal-open');
         };
 
