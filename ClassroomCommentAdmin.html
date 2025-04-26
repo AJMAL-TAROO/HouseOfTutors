@@ -71,10 +71,17 @@
                     Object.values(comments).forEach((comment) => {
                         const commentDiv = document.createElement("div");
                         commentDiv.className = "p-4 border border-gray-300 rounded-lg";
+
+                        // Detect and convert URLs in the comment text to clickable links
+                        const commentText = comment.COMMENT.replace(
+                            /(https?:\/\/[^\s]+)/g,
+                            '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>'
+                        );
+
                         commentDiv.innerHTML = `
-                            <h3 class="text-lg font-bold">Date: ${comment.DATE}</h3>
-                            <p>${comment.COMMENT}</p>
-                        `;
+                <h3 class="text-lg font-bold">Date: ${comment.DATE}</h3>
+                <p>${commentText}</p>
+            `;
                         commentsContainer.appendChild(commentDiv);
                     });
                 } else {
