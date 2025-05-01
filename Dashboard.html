@@ -58,10 +58,28 @@
         </div>
     </div>
 
+    <!-- Background Selection Modal -->
+    <div id="backgroundModal" class="modal">
+        <div class="modal-box">
+            <h2 class="text-xl font-bold mb-4">Choose a Background</h2>
+            <div id="backgroundOptions" class="grid grid-cols-3 gap-4">
+                <!-- Background options will be dynamically added here -->
+            </div>
+            <div class="modal-action">
+                <button class="btn" onclick="closeBackgroundModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
+        onclick="openBackgroundModal()">
+        Change Background
+    </button>
+
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -88,6 +106,34 @@
 
         // Fetch data and populate cards
         const classroomContainer = document.getElementById("classroomContainer");
+
+        const email = localStorage.getItem('student_email');
+        const studentKey = localStorage.getItem('STUDENT_KEY');
+
+        if (studentKey) {
+            const studentWallpaperRef = ref(database, `STUDENTS/${studentKey}`);
+            onValue(studentWallpaperRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const studentData = snapshot.val();
+                    if (studentData.WALLPAPER) {
+                        const savedWallpaper = studentData.WALLPAPER;
+                        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+                        document.body.style.backgroundSize = 'cover'; // Ensures the image covers the entire screen
+                        document.body.style.backgroundPosition = 'center'; // Centers the image
+                        document.body.style.backgroundRepeat = 'no-repeat'; // Prevents the image from repeating
+                        document.body.style.backgroundAttachment = 'fixed'; // Keeps the background fixed during scrolling
+                        document.body.style.height = '100vh'; // Ensures the body height matches the viewport height
+                        document.body.style.margin = '0'; // Removes any default margin
+                    }
+                } else {
+                    console.error('No wallpaper data found for the student.');
+                }
+            }, (error) => {
+                console.error('Error retrieving wallpaper data from Firebase:', error);
+            });
+        } else {
+            console.error('No student key found in local storage.');
+        }
 
         onValue(classroomsRef, (snapshot) => {
             const classrooms = snapshot.val();
@@ -152,6 +198,92 @@
         window.redirectToClassroomCommentForStudent = function(classroomId) {
             localStorage.setItem('CLASSROOM_ID', classroomId);
             window.location.href = 'ClassroomCommentForStudent.html';
+        };
+
+        // Open the background selection modal
+        window.openBackgroundModal = function () {
+            document.getElementById('backgroundModal').classList.add('modal-open');
+        };
+
+        // Close the background selection modal
+        window.closeBackgroundModal = function () {
+            document.getElementById('backgroundModal').classList.remove('modal-open');
+        };
+
+        // Dynamically load wallpapers from the img/wallpapers folder
+        const wallpapers = [
+            'img/wallpapers/wallpaper1.png',
+            'img/wallpapers/wallpaper2.png',
+            'img/wallpapers/wallpaper3.png',
+            'img/wallpapers/wallpaper4.png',
+            'img/wallpapers/wallpaper5.png',
+            'img/wallpapers/wallpaper6.png'
+        ];
+
+        const backgroundContainer = document.getElementById('backgroundOptions');
+        backgroundContainer.innerHTML = ''; // Clear any existing content
+
+        wallpapers.forEach((wallpaper) => {
+            const img = document.createElement('img');
+            img.src = wallpaper;
+            img.className = 'w-full h-32 object-cover cursor-pointer rounded-lg border-2 border-transparent hover:border-blue-500';
+            img.onclick = () => selectBackground(wallpaper);
+            backgroundContainer.appendChild(img);
+        });
+
+        // Handle background selection
+        window.selectBackground = function (wallpaper) {
+            document.body.style.backgroundImage = `url('${wallpaper}')`;
+            document.body.style.backgroundSize = 'cover'; // Ensures the image covers the entire screen
+            document.body.style.backgroundPosition = 'center'; // Centers the image
+            document.body.style.backgroundRepeat = 'no-repeat'; // Prevents the image from repeating
+            document.body.style.backgroundAttachment = 'fixed'; // Keeps the background fixed during scrolling
+            document.body.style.height = '100vh'; // Ensures the body height matches the viewport height
+            document.body.style.margin = '0'; // Removes any default margin
+
+            // Update the wallpaper in the database
+            const adminWallpaperRef = ref(database, `STUDENTS/${studentKey}`);
+
+            update(adminWallpaperRef, { WALLPAPER: wallpaper }).then(() => {
+                console.log('Wallpaper updated successfully in Firebase!');
+            }).catch((error) => {
+                console.error('Error updating wallpaper in Firebase:', error);
+            });
+
+            closeBackgroundModal();
+
+            // Save the selected wallpaper to Firebase
+            // if (email) {
+            //     const adminRef = ref(database, "STUDENTS");
+            //     get(adminRef).then((snapshot) => {
+            //         if (snapshot.exists()) {
+            //             const admins = snapshot.val();
+            //             let adminKey = null;
+
+            //             // Find the admin node
+            //             for (const key in admins) {
+            //                 if (admins[key].EMAIL === email) {
+            //                     adminKey = key;
+            //                     break;
+            //                 }
+            //             }
+
+            //             if (adminKey) {
+            //                 // Update the wallpaper in the database
+            //                 const adminWallpaperRef = ref(database, `STUDENTS/${adminKey}`);
+            //                 update(adminWallpaperRef, { WALLPAPER: wallpaper }).then(() => {
+            //                     console.log('Wallpaper updated successfully in Firebase!');
+            //                 }).catch((error) => {
+            //                     console.error('Error updating wallpaper in Firebase:', error);
+            //                 });
+            //             }
+            //         }
+            //     }).catch((error) => {
+            //         console.error('Error retrieving admin data:', error);
+            //     });
+            // }
+
+            // closeBackgroundModal();
         };
 
         console.log("Allowed Classroom IDs:", allowedClassroomIds);
