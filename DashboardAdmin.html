@@ -91,6 +91,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="drawer-side">
             <label for="my-drawer" class="drawer-overlay"></label>
@@ -125,6 +126,24 @@
         </div>
     </div>
 
+    <!-- Background Selection Modal -->
+    <div id="backgroundModal" class="modal">
+        <div class="modal-box">
+            <h2 class="text-xl font-bold mb-4">Choose a Background</h2>
+            <div id="backgroundOptions" class="grid grid-cols-3 gap-4">
+                <!-- Background options will be dynamically added here -->
+            </div>
+            <div class="modal-action">
+                <button class="btn" onclick="closeBackgroundModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
+        onclick="openBackgroundModal()">
+        Change Background
+    </button>
+
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
@@ -150,6 +169,31 @@
 
         // Retrieve the email from local storage
         const email = localStorage.getItem('userEmail');
+
+        // Load the saved wallpaper on page load
+        if (email) {
+            const adminRef = ref(database, "ADMIN");
+            get(adminRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const admins = snapshot.val();
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email && admins[key].WALLPAPER) {
+                            const savedWallpaper = admins[key].WALLPAPER;
+                            document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+                            document.body.style.backgroundSize = 'cover';
+                            document.body.style.backgroundPosition = 'center';
+                            document.body.style.backgroundRepeat = 'no-repeat';
+                            document.body.style.backgroundAttachment = 'fixed';
+                            document.body.style.height = '100vh';
+                            document.body.style.margin = '0';
+                            break;
+                        }
+                    }
+                }
+            }).catch((error) => {
+                console.error('Error retrieving admin data:', error);
+            });
+        }
 
         if (email) {
             // Find the admin with the matching email and retrieve VIRTUAL_ROOMS
@@ -326,6 +370,81 @@
                     console.error('Error deleting classroom:', error);
                 });
             }
+        };
+
+        // Open the background selection modal
+        window.openBackgroundModal = function () {
+            document.getElementById('backgroundModal').classList.add('modal-open');
+        };
+
+        // Close the background selection modal
+        window.closeBackgroundModal = function () {
+            document.getElementById('backgroundModal').classList.remove('modal-open');
+        };
+
+        // Dynamically load wallpapers from the img/wallpapers folder
+        const wallpapers = [
+            'img/wallpapers/wallpaper1.png',
+            'img/wallpapers/wallpaper2.png',
+            'img/wallpapers/wallpaper3.png',
+            'img/wallpapers/wallpaper4.png',
+            'img/wallpapers/wallpaper5.png',
+            'img/wallpapers/wallpaper6.png'
+        ];
+
+        const backgroundContainer = document.getElementById('backgroundOptions');
+        backgroundContainer.innerHTML = ''; // Clear any existing content
+
+        wallpapers.forEach((wallpaper) => {
+            const img = document.createElement('img');
+            img.src = wallpaper;
+            img.className = 'w-full h-32 object-cover cursor-pointer rounded-lg border-2 border-transparent hover:border-blue-500';
+            img.onclick = () => selectBackground(wallpaper);
+            backgroundContainer.appendChild(img);
+        });
+
+        // Handle background selection
+        window.selectBackground = function (wallpaper) {
+            document.body.style.backgroundImage = `url('${wallpaper}')`;
+            document.body.style.backgroundSize = 'cover'; // Ensures the image covers the entire screen
+            document.body.style.backgroundPosition = 'center'; // Centers the image
+            document.body.style.backgroundRepeat = 'no-repeat'; // Prevents the image from repeating
+            document.body.style.backgroundAttachment = 'fixed'; // Keeps the background fixed during scrolling
+            document.body.style.height = '100vh'; // Ensures the body height matches the viewport height
+            document.body.style.margin = '0'; // Removes any default margin
+
+            // Save the selected wallpaper to Firebase
+            if (email) {
+                const adminRef = ref(database, "ADMIN");
+                get(adminRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const admins = snapshot.val();
+                        let adminKey = null;
+
+                        // Find the admin node
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === email) {
+                                adminKey = key;
+                                break;
+                            }
+                        }
+
+                        if (adminKey) {
+                            // Update the wallpaper in the database
+                            const adminWallpaperRef = ref(database, `ADMIN/${adminKey}`);
+                            update(adminWallpaperRef, { WALLPAPER: wallpaper }).then(() => {
+                                console.log('Wallpaper updated successfully in Firebase!');
+                            }).catch((error) => {
+                                console.error('Error updating wallpaper in Firebase:', error);
+                            });
+                        }
+                    }
+                }).catch((error) => {
+                    console.error('Error retrieving admin data:', error);
+                });
+            }
+
+            closeBackgroundModal();
         };
     </script>
 
