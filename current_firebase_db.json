@@ -172,7 +172,8 @@
       "R_PARTY": "Ajmal Taroo",
       "R_PARTY_TEL": "57882383",
       "TEL": "59185657",
-      "VIRTUAL_ROOMS": "1001,1005"
+      "VIRTUAL_ROOMS": "1001,1005",
+      "STUDENTS": "STUDENTS_2,STUDENTS_3, STUDENTS_4,STUDENTS_5,STUDENTS_6"
     },
     "ADMIN_2": {
       "EMAIL": "house.of.tutors.48@gmail.com",
