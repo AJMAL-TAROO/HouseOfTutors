@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <title>Add Student to Classroom</title>
+
+    <style>
+    html, body {
+      height: 100%;      /* Make them take full viewport height */
+    }
+
+    body {
+      background: white; /* Just to visualize the full area */
+    }
+
+  </style>
 </head>
 
 <body style="padding: 10px;">
@@ -31,13 +42,13 @@
             <form id="addStudentToClassroomForm">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
-                    <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white">
                         <option value="">Select a student</option>
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="classroomSelect">Select Classroom</label>
-                    <select id="classroomSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <select id="classroomSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white">
                         <option value="">Select a classroom</option>
                     </select>
                 </div>
