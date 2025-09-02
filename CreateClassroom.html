@@ -12,6 +12,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <title>Add Classroom</title>
+
+    <style>
+        html, body {
+        height: 100%;      /* Make them take full viewport height */
+        }
+
+        body {
+        background: white; /* Just to visualize the full area */
+        }
+  </style>
 </head>
 
 <body style="padding: 10px;">
@@ -30,19 +40,19 @@
         <form id="addClassroomForm">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Title">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Title" bg-white>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherFullName">Teacher Full Name</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherFullName" type="text" placeholder="Teacher Full Name">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherFullName" type="text" placeholder="Teacher Full Name" bg-white>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherAddress">Teacher Address</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherAddress" type="text" placeholder="Teacher Address">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherAddress" type="text" placeholder="Teacher Address" bg-white>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherTel">Teacher Telephone</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherTel" type="text" placeholder="Teacher Telephone">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="teacherTel" type="text" placeholder="Teacher Telephone" bg-white>
             </div>
             <div class="flex items-center justify-between">
                 <button class="btn btn-primary" type="button" onclick="uploadClassroomData()">Upload</button>
