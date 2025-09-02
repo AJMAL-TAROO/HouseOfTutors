@@ -15,13 +15,12 @@
 
     <style>
         html, body {
-        height: 100%;      /* Make them take full viewport height */
+            height: 100%;
         }
-
         body {
-        background: white; /* Just to visualize the full area */
+            background: white;
         }
-  </style>
+    </style>
 </head>
 
 <body style="padding: 10px;">
@@ -112,8 +111,8 @@
             document.getElementById('password').value = password;
         };
 
-        // Upload student data to Firebase
-        window.uploadStudentData = function() {
+        // Upload student data to Firebase and append student ID to admin node
+        window.uploadStudentData = async function() {
             const fullName = document.getElementById('fullName').value;
             const tel = document.getElementById('tel').value;
             const rParty = document.getElementById('rParty').value;
@@ -147,8 +146,34 @@
             };
 
             const newStudentRef = ref(database, `STUDENTS/STUDENTS_${studentId}`);
-            set(newStudentRef, studentData).then(() => {
-                console.log("Student data uploaded successfully");
+            try {
+                await set(newStudentRef, studentData);
+
+                // Append student ID to the admin's STUDENTS sub node
+                const adminEmail = localStorage.getItem('userEmail');
+                if (adminEmail) {
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        let adminKey = null;
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === adminEmail) {
+                                adminKey = key;
+                                break;
+                            }
+                        }
+                        if (adminKey) {
+                            const adminData = admins[adminKey];
+                            let studentsList = adminData.STUDENTS ? adminData.STUDENTS.split(',').map(s => s.trim()) : [];
+                            studentsList.push(`STUDENTS_${studentId}`);
+                            // Remove duplicates and join back to string
+                            studentsList = [...new Set(studentsList)].join(',');
+                            await set(ref(database, `ADMIN/${adminKey}/STUDENTS`), studentsList);
+                        }
+                    }
+                }
+
                 nativeToast({
                     message: 'Student data uploaded successfully!',
                     position: 'center',
@@ -160,16 +185,15 @@
                     closeOnClick: false
                 });
                 // Increment the student ID number in Firebase
-                set(ref(database, "NUMBERS/ID_STUDENT/NUMBER"), parseInt(studentId) + 1);
+                await set(ref(database, "NUMBERS/ID_STUDENT/NUMBER"), parseInt(studentId) + 1);
                 setTimeout(() => {
                     location.reload();
                 }, 2000); // 2 seconds delay before reloading
-            }).catch((error) => {
-                console.error("Error uploading student data:", error);
-            });
+            } catch (error) {
+                console.error("Error uploading student data or updating admin node:", error);
+            }
         };
     </script>
 
 </body>
-
 </html>
