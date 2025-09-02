@@ -8,7 +8,18 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
     <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+
     <title>Remove Student from Classroom</title>
+
+    <style>
+        html, body {
+        height: 100%;      /* Make them take full viewport height */
+        }
+
+        body {
+        background: white; /* Just to visualize the full area */
+        }
+  </style>
 </head>
 
 <body style="padding: 10px;">
@@ -17,7 +28,7 @@
         <form id="removeStudentFromClassroomForm" onsubmit="return false;">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
-                <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onchange="populateClassrooms()">
+                <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline  bg-white" onchange="populateClassrooms()">
                     <option value="">Select a student</option>
                 </select>
             </div>
