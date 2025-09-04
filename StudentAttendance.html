@@ -194,7 +194,7 @@
         }
 
         // Handle attendance form submission
-        document.getElementById('attendanceForm').addEventListener('submit', (event) => {
+        document.getElementById('attendanceForm').addEventListener('submit', async(event) => {
             event.preventDefault();
 
             const date = document.getElementById('attendanceModal').getAttribute('data-date');
@@ -219,6 +219,20 @@
                     };
                 }
             });
+
+            // Get admin node
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
+                }
+            }
 
             // Upload attendance data to Firebase
             const attendanceRef = ref(database, `ATTENDANCE${year}/${month}-${adminKey}/${day}`);
