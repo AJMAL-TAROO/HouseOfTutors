@@ -152,7 +152,7 @@
             const [year, month, day] = date.split('-');
 
             // Fetch attendance data for the selected date
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}-${adminKey}/${day}`);
             onValue(attendanceRef, (snapshot) => {
                 const attendanceData = snapshot.val();
 
@@ -207,7 +207,7 @@
             });
 
             // Upload attendance data to Firebase
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}-${adminKey}/${day}`);
             set(attendanceRef, attendanceData)
                 .then(() => {
                     alert('Attendance recorded successfully!');
