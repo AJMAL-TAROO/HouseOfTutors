@@ -158,7 +158,7 @@
                     }
                 }
             }
-            
+
             const modal = document.getElementById('attendanceModal');
             modal.setAttribute('data-date', date);
 
@@ -166,7 +166,7 @@
             const [year, month, day] = date.split('-');
 
             // Fetch attendance data for the selected date
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}-${adminKey}/${day}`);
+            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
             onValue(attendanceRef, (snapshot) => {
                 const attendanceData = snapshot.val();
 
