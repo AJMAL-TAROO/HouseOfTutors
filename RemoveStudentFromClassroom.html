@@ -6,184 +6,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
-    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <title>Remove Student from Classroom</title>
-
-    <style>
-        html, body {
-        height: 100%;      /* Make them take full viewport height */
-        }
-
-        body {
-        background: white; /* Just to visualize the full area */
-        }
-  </style>
+    <title>Remove Student From Classroom</title>
 </head>
 
-<body style="padding: 10px;">
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<body style="padding: 10px;" class="bg-gray-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-full">
         <div class="container-fluid">
             <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
-                <i class="fas fa-arrow-left"></i>
+                <i class="fa-solid fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
 
-    <div class="container mx-auto">
-        <h2 class="text-2xl mb-4">Remove Student from Classroom</h2>
-        <form id="removeStudentFromClassroomForm" onsubmit="return false;">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
-                <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline  bg-white" onchange="populateClassrooms()">
-                    <option value="">Select a student</option>
-                </select>
-            </div>
-            <div id="classroomList" class="mb-4"></div>
-        </form>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal">
-        <div class="modal-box">
-            <h2 class="text-xl">Do you want to remove the student from this classroom?</h2>
-            <div class="modal-action">
-                <button class="btn btn-primary" onclick="confirmRemove()">Yes</button>
-                <button class="btn" onclick="closeModal()">No</button>
-            </div>
+    <div class="container flex items-center justify-center min-h-screen mt-5">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
+            <h1 class="text-3xl font-bold mb-4 text-center">Remove Student From Classroom</h1>
+            <form id="removeStudentForm" class="space-y-4">
+                <div>
+                    <label for="studentSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Student</label>
+                    <select id="studentSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div id="classroomFields" style="display:none;">
+                    <div class="mb-4">
+                        <label for="classroomSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Classroom</label>
+                        <select id="classroomSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="btn btn-danger" type="button" id="removeStudentBtn" style="background-color:#dc3545;color:#fff;border-color:#dc3545;">Remove From Classroom</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
     <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
-            authDomain: "houseoftutors-f398e.firebaseapp.com",
-            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
-            projectId: "houseoftutors-f398e",
-            storageBucket: "houseoftutors-f398e.appspot.com",
-            messagingSenderId: "1006665226128",
-            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
-            measurementId: "G-PEM636J9ZD"
-        };
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+        authDomain: "houseoftutors-f398e.firebaseapp.com",
+        databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+        projectId: "houseoftutors-f398e",
+        storageBucket: "houseoftutors-f398e.appspot.com",
+        messagingSenderId: "1006665226128",
+        appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+        measurementId: "G-PEM636J9ZD"
+    };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-        let selectedStudentId = null;
-        let selectedClassroomId = null;
+    // Get admin email from localStorage
+    const adminEmail = localStorage.getItem('userEmail');
+    const studentSelect = document.getElementById('studentSelect');
+    const classroomSelect = document.getElementById('classroomSelect');
+    const classroomFields = document.getElementById('classroomFields');
 
-        // Populate the student dropdown
-        async function populateStudents() {
-            const studentsRef = ref(database, "STUDENTS");
-            const snapshot = await get(studentsRef);
-            if (snapshot.exists()) {
-                const students = snapshot.val();
-                const studentSelect = document.getElementById('studentSelect');
-                for (const key in students) {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.text = students[key].FULL_NAME;
-                    studentSelect.appendChild(option);
+    // Populate student dropdown using admin's STUDENTS sub node
+    async function populateStudents() {
+        studentSelect.innerHTML = '<option value="">Select a student</option>';
+        if (!adminEmail) return;
+
+        const adminRef = ref(database, "ADMIN");
+        const adminSnapshot = await get(adminRef);
+        if (adminSnapshot.exists()) {
+            const admins = adminSnapshot.val();
+            let adminKey = null;
+            for (const key in admins) {
+                if (admins[key].EMAIL === adminEmail) {
+                    adminKey = key;
+                    break;
                 }
-            } else {
-                console.error("No student data available");
             }
-        }
-
-        // Populate the classroom list based on the selected student's VIRTUAL_ROOMS
-        window.populateClassrooms = async function() {
-            const studentId = document.getElementById('studentSelect').value;
-            selectedStudentId = studentId;
-            if (studentId) {
-                const studentRef = ref(database, `STUDENTS/${studentId}`);
-                const snapshot = await get(studentRef);
-                if (snapshot.exists()) {
-                    const studentData = snapshot.val();
-                    const virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
-                    const classroomList = document.getElementById('classroomList');
-                    classroomList.innerHTML = '';
-
-                    for (const roomId of virtualRooms) {
-                        const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
-                        const classroomSnapshot = await get(classroomRef);
-                        if (classroomSnapshot.exists()) {
-                            const classroom = classroomSnapshot.val();
-                            const row = document.createElement('div');
-                            row.className = 'flex items-center justify-between mb-2 p-2 bg-gray-100 rounded shadow';
-                            row.innerHTML = `
-                                <span class="text-gray-700">${classroom.TITLE}</span>
-                                <button type="button" class="btn btn-error btn-sm" style="background-color:#dc3545;color:#fff;border-color:#dc3545;" onclick="showModal('${roomId}')">Remove</button>
-                            `;
-                            classroomList.appendChild(row);
-                        }
+            if (adminKey) {
+                const studentsStr = admins[adminKey].STUDENTS || "";
+                const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
+                for (const studentId of studentIds) {
+                    const studentRef = ref(database, `STUDENTS/${studentId}`);
+                    const studentSnapshot = await get(studentRef);
+                    if (studentSnapshot.exists()) {
+                        const student = studentSnapshot.val();
+                        const option = document.createElement('option');
+                        option.value = studentId;
+                        option.text = student.FULL_NAME;
+                        studentSelect.appendChild(option);
                     }
-                } else {
-                    console.error("No student data available");
                 }
             }
         }
+    }
 
-        // Show confirmation modal
-        window.showModal = function(classroomId) {
-            selectedClassroomId = classroomId;
-            document.getElementById('confirmationModal').classList.add('modal-open');
-        };
-
-        // Close confirmation modal
-        window.closeModal = function() {
-            document.getElementById('confirmationModal').classList.remove('modal-open');
-        };
-
-        // Confirm removal of student from classroom
-        window.confirmRemove = async function() {
-            if (selectedStudentId && selectedClassroomId) {
-                const studentRef = ref(database, `STUDENTS/${selectedStudentId}`);
-                const snapshot = await get(studentRef);
-                if (snapshot.exists()) {
-                    const studentData = snapshot.val();
-                    let virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
-                    virtualRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId);
-                    await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
-
-                    nativeToast({
-                        message: 'Student removed from classroom successfully!',
-                        position: 'center',
-                        rounded: true,
-                        timeout: 2000,
-                        type: 'success',
-                        icon: false,
-                        edge: true,
-                        closeOnClick: false
-                    });
-
-                    // Refresh the page after the toast appears
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000); // 2 seconds delay before reloading
+    // Populate classroom dropdown based on selected student
+    async function populateClassrooms(studentId) {
+        classroomSelect.innerHTML = '<option value="">Select a classroom</option>';
+        if (!studentId) return;
+        const studentRef = ref(database, `STUDENTS/${studentId}`);
+        const studentSnapshot = await get(studentRef);
+        if (studentSnapshot.exists()) {
+            const student = studentSnapshot.val();
+            const virtualRooms = student.VIRTUAL_ROOMS ? student.VIRTUAL_ROOMS.split(',').map(s => s.trim()).filter(s => s) : [];
+            for (const roomId of virtualRooms) {
+                const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
+                const classroomSnapshot = await get(classroomRef);
+                if (classroomSnapshot.exists()) {
+                    const classroom = classroomSnapshot.val();
+                    const option = document.createElement('option');
+                    option.value = roomId;
+                    option.text = classroom.TITLE || roomId;
+                    classroomSelect.appendChild(option);
                 } else {
-                    console.error("No student data available");
+                    // If classroom node doesn't exist, still show the roomId
+                    const option = document.createElement('option');
+                    option.value = roomId;
+                    option.text = roomId;
+                    classroomSelect.appendChild(option);
                 }
             }
-            closeModal();
-        };
+        }
+    }
 
-        // Populate students dropdown on page load
-        window.onload = function() {
-            populateStudents();
-        };
+    // Show classroom dropdown when student is selected
+    studentSelect.addEventListener('change', async function() {
+        const studentId = this.value;
+        if (!studentId) {
+            classroomFields.style.display = 'none';
+            classroomSelect.innerHTML = '';
+            return;
+        }
+        await populateClassrooms(studentId);
+        classroomFields.style.display = '';
+    });
+
+    // Remove student from classroom
+    document.getElementById('removeStudentBtn').addEventListener('click', async function() {
+        const studentId = studentSelect.value;
+        const classroomId = classroomSelect.value;
+        if (!studentId || !classroomId) {
+            alert('Please select both a student and a classroom.');
+            return;
+        }
+        const studentRef = ref(database, `STUDENTS/${studentId}`);
+        const studentSnapshot = await get(studentRef);
+        if (studentSnapshot.exists()) {
+            const student = studentSnapshot.val();
+            let virtualRooms = student.VIRTUAL_ROOMS ? student.VIRTUAL_ROOMS.split(',').map(s => s.trim()) : [];
+            virtualRooms = virtualRooms.filter(room => room !== classroomId);
+            await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
+            alert('Student removed from classroom successfully!');
+            // Optionally, refresh classroom dropdown
+            await populateClassrooms(studentId);
+        }
+    });
+
+    // Populate students dropdown on page load
+    window.onload = function() {
+        populateStudents();
+    };
     </script>
-
 </body>
-
 </html>
