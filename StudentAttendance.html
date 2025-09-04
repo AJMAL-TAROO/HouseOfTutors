@@ -63,9 +63,8 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -83,6 +82,9 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        // Get admin email from localStorage
+        const adminEmail = localStorage.getItem('userEmail');
+
         // Initialize FullCalendar
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -93,31 +95,53 @@
         });
         calendar.render();
 
-        // Populate student table
+        // Populate student table ONLY from admin's STUDENTS sub node
         const attendanceTableBody = document.getElementById('attendanceTableBody');
-        const studentsRef = ref(database, 'STUDENTS');
         let students = {};
 
-        onValue(studentsRef, (snapshot) => {
-            students = snapshot.val();
-            attendanceTableBody.innerHTML = ''; // Clear existing rows
-            for (const key in students) {
-                if (students.hasOwnProperty(key)) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${students[key].FULL_NAME}</td>
-                        <td>
-                            <input type="radio" name="attendance_${key}" value="present" />
-                        </td>
-                        <td>
-                            <input type="radio" name="attendance_${key}" value="absent" />
-                        </td>
-                    `;
-                    row.setAttribute('data-student-id', key);
-                    attendanceTableBody.appendChild(row);
+        async function loadAdminStudents() {
+            attendanceTableBody.innerHTML = '';
+            if (!adminEmail) return;
+
+            // Get admin node
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
+                }
+                if (adminKey) {
+                    const studentsStr = admins[adminKey].STUDENTS || "";
+                    const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
+                    students = {};
+                    for (const studentId of studentIds) {
+                        const studentRef = ref(database, `STUDENTS/${studentId}`);
+                        const studentSnapshot = await get(studentRef);
+                        if (studentSnapshot.exists()) {
+                            const student = studentSnapshot.val();
+                            students[studentId] = student;
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${student.FULL_NAME}</td>
+                                <td>
+                                    <input type="radio" name="attendance_${studentId}" value="present" />
+                                </td>
+                                <td>
+                                    <input type="radio" name="attendance_${studentId}" value="absent" />
+                                </td>
+                            `;
+                            row.setAttribute('data-student-id', studentId);
+                            attendanceTableBody.appendChild(row);
+                        }
+                    }
                 }
             }
-        });
+        }
 
         // Open attendance modal
         function openAttendanceModal(date) {
@@ -146,14 +170,13 @@
                             absentRadio.checked = true;
                         }
                     } else {
-                        // Uncheck all radio buttons if no data is available
                         presentRadio.checked = false;
                         absentRadio.checked = false;
                     }
                 });
             });
 
-            $(modal).modal('show'); // Use jQuery to show the modal
+            $(modal).modal('show');
         }
 
         // Handle attendance form submission
@@ -188,14 +211,18 @@
             set(attendanceRef, attendanceData)
                 .then(() => {
                     alert('Attendance recorded successfully!');
-                    $('#attendanceModal').modal('hide'); // Use jQuery to hide the modal
+                    $('#attendanceModal').modal('hide');
                 })
                 .catch((error) => {
                     console.error('Error recording attendance:', error);
                     alert('Failed to record attendance.');
                 });
         });
+
+        // Load students for this admin on page load
+        window.onload = function() {
+            loadAdminStudents();
+        };
     </script>
 </body>
-
 </html>
