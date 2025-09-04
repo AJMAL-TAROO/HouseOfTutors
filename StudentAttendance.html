@@ -144,7 +144,21 @@
         }
 
         // Open attendance modal
-        function openAttendanceModal(date) {
+        async function openAttendanceModal(date) {
+            // Get admin node
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
+                }
+            }
+            
             const modal = document.getElementById('attendanceModal');
             modal.setAttribute('data-date', date);
 
