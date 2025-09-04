@@ -63,10 +63,11 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Populate student dropdown using admin's STUDENTS sub node
-        const studentSelect = document.getElementById('studentSelect');
+        // Get admin email from localStorage
         const adminEmail = localStorage.getItem('userEmail');
+        const studentSelect = document.getElementById('studentSelect');
 
+        // Populate student dropdown using admin's STUDENTS sub node
         async function populateStudentDropdown() {
             studentSelect.innerHTML = '<option value="">Select a student</option>';
             if (!adminEmail) return;
