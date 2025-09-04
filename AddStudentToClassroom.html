@@ -15,13 +15,19 @@
 
     <style>
         html, body {
-        height: 100%;      /* Make them take full viewport height */
+            height: 100%;
         }
-
         body {
-        background: white; /* Just to visualize the full area */
+            background: white;
         }
-  </style>
+        .container.centered-content {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 
 <body style="padding: 10px;">
@@ -29,7 +35,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
-                <i class="fas fa-arrow-left"></i>
+                <i class="fa-solid fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
@@ -59,7 +65,6 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
@@ -79,43 +84,61 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Retrieve the email from local storage
-        const email = localStorage.getItem('userEmail');
+        // Retrieve the admin email from local storage
+        const adminEmail = localStorage.getItem('userEmail');
 
-        // Populate the student dropdown
+        // Populate the student dropdown using admin's STUDENTS sub node
         async function populateStudents() {
-            const studentsRef = ref(database, "STUDENTS");
-            const snapshot = await get(studentsRef);
-            if (snapshot.exists()) {
-                const students = snapshot.val();
-                const studentSelect = document.getElementById('studentSelect');
-                for (const key in students) {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.text = students[key].FULL_NAME;
-                    studentSelect.appendChild(option);
+            const studentSelect = document.getElementById('studentSelect');
+            studentSelect.innerHTML = '<option value="">Select a student</option>';
+            if (!adminEmail) return;
+
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
                 }
-            } else {
-                console.error("No student data available");
+                if (adminKey) {
+                    const studentsStr = admins[adminKey].STUDENTS || "";
+                    const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
+                    for (const studentId of studentIds) {
+                        const studentRef = ref(database, `STUDENTS/${studentId}`);
+                        const studentSnapshot = await get(studentRef);
+                        if (studentSnapshot.exists()) {
+                            const student = studentSnapshot.val();
+                            const option = document.createElement('option');
+                            option.value = studentId;
+                            option.text = student.FULL_NAME;
+                            studentSelect.appendChild(option);
+                        }
+                    }
+                }
             }
         }
 
         // Populate the classroom dropdown based on admin's VIRTUAL_ROOMS
         async function populateClassrooms() {
-            if (email) {
+            const classroomSelect = document.getElementById('classroomSelect');
+            classroomSelect.innerHTML = '<option value="">Select a classroom</option>';
+            if (adminEmail) {
                 const adminRef = ref(database, "ADMIN");
                 const snapshot = await get(adminRef);
                 if (snapshot.exists()) {
                     const admins = snapshot.val();
                     let virtualRooms = [];
                     for (const key in admins) {
-                        if (admins[key].EMAIL === email) {
+                        if (admins[key].EMAIL === adminEmail) {
                             virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
                             break;
                         }
                     }
 
-                    const classroomSelect = document.getElementById('classroomSelect');
                     for (const roomId of virtualRooms) {
                         const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
                         const classroomSnapshot = await get(classroomRef);
@@ -201,5 +224,4 @@
     </script>
 
 </body>
-
 </html>
