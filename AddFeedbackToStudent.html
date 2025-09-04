@@ -68,7 +68,7 @@
         const studentSelect = document.getElementById('studentSelect');
 
         // Populate student dropdown using admin's STUDENTS sub node
-        async function populateStudentDropdown() {
+        async function populateStudents() {
             studentSelect.innerHTML = '<option value="">Select a student</option>';
             if (!adminEmail) return;
 
@@ -93,15 +93,13 @@
                             const student = studentSnapshot.val();
                             const option = document.createElement('option');
                             option.value = studentId;
-                            option.textContent = student.FULL_NAME;
+                            option.text = student.FULL_NAME;
                             studentSelect.appendChild(option);
                         }
                     }
                 }
             }
         }
-
-        populateStudentDropdown();
 
         // Handle form submission
         document.getElementById('feedbackForm').addEventListener('submit', async (event) => {
@@ -153,6 +151,11 @@
                 });
             });
         });
+
+        // Populate students dropdown on page load
+        window.onload = function() {
+            populateStudents();
+        };
     </script>
 </body>
 </html>
