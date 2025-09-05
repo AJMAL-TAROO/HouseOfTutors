@@ -147,11 +147,14 @@
             const sessionRef = ref(database, `TIME_TABLE/${adminKey}/VALUE/${day}/${time}`);
             await set(sessionRef, null);
             nativeToast({
-                message: 'Session deleted!',
+                message: 'Time table updated successfully!',
                 position: 'center',
                 rounded: true,
-                timeout: 2000,
-                type: 'success'
+                timeout: 5000,
+                type: 'success',
+                icon: false,
+                edge: true,
+                closeOnClick: false
             });
         };
 
