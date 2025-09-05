@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
     <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
 </head>
 
@@ -68,9 +64,8 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -87,6 +82,21 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+
+        // Helper to get admin key from email
+        async function getAdminKey(email) {
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                for (const key in admins) {
+                    if (admins[key].EMAIL === email) {
+                        return key;
+                    }
+                }
+            }
+            return null;
+        }
 
         // Populate classroom dropdown
         const classroomSelect = document.getElementById('classroomSelect');
@@ -122,7 +132,7 @@
         }
 
         // Handle form submission
-        document.getElementById('timeTableForm').addEventListener('submit', (event) => {
+        document.getElementById('timeTableForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const day = document.getElementById('daySelect').value;
@@ -130,8 +140,24 @@
             const startTime = document.getElementById('startTime').value;
             const endTime = document.getElementById('endTime').value;
             const time = `${startTime} - ${endTime}`;
+            const adminEmail = localStorage.getItem('userEmail');
+            const adminKey = await getAdminKey(adminEmail);
 
-            const timeTableRef = ref(database, `TIME_TABLE/VALUE/${day}`);
+            if (!adminKey) {
+                nativeToast({
+                    message: 'Admin not found!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 5000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+                return;
+            }
+
+            const timeTableRef = ref(database, `TIME_TABLE/${adminKey}/VALUE/${day}`);
             update(timeTableRef, { [time]: classrooms[classroomId] })
                 .then(() => {
                     nativeToast({
@@ -165,5 +191,4 @@
         }
     </script>
 </body>
-
 </html>
