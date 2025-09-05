@@ -49,9 +49,8 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -69,23 +68,53 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Populate classroom dropdown
+        // Get admin email from localStorage
+        const adminEmail = localStorage.getItem('userEmail');
         const classroomSelect = document.getElementById('classroomSelect');
-        const classroomsRef = ref(database, 'CLASSROOMS');
-        onValue(classroomsRef, (snapshot) => {
-            const classrooms = snapshot.val();
-            for (const key in classrooms) {
-                if (classrooms.hasOwnProperty(key) && key.startsWith('CLASSROOM_')) {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.textContent = classrooms[key].TITLE;
-                    classroomSelect.appendChild(option);
+
+        // Populate classroom dropdown using admin's VIRTUAL_ROOMS sub node
+        async function populateClassroomDropdown() {
+            classroomSelect.innerHTML = '<option value="">-- Select a classroom --</option>';
+            if (!adminEmail) return;
+
+            // Get admin node
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
+                }
+                if (adminKey) {
+                    const virtualRoomsStr = admins[adminKey].VIRTUAL_ROOMS || "";
+                    const roomIds = virtualRoomsStr.split(',').map(s => s.trim()).filter(s => s);
+                    for (const roomId of roomIds) {
+                        const classroomKey = `CLASSROOM_${roomId}`;
+                        const classroomRef = ref(database, `CLASSROOMS/${classroomKey}`);
+                        const classroomSnapshot = await get(classroomRef);
+                        if (classroomSnapshot.exists()) {
+                            const classroom = classroomSnapshot.val();
+                            const option = document.createElement('option');
+                            option.value = classroomKey;
+                            option.textContent = classroom.TITLE;
+                            classroomSelect.appendChild(option);
+                        }
+                    }
                 }
             }
-        });
+        }
+
+        // Call on page load
+        window.onload = function() {
+            populateClassroomDropdown();
+        };
 
         // Handle form submission
-        document.getElementById('commentForm').addEventListener('submit', (event) => {
+        document.getElementById('commentForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const classroomKey = classroomSelect.value;
@@ -100,7 +129,7 @@
             const commentRef = ref(database, `CLASSROOMS/${classroomKey}/COMMENTS`);
             const newCommentKey = `COMMENT_${Date.now()}`; // Generate a unique key for the new comment
 
-            update(commentRef, {
+            await update(commentRef, {
                 [newCommentKey]: {
                     DATE: currentDate,
                     COMMENT: commentText
