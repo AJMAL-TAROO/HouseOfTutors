@@ -12,9 +12,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <!-- REMOVE these two lines below! -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js"></script> -->
 </head>
 
 <body class="bg-gray-100">
@@ -100,24 +97,31 @@
         const attendanceTableBody = document.getElementById('attendanceTableBody');
         let students = {};
 
-        async function loadAdminStudents() {
-            attendanceTableBody.innerHTML = '';
-            if (!adminEmail) return;
-
-            // Get admin node
+        async function getAdminKey() {
             const adminRef = ref(database, "ADMIN");
             const adminSnapshot = await get(adminRef);
             if (adminSnapshot.exists()) {
                 const admins = adminSnapshot.val();
-                let adminKey = null;
                 for (const key in admins) {
                     if (admins[key].EMAIL === adminEmail) {
-                        adminKey = key;
-                        break;
+                        return key;
                     }
                 }
-                if (adminKey) {
-                    const studentsStr = admins[adminKey].STUDENTS || "";
+            }
+            return null;
+        }
+
+        async function loadAdminStudents() {
+            attendanceTableBody.innerHTML = '';
+            if (!adminEmail) return;
+
+            const adminKey = await getAdminKey();
+            if (adminKey) {
+                const adminRef = ref(database, `ADMIN/${adminKey}`);
+                const adminSnapshot = await get(adminRef);
+                if (adminSnapshot.exists()) {
+                    const adminData = adminSnapshot.val();
+                    const studentsStr = adminData.STUDENTS || "";
                     const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
                     students = {};
                     for (const studentId of studentIds) {
@@ -149,15 +153,14 @@
             const modal = document.getElementById('attendanceModal');
             modal.setAttribute('data-date', date);
 
-            // Extract year, month, and day from the selected date
             const [year, month, day] = date.split('-');
+            const adminKey = await getAdminKey();
 
-            // Fetch attendance data for the selected date
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            // Fetch attendance data for the selected date for this admin only
+            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}`);
             onValue(attendanceRef, (snapshot) => {
                 const attendanceData = snapshot.val();
 
-                // Update radio buttons based on attendance data
                 Array.from(attendanceTableBody.children).forEach((row) => {
                     const studentId = row.getAttribute('data-student-id');
                     const presentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="present"]`);
@@ -165,11 +168,8 @@
 
                     if (attendanceData && attendanceData[studentId]) {
                         const status = attendanceData[studentId].attendance;
-                        if (status === 'present') {
-                            presentRadio.checked = true;
-                        } else if (status === 'absent') {
-                            absentRadio.checked = true;
-                        }
+                        presentRadio.checked = status === 'present';
+                        absentRadio.checked = status === 'absent';
                     } else {
                         presentRadio.checked = false;
                         absentRadio.checked = false;
@@ -186,6 +186,7 @@
 
             const date = document.getElementById('attendanceModal').getAttribute('data-date');
             const [year, month, day] = date.split('-');
+            const adminKey = await getAdminKey();
 
             // Prepare attendance data
             const attendanceData = {};
@@ -207,25 +208,8 @@
                 }
             });
 
-            // Get adminKey inside this handler
-            let adminKey = null;
-            const adminRef = ref(database, "ADMIN");
-            const adminSnapshot = await get(adminRef);
-            if (adminSnapshot.exists()) {
-                const admins = adminSnapshot.val();
-                for (const key in admins) {
-                    if (admins[key].EMAIL === adminEmail) {
-                        adminKey = key;
-                        break;
-                    }
-                }
-            }
-
-            // Upload attendance data to Firebase
-            // If you want to use adminKey in the path, do it here:
-            // Example: ATTENDANCE{year}/{month}-{adminKey}/{day}
-            // Otherwise, use ATTENDANCE{year}/{month}/{day}
-            const attendanceRef = ref(database, `ATTENDANCE${year}/${month}/${day}`);
+            // Save attendance under adminKey
+            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}`);
             await set(attendanceRef, attendanceData)
                 .then(() => {
                     alert('Attendance recorded successfully!');
