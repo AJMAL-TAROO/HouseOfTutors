@@ -44,11 +44,9 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
             authDomain: "houseoftutors-f398e.firebaseapp.com",
@@ -60,11 +58,9 @@
             measurementId: "G-PEM636J9ZD"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Map day numbers to day names
         const dayMap = {
             1: 'Monday',
             2: 'Tuesday',
@@ -75,15 +71,31 @@
             7: 'Sunday'
         };
 
-        // Update time table overview
-        function updateTimeTableOverview() {
-            const timeTableOverview = document.getElementById('timeTableOverview');
-            const timeTableRef = ref(database, 'TIME_TABLE/VALUE');
+        async function getAdminKey(database, adminEmail) {
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        return key;
+                    }
+                }
+            }
+            return null;
+        }
 
+        async function updateTimeTableOverview() {
+            const timeTableOverview = document.getElementById('timeTableOverview');
+            timeTableOverview.innerHTML = '';
+            const adminEmail = localStorage.getItem('userEmail');
+            const adminKey = await getAdminKey(database, adminEmail);
+            if (!adminKey) return;
+
+            const timeTableRef = ref(database, `TIME_TABLE/${adminKey}/VALUE`);
             onValue(timeTableRef, (snapshot) => {
                 const timeTable = snapshot.val();
-                timeTableOverview.innerHTML = '';
-
+                if (!timeTable) return;
                 for (const day in timeTable) {
                     if (timeTable.hasOwnProperty(day)) {
                         const daySection = document.createElement('div');
@@ -100,6 +112,7 @@
                             <tr class="bg-purple-800 text-white">
                                 <th class="px-4 py-2">Time</th>
                                 <th class="px-4 py-2">Classroom</th>
+                                <th class="px-4 py-2">Action</th>
                             </tr>
                         `;
                         table.appendChild(thead);
@@ -112,6 +125,9 @@
                                 row.innerHTML = `
                                     <td class="border px-4 py-2">${time}</td>
                                     <td class="border px-4 py-2">${classroom}</td>
+                                    <td class="border px-4 py-2">
+                                        <button class="btn btn-danger btn-sm" onclick="deleteSession('${day}', '${time}')">Delete</button>
+                                    </td>
                                 `;
                                 tbody.appendChild(row);
                             }
@@ -124,12 +140,22 @@
             });
         }
 
-        // Initial load of time table overview
-        updateTimeTableOverview();
+        window.deleteSession = async function(day, time) {
+            const adminEmail = localStorage.getItem('userEmail');
+            const adminKey = await getAdminKey(database, adminEmail);
+            if (!adminKey) return;
+            const sessionRef = ref(database, `TIME_TABLE/${adminKey}/VALUE/${day}/${time}`);
+            await set(sessionRef, null);
+            nativeToast({
+                message: 'Session deleted!',
+                position: 'center',
+                rounded: true,
+                timeout: 2000,
+                type: 'success'
+            });
+        };
 
-        function goBack() {
-            window.history.back();
-        }
+        updateTimeTableOverview();
     </script>
 </body>
 
