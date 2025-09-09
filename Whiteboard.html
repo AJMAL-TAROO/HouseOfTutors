@@ -141,6 +141,7 @@
             loadWhiteboard(latestWhiteboardUrl);
             document.getElementById('whiteboardModal').style.display = 'none';
         };
+
         document.getElementById('loadNewBtn').onclick = function() {
             loadWhiteboard("https://www.whiteboard.team/app/board/new");
             document.getElementById('whiteboardModal').style.display = 'none';
@@ -149,6 +150,7 @@
         function showExitModal() {
             document.getElementById('exitModal').style.display = 'flex';
         }
+
         document.getElementById('saveWhiteboardBtn').onclick = async function() {
             // Use the latest URL tracked by iframe load event
             let url = currentWhiteboardUrl;
@@ -163,8 +165,9 @@
             document.getElementById('exitModal').style.display = 'none';
             setTimeout(() => {
                 window.location.href = 'DashboardAdmin.html';
-            }, 3000);
+            }, 5000);
         };
+        
         document.getElementById('dontSaveWhiteboardBtn').onclick = async function() {
             await saveWhiteboardUrl("https://www.whiteboard.team/app/board/new");
             nativeToast({
@@ -177,19 +180,13 @@
             document.getElementById('exitModal').style.display = 'none';
             setTimeout(() => {
                 window.location.href = 'DashboardAdmin.html';
-            }, 3000);
+            }, 1200);
         };
 
         document.getElementById('backBtn').onclick = function(e) {
             e.preventDefault();
             showExitModal();
         };
-
-        // REMOVE browser/tab close warning!
-        // window.onbeforeunload = function(e) {
-        //     showExitModal();
-        //     return "Do you want to save your whiteboard before exiting?";
-        // };
 
         window.onload = function() {
             showWhiteboardModal();
