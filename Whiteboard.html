@@ -77,7 +77,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
             authDomain: "houseoftutors-f398e.firebaseapp.com",
@@ -96,7 +95,6 @@
         let latestWhiteboardUrl = "https://www.whiteboard.team/app/board/new";
         let currentWhiteboardUrl = "";
 
-        // Get admin key and latest whiteboard url
         async function getAdminInfo() {
             const adminRef = ref(database, "ADMIN");
             const adminSnapshot = await get(adminRef);
@@ -112,10 +110,8 @@
             }
         }
 
-        // Show modal to choose whiteboard
         async function showWhiteboardModal() {
             await getAdminInfo();
-            // If the latest whiteboard is the default, just load it, no popup
             if (latestWhiteboardUrl === "https://www.whiteboard.team/app/board/new") {
                 loadWhiteboard(latestWhiteboardUrl);
             } else {
@@ -123,31 +119,24 @@
             }
         }
 
-        // Load whiteboard in iframe
         function loadWhiteboard(url) {
             const frame = document.getElementById('whiteboardFrame');
             frame.src = url;
             currentWhiteboardUrl = url;
         }
 
-        // Extract whiteboard url from iframe (after navigation)
-        function getCurrentWhiteboardUrl() {
-            const frame = document.getElementById('whiteboardFrame');
-            try {
-                return frame.contentWindow.location.href || frame.src;
-            } catch (e) {
-                return frame.src;
-            }
-        }
+        // Track the latest URL loaded in the iframe
+        const frame = document.getElementById('whiteboardFrame');
+        frame.addEventListener('load', function() {
+            currentWhiteboardUrl = frame.src;
+        });
 
-        // Save whiteboard url to Firebase
         async function saveWhiteboardUrl(url) {
             if (!adminKey) return;
             const adminRef = ref(database, `ADMIN/${adminKey}`);
             await update(adminRef, { WHITEBOARD: url });
         }
 
-        // Modal event listeners
         document.getElementById('loadLatestBtn').onclick = function() {
             loadWhiteboard(latestWhiteboardUrl);
             document.getElementById('whiteboardModal').style.display = 'none';
@@ -157,19 +146,13 @@
             document.getElementById('whiteboardModal').style.display = 'none';
         };
 
-        // Exit modal logic
         function showExitModal() {
             document.getElementById('exitModal').style.display = 'flex';
         }
         document.getElementById('saveWhiteboardBtn').onclick = async function() {
-            // Always get the src attribute of the iframe
-            let url = document.getElementById('whiteboardFrame').src;
-
-            // If still /new, try to get the actual board URL after a short delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            url = document.getElementById('whiteboardFrame').src;
+            // Use the latest URL tracked by iframe load event
+            let url = currentWhiteboardUrl;
             await saveWhiteboardUrl(url);
-            
             nativeToast({
                 message: 'Whiteboard URL saved!',
                 position: 'center',
@@ -178,9 +161,9 @@
                 type: 'success'
             });
             document.getElementById('exitModal').style.display = 'none';
-            // setTimeout(() => {
-            //     window.location.href = 'DashboardAdmin.html';
-            // }, 1200);
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 1200);
         };
         document.getElementById('dontSaveWhiteboardBtn').onclick = async function() {
             await saveWhiteboardUrl("https://www.whiteboard.team/app/board/new");
@@ -192,24 +175,22 @@
                 type: 'info'
             });
             document.getElementById('exitModal').style.display = 'none';
-            // setTimeout(() => {
-            //     window.location.href = 'DashboardAdmin.html';
-            // }, 1200);
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 1200);
         };
 
-        // Back button triggers exit modal
         document.getElementById('backBtn').onclick = function(e) {
             e.preventDefault();
             showExitModal();
         };
 
-        // Warn on browser/tab close
-        window.onbeforeunload = function(e) {
-            showExitModal();
-            return "Do you want to save your whiteboard before exiting?";
-        };
+        // REMOVE browser/tab close warning!
+        // window.onbeforeunload = function(e) {
+        //     showExitModal();
+        //     return "Do you want to save your whiteboard before exiting?";
+        // };
 
-        // On page load, show modal to choose whiteboard or just load default
         window.onload = function() {
             showWhiteboardModal();
         };
