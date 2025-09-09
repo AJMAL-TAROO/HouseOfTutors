@@ -6,6 +6,7 @@
     <title>Whiteboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -19,17 +20,196 @@
             height: calc(100% - 56px); /* Adjust for navbar height */
             width: 100%;
         }
+        #whiteboardModal, #exitModal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content-custom {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .modal-btn {
+            margin: 0 10px;
+            min-width: 120px;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+            <button class="btn btn-dark" id="backBtn">
                 <i class="fas fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
-    <iframe src="https://www.whiteboard.team/app/board/aI7kaY6e"></iframe>
+    <iframe id="whiteboardFrame"></iframe>
+
+    <!-- Modal for loading whiteboard -->
+    <div id="whiteboardModal" style="display:none;">
+        <div class="modal-content-custom">
+            <h5>Load Whiteboard</h5>
+            <p>Do you want to load the latest whiteboard or start a new one?</p>
+            <button class="btn btn-primary modal-btn" id="loadLatestBtn">Load Latest</button>
+            <button class="btn btn-secondary modal-btn" id="loadNewBtn">Load New</button>
+        </div>
+    </div>
+    <!-- Modal for exit/save whiteboard -->
+    <div id="exitModal" style="display:none;">
+        <div class="modal-content-custom">
+            <h5>Save Whiteboard</h5>
+            <p>Do you want to save the current whiteboard?</p>
+            <button class="btn btn-success modal-btn" id="saveWhiteboardBtn">Yes, Save</button>
+            <button class="btn btn-danger modal-btn" id="dontSaveWhiteboardBtn">No, Don't Save</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const adminEmail = localStorage.getItem('userEmail');
+        let adminKey = null;
+        let latestWhiteboardUrl = "https://www.whiteboard.team/app/board/new";
+        let currentWhiteboardUrl = "";
+
+        // Get admin key and latest whiteboard url
+        async function getAdminInfo() {
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        latestWhiteboardUrl = admins[key].WHITEBOARD || "https://www.whiteboard.team/app/board/new";
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Show modal to choose whiteboard
+        async function showWhiteboardModal() {
+            await getAdminInfo();
+            document.getElementById('whiteboardModal').style.display = 'flex';
+        }
+
+        // Load whiteboard in iframe
+        function loadWhiteboard(url) {
+            const frame = document.getElementById('whiteboardFrame');
+            frame.src = url;
+            currentWhiteboardUrl = url;
+        }
+
+        // Extract whiteboard url from iframe (after navigation)
+        function getCurrentWhiteboardUrl() {
+            const frame = document.getElementById('whiteboardFrame');
+            try {
+                // Try to get the current URL from iframe
+                // This works only if same-origin, otherwise fallback to src
+                return frame.contentWindow.location.href || frame.src;
+            } catch (e) {
+                return frame.src;
+            }
+        }
+
+        // Save whiteboard url to Firebase
+        async function saveWhiteboardUrl(url) {
+            if (!adminKey) return;
+            const adminRef = ref(database, `ADMIN/${adminKey}`);
+            await update(adminRef, { WHITEBOARD: url });
+        }
+
+        // Modal event listeners
+        document.getElementById('loadLatestBtn').onclick = function() {
+            loadWhiteboard(latestWhiteboardUrl);
+            document.getElementById('whiteboardModal').style.display = 'none';
+        };
+        document.getElementById('loadNewBtn').onclick = function() {
+            loadWhiteboard("https://www.whiteboard.team/app/board/new");
+            document.getElementById('whiteboardModal').style.display = 'none';
+        };
+
+        // Exit modal logic
+        function showExitModal() {
+            document.getElementById('exitModal').style.display = 'flex';
+        }
+        document.getElementById('saveWhiteboardBtn').onclick = async function() {
+            // Get the current whiteboard url (should be the unique id url)
+            let url = getCurrentWhiteboardUrl();
+            // If it's still the /new url, try to get the actual board url from iframe src
+            if (url.endsWith('/new')) {
+                url = document.getElementById('whiteboardFrame').src;
+            }
+            await saveWhiteboardUrl(url);
+            nativeToast({
+                message: 'Whiteboard URL saved!',
+                position: 'center',
+                rounded: true,
+                timeout: 2000,
+                type: 'success'
+            });
+            document.getElementById('exitModal').style.display = 'none';
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 1200);
+        };
+        document.getElementById('dontSaveWhiteboardBtn').onclick = async function() {
+            await saveWhiteboardUrl("https://www.whiteboard.team/app/board/new");
+            nativeToast({
+                message: 'Whiteboard reset!',
+                position: 'center',
+                rounded: true,
+                timeout: 2000,
+                type: 'info'
+            });
+            document.getElementById('exitModal').style.display = 'none';
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 1200);
+        };
+
+        // Back button triggers exit modal
+        document.getElementById('backBtn').onclick = function(e) {
+            e.preventDefault();
+            showExitModal();
+        };
+
+        // Warn on browser/tab close
+        window.onbeforeunload = function(e) {
+            showExitModal();
+            // Prevent default close
+            return "Do you want to save your whiteboard before exiting?";
+        };
+
+        // On page load, show modal to choose whiteboard
+        window.onload = function() {
+            showWhiteboardModal();
+        };
+    </script>
 </body>
 </html>
