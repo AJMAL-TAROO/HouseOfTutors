@@ -162,8 +162,12 @@
             document.getElementById('exitModal').style.display = 'flex';
         }
         document.getElementById('saveWhiteboardBtn').onclick = async function() {
-            let url = getCurrentWhiteboardUrl();
+            // Always get the src attribute of the iframe
+            let url = document.getElementById('whiteboardFrame').src;
+            // If still /new, try to get the actual board URL after a short delay
             if (url.endsWith('/new')) {
+                // Wait 1 second and try again
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 url = document.getElementById('whiteboardFrame').src;
             }
             await saveWhiteboardUrl(url);
