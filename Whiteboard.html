@@ -17,7 +17,7 @@
         }
         iframe {
             border: none;
-            height: calc(100% - 56px); /* Adjust for navbar height */
+            height: calc(100% - 56px);
             width: 100%;
         }
         #whiteboardModal, #exitModal {
@@ -115,7 +115,12 @@
         // Show modal to choose whiteboard
         async function showWhiteboardModal() {
             await getAdminInfo();
-            document.getElementById('whiteboardModal').style.display = 'flex';
+            // If the latest whiteboard is the default, just load it, no popup
+            if (latestWhiteboardUrl === "https://www.whiteboard.team/app/board/new") {
+                loadWhiteboard(latestWhiteboardUrl);
+            } else {
+                document.getElementById('whiteboardModal').style.display = 'flex';
+            }
         }
 
         // Load whiteboard in iframe
@@ -129,8 +134,6 @@
         function getCurrentWhiteboardUrl() {
             const frame = document.getElementById('whiteboardFrame');
             try {
-                // Try to get the current URL from iframe
-                // This works only if same-origin, otherwise fallback to src
                 return frame.contentWindow.location.href || frame.src;
             } catch (e) {
                 return frame.src;
@@ -159,9 +162,7 @@
             document.getElementById('exitModal').style.display = 'flex';
         }
         document.getElementById('saveWhiteboardBtn').onclick = async function() {
-            // Get the current whiteboard url (should be the unique id url)
             let url = getCurrentWhiteboardUrl();
-            // If it's still the /new url, try to get the actual board url from iframe src
             if (url.endsWith('/new')) {
                 url = document.getElementById('whiteboardFrame').src;
             }
@@ -202,11 +203,10 @@
         // Warn on browser/tab close
         window.onbeforeunload = function(e) {
             showExitModal();
-            // Prevent default close
             return "Do you want to save your whiteboard before exiting?";
         };
 
-        // On page load, show modal to choose whiteboard
+        // On page load, show modal to choose whiteboard or just load default
         window.onload = function() {
             showWhiteboardModal();
         };
