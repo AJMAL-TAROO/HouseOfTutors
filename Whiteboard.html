@@ -20,27 +20,6 @@
             height: calc(100% - 56px);
             width: 100%;
         }
-        #whiteboardModal, #exitModal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content-custom {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-        }
-        .modal-btn {
-            margin: 0 10px;
-            min-width: 120px;
-        }
     </style>
 </head>
 <body>
@@ -54,19 +33,11 @@
     </nav>
     <iframe id="whiteboardFrame"></iframe>
 
-    <!-- Modal for loading whiteboard -->
-    <div id="whiteboardModal" style="display:none;">
-        <div class="modal-content-custom">
-            <h5>Load Whiteboard</h5>
-            <p>Do you want to load the latest whiteboard or start a new one?</p>
-            <button class="btn btn-primary modal-btn" id="loadLatestBtn">Load Latest</button>
-            <button class="btn btn-secondary modal-btn" id="loadNewBtn">Load New</button>
-        </div>
-    </div>
+    <!-- Removed modal for loading whiteboard -->
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
@@ -113,56 +84,14 @@
             currentWhiteboardUrl = frame.src;
         });
 
-        async function saveWhiteboardUrl(url) {
-            if (!adminKey) return;
-            const adminRef = ref(database, `ADMIN/${adminKey}`);
-            await update(adminRef, { WHITEBOARD: url });
-        }
+        document.getElementById('backBtn').onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'DashboardAdmin.html';
+        };
 
-        document.getElementById('loadLatestBtn').onclick = function() {
+        window.onload = async function() {
+            await getAdminInfo();
             loadWhiteboard(latestWhiteboardUrl);
-            document.getElementById('whiteboardModal').style.display = 'none';
-        };
-
-        document.getElementById('loadNewBtn').onclick = function() {
-            loadWhiteboard("https://www.whiteboard.team/app/board/new");
-            document.getElementById('whiteboardModal').style.display = 'none';
-        };
-
-        function showExitModal() {
-            document.getElementById('exitModal').style.display = 'flex';
-        }
-
-        document.getElementById('saveWhiteboardBtn').onclick = async function() {
-            // Use the latest URL tracked by iframe load event
-            let url = currentWhiteboardUrl;
-            await saveWhiteboardUrl(url);
-            nativeToast({
-                message: 'Whiteboard URL saved!',
-                position: 'center',
-                rounded: true,
-                timeout: 2000,
-                type: 'success'
-            });
-            document.getElementById('exitModal').style.display = 'none';
-            setTimeout(() => {
-                window.location.href = 'DashboardAdmin.html';
-            }, 5000);
-        };
-        
-        document.getElementById('dontSaveWhiteboardBtn').onclick = async function() {
-            await saveWhiteboardUrl("https://www.whiteboard.team/app/board/new");
-            nativeToast({
-                message: 'Whiteboard reset!',
-                position: 'center',
-                rounded: true,
-                timeout: 2000,
-                type: 'info'
-            });
-            document.getElementById('exitModal').style.display = 'none';
-            setTimeout(() => {
-                window.location.href = 'DashboardAdmin.html';
-            }, 1200);
         };
     </script>
 </body>
