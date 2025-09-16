@@ -63,15 +63,6 @@
             <button class="btn btn-secondary modal-btn" id="loadNewBtn">Load New</button>
         </div>
     </div>
-    <!-- Modal for exit/save whiteboard -->
-    <div id="exitModal" style="display:none;">
-        <div class="modal-content-custom">
-            <h5>Save Whiteboard</h5>
-            <p>Do you want to save the current whiteboard?</p>
-            <button class="btn btn-success modal-btn" id="saveWhiteboardBtn">Yes, Save</button>
-            <button class="btn btn-danger modal-btn" id="dontSaveWhiteboardBtn">No, Don't Save</button>
-        </div>
-    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
@@ -107,15 +98,6 @@
                         break;
                     }
                 }
-            }
-        }
-
-        async function showWhiteboardModal() {
-            await getAdminInfo();
-            if (latestWhiteboardUrl === "https://www.whiteboard.team/app/board/new") {
-                loadWhiteboard(latestWhiteboardUrl);
-            } else {
-                document.getElementById('whiteboardModal').style.display = 'flex';
             }
         }
 
@@ -181,15 +163,6 @@
             setTimeout(() => {
                 window.location.href = 'DashboardAdmin.html';
             }, 1200);
-        };
-
-        document.getElementById('backBtn').onclick = function(e) {
-            e.preventDefault();
-            showExitModal();
-        };
-
-        window.onload = function() {
-            showWhiteboardModal();
         };
     </script>
 </body>
