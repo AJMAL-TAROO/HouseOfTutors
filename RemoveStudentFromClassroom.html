@@ -172,17 +172,19 @@
             let virtualRooms = student.VIRTUAL_ROOMS ? student.VIRTUAL_ROOMS.split(',').map(s => s.trim()) : [];
             virtualRooms = virtualRooms.filter(room => room !== classroomId);
             await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
-            nativeToast({
-                message: 'Student removed from classroom successfully!',
-                position: 'center',
-                rounded: true,
-                timeout: 4000,
-                type: 'success',
-                icon: false,
-                edge: true,
-                closeOnClick: false
-            });
-            // Optionally, refresh classroom dropdown
+            // Show toast after update completes
+            setTimeout(() => {
+                nativeToast({
+                    message: 'Student removed from classroom successfully!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 4000,
+                    type: 'success',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
+            }, 100); // slight delay to ensure UI updates
             await populateClassrooms(studentId);
         }
     });
