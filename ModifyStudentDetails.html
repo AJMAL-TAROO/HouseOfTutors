@@ -162,7 +162,16 @@
         const password = document.getElementById('password').value;
 
         if (!fullName || !tel || !rParty || !rPartyTel || !email || !password) {
-            alert('All fields must be filled!');
+            nativeToast({
+                message: 'All fields must be filled!',
+                position: 'center',
+                rounded: true,
+                timeout: 4000,
+                type: 'error',
+                icon: false,
+                edge: true,
+                closeOnClick: false
+            });
             return;
         }
 
@@ -176,7 +185,16 @@
             PASSWORD: password
         });
 
-        alert('Student details updated successfully!');
+        nativeToast({
+            message: 'Student details updated successfully!',
+            position: 'center',
+            rounded: true,
+            timeout: 4000,
+            type: 'success',
+            icon: false,
+            edge: true,
+            closeOnClick: false
+        });
     });
     </script>
 </body>
