@@ -15,13 +15,19 @@
 
     <style>
         html, body {
-        height: 100%;      /* Make them take full viewport height */
+            height: 100%;
         }
-
         body {
-        background: white; /* Just to visualize the full area */
+            background: white;
         }
-  </style>
+        .container.centered-content {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 
 <body style="padding: 10px;">
@@ -34,34 +40,35 @@
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
-    
-    <div class="container mx-auto">
-        <h2 class="text-2xl mb-4">Create new Classroom</h2>
-        <form id="addClassroomForm">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="title" type="text" placeholder="Title">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherFullName">Teacher Full Name</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherFullName" type="text" placeholder="Teacher Full Name">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherAddress">Teacher Address</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherAddress" type="text" placeholder="Teacher Address">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherTel">Teacher Telephone</label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherTel" type="text" placeholder="Teacher Telephone">
-            </div>
-            <div class="flex items-center justify-between">
-                <button class="btn btn-primary" type="button" onclick="uploadClassroomData()">Upload</button>
-            </div>
-        </form>
+
+    <div class="container centered-content">
+        <div class="container mx-auto">
+            <h2 class="text-2xl mb-4 text-center">Create New Classroom</h2>
+            <form id="addClassroomForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="title" type="text" placeholder="Title">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherFullName">Teacher Full Name</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherFullName" type="text" placeholder="Teacher Full Name">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherAddress">Teacher Address</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherAddress" type="text" placeholder="Teacher Address">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="teacherTel">Teacher Telephone</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="teacherTel" type="text" placeholder="Teacher Telephone">
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="btn btn-primary" type="button" onclick="uploadClassroomData()">Upload</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
@@ -89,10 +96,7 @@
                 const snapshot = await get(classroomIdRef);
                 if (snapshot.exists()) {
                     classroomId = snapshot.val();
-                    console.log("Retrieved classroom ID:", classroomId);
                     classroomId++; // Increment the classroom ID
-                } else {
-                    console.error("No data available");
                 }
             } catch (error) {
                 console.error("Error retrieving classroom ID:", error);
@@ -135,7 +139,6 @@
             try {
                 const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
                 await set(newClassroomRef, classroomData);
-                console.log("Classroom data uploaded successfully");
                 nativeToast({
                     message: 'Classroom data uploaded successfully!',
                     position: 'center',
@@ -173,20 +176,13 @@
                             const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.toString().split(',') : [];
                             virtualRooms.push(classroomId.toString());
                             await update(ref(database, `ADMIN/${adminKey}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
-                            console.log("VIRTUAL_ROOMS updated successfully");
 
                             // Reload the page after successful upload
                             setTimeout(() => {
                                 location.reload();
-                            }, 2000); // 2 seconds delay before reloading
-                        } else {
-                            console.error("Admin with the specified email not found");
+                            }, 2000);
                         }
-                    } else {
-                        console.error("No admin data available");
                     }
-                } else {
-                    console.error("No email found in local storage");
                 }
             } catch (error) {
                 console.error("Error uploading classroom data:", error);
@@ -195,5 +191,4 @@
     </script>
 
 </body>
-
 </html>
