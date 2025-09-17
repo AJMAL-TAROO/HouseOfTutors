@@ -25,6 +25,19 @@
             padding: 2rem;
             margin-top: 2rem;
         }
+        table.equal-cols {
+            table-layout: fixed;
+            width: 100%;
+        }
+        table.equal-cols th, table.equal-cols td {
+            width: 33.33%;
+            word-break: break-word;
+        }
+        /* Use same color as navbar for table header */
+        .table-header-bg {
+            background-color: #343a40 !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 
@@ -113,10 +126,10 @@
                         daySection.appendChild(dayTitle);
 
                         const table = document.createElement('table');
-                        table.classList.add('table-auto', 'w-full', 'text-center');
+                        table.classList.add('equal-cols', 'table-auto', 'w-full', 'text-center');
                         const thead = document.createElement('thead');
                         thead.innerHTML = `
-                            <tr class="bg-purple-800 text-white">
+                            <tr class="table-header-bg">
                                 <th class="px-4 py-2">Time</th>
                                 <th class="px-4 py-2">Classroom</th>
                                 <th class="px-4 py-2">Action</th>
