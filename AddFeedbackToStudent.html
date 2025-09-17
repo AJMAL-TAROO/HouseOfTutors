@@ -5,17 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Add Feedback to Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <title>Add Feedback to Student</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            background: white;
+        }
+        .container.centered-content {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-full">
         <div class="container-fluid">
             <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -24,21 +38,23 @@
         </div>
     </nav>
 
-    <div class="container flex items-center justify-center min-h-screen mt-5">
-        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
-            <h1 class="text-3xl font-bold mb-4 text-center">Add Feedback to Student</h1>
-            <form id="feedbackForm" class="space-y-4">
-                <div>
-                    <label for="studentSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Student</label>
-                    <select id="studentSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
-                        <!-- Options will be populated dynamically -->
+    <div class="container centered-content">
+        <div class="container mx-auto">
+            <h2 class="text-2xl mb-4 text-center">Add Feedback to Student</h2>
+            <form id="feedbackForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
+                    <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white">
+                        <option value="">-- Select a student --</option>
                     </select>
                 </div>
-                <div>
-                    <label for="feedbackText" class="block mb-2 text-sm font-medium text-gray-900">Feedback</label>
-                    <textarea id="feedbackText" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" rows="4"></textarea>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="feedbackText">Feedback</label>
+                    <textarea id="feedbackText" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" rows="4"></textarea>
                 </div>
-                <button type="submit" class="w-full text-white bg-purple-800 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
+                <div class="flex items-center justify-between">
+                    <button class="btn btn-primary" type="submit">Add Feedback</button>
+                </div>
             </form>
         </div>
     </div>
@@ -115,7 +131,16 @@
             const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
             if (!studentKey || !feedbackText) {
-                alert('Please select a student and enter feedback.');
+                nativeToast({
+                    message: 'Please select a student and enter feedback.',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'error',
+                    icon: false,
+                    edge: true,
+                    closeOnClick: false
+                });
                 return;
             }
 
@@ -132,7 +157,7 @@
                     message: 'Feedback added successfully!',
                     position: 'center',
                     rounded: true,
-                    timeout: 5000,
+                    timeout: 2000,
                     type: 'success',
                     icon: false,
                     edge: true,
@@ -148,7 +173,7 @@
                     message: 'Error adding feedback!',
                     position: 'center',
                     rounded: true,
-                    timeout: 5000,
+                    timeout: 2000,
                     type: 'error',
                     icon: false,
                     edge: true,
