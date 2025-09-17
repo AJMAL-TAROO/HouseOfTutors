@@ -15,9 +15,20 @@
             width: 100%;
             overflow: hidden;
         }
-        iframe {
-            border: none;
+
+        /* Wrapper to crop top 50px of the whiteboard */
+        .iframe-wrapper {
+            position: relative;
             height: calc(100% - 56px);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #whiteboardFrame {
+            border: none;
+            position: absolute;
+            top: -50px; /* hides top 50px */
+            height: calc(100% + 50px); /* extend so no empty space */
             width: 100%;
         }
     </style>
@@ -31,9 +42,11 @@
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
-    <iframe id="whiteboardFrame"></iframe>
 
-    <!-- Removed modal for loading whiteboard -->
+    <!-- Wrapper hides 50px of the top of the iframe -->
+    <div class="iframe-wrapper">
+        <iframe id="whiteboardFrame"></iframe>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
