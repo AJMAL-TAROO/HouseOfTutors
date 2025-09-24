@@ -13,21 +13,30 @@
   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
   <style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    }
+
     body {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+    display: flex;
+    flex-direction: column;
     }
+
     .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+    flex: 1;              /* expand to fill space below navbar */
+    display: flex;
+    flex-direction: column;
+    height: 100%;         /* full available height */
     }
+
     #notesContainer {
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: 20px;
+    flex: 1;              /* take all remaining space */
+    overflow-y: auto;     /* scroll if too many notes */
+    padding-bottom: 20px;
     }
+
     .alert img { border: 2px solid gray; border-radius: 8px; cursor: pointer; margin-right: 10px; }
     .alert { display: flex; align-items: center; margin-bottom: 10px; background-color: #f8f9fa;
              box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px; padding: 10px; position: relative; }
