@@ -88,44 +88,58 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Retrieve the current classroom ID number from Firebase and increment it
         let classroomId;
+        let adminVrLink = null;
+
+        // On page load, fetch classroom ID and admin VR_LINK
         window.onload = async function() {
             try {
+                // Get classroom ID
                 const classroomIdRef = ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER");
                 const snapshot = await get(classroomIdRef);
                 if (snapshot.exists()) {
-                    classroomId = snapshot.val();
-                    classroomId++; // Increment the classroom ID
+                    classroomId = snapshot.val() + 1;
+                }
+
+                // Get admin VR_LINK based on email
+                const email = localStorage.getItem('userEmail');
+                if (email) {
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === email) {
+                                adminVrLink = admins[key].VR_LINK;
+                                break;
+                            }
+                        }
+                    }
                 }
             } catch (error) {
-                console.error("Error retrieving classroom ID:", error);
+                console.error("Error on page load:", error);
             }
         };
 
-        // Upload classroom data to Firebase
+        // Upload classroom data
         window.uploadClassroomData = async function() {
             const title = document.getElementById('title').value;
             const teacherFullName = document.getElementById('teacherFullName').value;
             const teacherAddress = document.getElementById('teacherAddress').value;
             const teacherTel = document.getElementById('teacherTel').value;
-            const vrLink = "https://mindtech.daily.co/HouseOfTutors";
 
-            // Validate all fields
             if (!title || !teacherFullName || !teacherAddress || !teacherTel) {
                 nativeToast({
                     message: 'All fields must be filled!',
                     position: 'center',
                     rounded: true,
                     timeout: 2000,
-                    type: 'error',
-                    icon: false,
-                    edge: true,
-                    closeOnClick: false
+                    type: 'error'
                 });
                 return;
             }
 
+            // Always use admin's VR_LINK
             const classroomData = {
                 CLASSROOM_ID: classroomId,
                 STORAGE_FOLDER: `${classroomId}_NOTES`,
@@ -133,57 +147,45 @@
                 TEACHER_FULL_NAME: teacherFullName,
                 TEACHER_TEL: teacherTel,
                 TITLE: title,
-                VR_LINK: vrLink
+                VR_LINK: adminVrLink
             };
 
             try {
-                const newClassroomRef = ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`);
-                await set(newClassroomRef, classroomData);
-                nativeToast({
-                    message: 'Classroom data uploaded successfully!',
-                    position: 'center',
-                    rounded: true,
-                    timeout: 2000,
-                    type: 'success',
-                    icon: false,
-                    edge: true,
-                    closeOnClick: false
-                });
+                // Save classroom
+                await set(ref(database, `CLASSROOMS/CLASSROOM_${classroomId}`), classroomData);
 
-                // Increment the classroom ID number in Firebase
+                // Update numbers
                 await set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
-                // Create a new node for the classroom notes
                 await set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
 
-                // Retrieve the email from local storage
+                // Add classroom to admin's VIRTUAL_ROOMS list
                 const email = localStorage.getItem('userEmail');
                 if (email) {
-                    // Find the admin with the matching email
                     const adminRef = ref(database, "ADMIN");
                     const adminSnapshot = await get(adminRef);
                     if (adminSnapshot.exists()) {
                         const admins = adminSnapshot.val();
-                        let adminKey = null;
                         for (const key in admins) {
                             if (admins[key].EMAIL === email) {
-                                adminKey = key;
+                                const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                                virtualRooms.push(classroomId.toString());
+                                await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
                                 break;
                             }
                         }
-
-                        if (adminKey) {
-                            const adminData = admins[adminKey];
-                            const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.toString().split(',') : [];
-                            virtualRooms.push(classroomId.toString());
-                            await update(ref(database, `ADMIN/${adminKey}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
-
-                            // Reload the page after successful upload
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
-                        }
                     }
                 }
+
+                nativeToast({
+                    message: 'Classroom created successfully!',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 2000,
+                    type: 'success'
+                });
+
+                setTimeout(() => location.reload(), 2000);
+
             } catch (error) {
                 console.error("Error uploading classroom data:", error);
             }
