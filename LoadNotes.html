@@ -138,6 +138,17 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
+        //------------------------------------------HELPER: PICK ICON-----------------------
+        function getIconByExtension(filename) {
+            if (!filename) return "img/uploadnote_icons/icon-img.png";
+            let ext = filename.split('.').pop().toLowerCase();
+            if (["jpg","jpeg","png","gif"].includes(ext)) return "img/uploadnote_icons/icon-img.png";
+            if (ext === "pdf") return "img/uploadnote_icons/icon-pdf.png";
+            if (ext === "docx" || ext === "doc") return "img/uploadnote_icons/icon-docx.png";
+            if (["mp4","mov","avi","mkv"].includes(ext)) return "img/uploadnote_icons/icon-video.png";
+            return "img/uploadnote_icons/icon-img.png"; // fallback
+        }
+
         //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
         function readData() {
             var storageFolder = localStorage.getItem('storage_folder');
@@ -166,7 +177,7 @@
                     alertDiv.setAttribute("role", "alert");
 
                     var img = document.createElement("img");
-                    img.src = item.Link;
+                    img.src = getIconByExtension(item.Name);;
                     img.onclick = function() {
                         document.getElementById('modalImage').src = item.Link;
                         $('#imageModal').modal('show');
