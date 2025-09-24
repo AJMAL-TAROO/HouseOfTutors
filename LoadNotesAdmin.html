@@ -1,165 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Notes</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-    .container {
-      flex: 1;                /* take remaining height under navbar */
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    #notesContainer {
-      flex: 1;
-      overflow-y: auto;       /* scroll when too many notes */
-      margin-top: 15px;
-      padding-bottom: 20px;
-    }
-
-    .alert img { border: 2px solid gray; border-radius: 8px; cursor: pointer; margin-right: 10px; }
-    .alert { display: flex; align-items: center; margin-bottom: 10px; background-color: #f8f9fa;
-             box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px; padding: 10px; position: relative; }
-    .details { display: flex; flex-direction: column; padding-left: 10px; }
-    .details .name { font-weight: bold; font-size: 1.2em; }
-    .details .date { color: gray; font-size: 0.9em; }
-    .details .separator { border-top: 1px solid #ddd; margin: 10px 0; }
-    .delete-btn { position: absolute; top: 10px; right: 10px; cursor: pointer; color: red; }
-    .delete-btn i { font-size: 1.5em; }
-    @media (min-width: 769px) { .alert img { height: 200px; width: 200px; } }
-    @media (max-width: 768px) { .alert img { height: 100px; width: 100px; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Notes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <style>
+                .alert img { 
+            border: 2px solid gray; 
+            border-radius: 8px; /* Rounded corners */
+            cursor: pointer; 
+            margin-right: 10px; 
+        }
+        .alert { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 10px; 
+            background-color: #f8f9fa; /* Off-white color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+            padding: 10px; 
+            position: relative;
+        }
+        .modal img { width: 100%; }
+        .modal-dialog { max-height: calc(100% * 4); } /* Increase height by 4 times */
+        @media (max-width: 768px) {
+            .modal-dialog {
+                max-width: 90%;
+                margin: 1.75rem auto;
+            }
+            .modal img {
+                width: 100%;
+                height: auto;
+            }
+        }
+        .modal-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (min-width: 769px) {
+            .alert img {
+                height: 200px; /* Larger size for laptop */
+                width: 200px;
+            }
+            .modal img {
+                height: 80vh; /* Increase height for laptop */
+                width: auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .alert img {
+                height: 100px; /* Normal size for mobile */
+                width: 100px;
+            }
+            .modal img {
+                height: 60vh; /* Increase height for mobile */
+                width: auto;
+            }
+        }
+        .details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 10px;
+        }
+        .details span {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .details .name {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .details .date {
+            color: gray;
+            font-size: 0.9em;
+        }
+        .details .separator {
+            border-top: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: red;
+        }
+        .delete-btn i {
+            font-size: 1.5em; /* Default size */
+        }
+        @media (max-width: 768px) {
+            .delete-btn i {
+                font-size: 1.2em; /* Smaller size for mobile */
+            }
+        }
+    </style>
 </head>
 <body onload="readData()">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <h2 class="mt-4 text-center">Uploaded Notes</h2>
-    <div id="notesContainer"></div>
-  </div>
-
-  <!-- Preview Modal -->
-  <div class="modal fade" id="imageModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content"><div class="modal-body"><img id="modalImage" style="width:100%;"></div></div>
-    </div>
-  </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"><h5>Confirm Deletion</h5></div>
-        <div class="modal-body">Are you sure you want to delete this note?</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
-      </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mt-4 text-center">Uploaded Notes</h2>
+        <div id="notesContainer"></div>
     </div>
-  </div>
 
-  <script>
-    // ---- Firebase config ----
-    var firebaseConfig = {
-      apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
-      authDomain: "houseoftutors-f398e.firebaseapp.com",
-      databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com",
-      projectId: "houseoftutors-f398e",
-      storageBucket: "houseoftutors-f398e.appspot.com",
-      messagingSenderId: "1006665226128",
-      appId: "1:1006665226128:web:bcf481758d361da3ef8515"
-    };
-    firebase.initializeApp(firebaseConfig);
+    <!-- Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Image Preview">
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function readData() {
-      var storageFolder = localStorage.getItem('storage_folder');
-      if (!storageFolder) return;
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this note?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      var itemsRef = firebase.database().ref(storageFolder);
-      var notesContainer = document.getElementById('notesContainer');
+    <script>
+        //------------------------------------------CONFIGURATIONS-----------------------
+        var firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
 
-      itemsRef.once('value', function(snapshot) {
-        var items = [];
-        snapshot.forEach(snap => items.push(snap.val()));
-        items.sort((a,b) => b.ID - a.ID);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
 
-        notesContainer.innerHTML = "";
-
-        items.forEach(function(item) {
-          var alertDiv = document.createElement("div");
-          alertDiv.className = "alert";
-
-          var img = document.createElement("img");
-          img.src = item.Link;
-          img.onclick = function() {
-            if (/\.(jpg|jpeg|png|gif)$/i.test(item.Name)) {
-              document.getElementById('modalImage').src = item.Link;
-              $('#imageModal').modal('show');
-            } else if (item.Name && item.Name.toLowerCase().endsWith(".pdf")) {
-              localStorage.setItem('pdf_link', item.Link);
-              window.location.href = 'PdfViewer.html';
-            } else {
-              window.open(item.Link, '_blank');
+        //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
+        function readData() {
+            var storageFolder = localStorage.getItem('storage_folder');
+            if (!storageFolder) {
+                console.error('No storage folder found in localStorage');
+                return;
             }
-          };
-          alertDiv.appendChild(img);
 
-          var detailsDiv = document.createElement("div");
-          detailsDiv.className = "details";
-          detailsDiv.innerHTML = `
-            <span class="name">${item.Name || ("Note ID " + item.ID)}</span>
-            <div class="separator"></div>
-            <span class="date">Uploaded on: ${new Date(item.Time).toLocaleString()}</span>
-          `;
-          alertDiv.appendChild(detailsDiv);
+            var itemsRef = firebase.database().ref(storageFolder);
+            var notesContainer = document.getElementById('notesContainer');
 
-          var deleteBtn = document.createElement("span");
-          deleteBtn.className = "delete-btn";
-          deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-          deleteBtn.onclick = () => showDeleteModal(item.ID, storageFolder);
-          alertDiv.appendChild(deleteBtn);
+            itemsRef.once('value', function(snapshot) {
+                var items = [];
+                snapshot.forEach(function(item_snapshot) {
+                    items.push(item_snapshot.val());
+                });
 
-          notesContainer.appendChild(alertDiv);
-        });
-      });
-    }
+                // Sort items by ID in descending order
+                items.sort(function(a, b) {
+                    return b.ID - a.ID;
+                });
 
-    function showDeleteModal(id, folder) {
-      $('#deleteModal').modal('show');
-      document.getElementById('confirmDeleteBtn').onclick = () => deleteNote(id, folder);
-    }
+                items.forEach(function(item) {
+                    var alertDiv = document.createElement("div");
+                    alertDiv.className = "alert";
+                    alertDiv.setAttribute("role", "alert");
 
-    function deleteNote(id, folder) {
-      firebase.database().ref(folder + '/' + id).remove()
-        .then(() => location.reload())
-        .catch(err => console.error(err));
-    }
-  </script>
+                    var img = document.createElement("img");
+                    img.src = item.Link;
+
+                    // Check if the file is a PDF
+                    if (item.Name.endsWith(".pdf")) {
+                        img.onclick = function() {
+                            localStorage.setItem('pdf_link', item.Link);
+                            window.location.href = 'PdfViewer.html';
+                        };
+                    } else {
+                        img.onclick = function() {
+                            document.getElementById('modalImage').src = item.Link;
+                            $('#imageModal').modal('show');
+                        };
+                    }
+                    alertDiv.appendChild(img);
+
+                    var detailsDiv = document.createElement("div");
+                    detailsDiv.className = "details";
+
+                    var nameSpan = document.createElement("span");
+                    nameSpan.className = "name";
+                    nameSpan.innerText = "Image Name: " + item.Name; // Ensure Name is used
+                    detailsDiv.appendChild(nameSpan);
+
+                    var separator = document.createElement("div");
+                    separator.className = "separator";
+                    detailsDiv.appendChild(separator);
+
+                    var dateSpan = document.createElement("span");
+                    dateSpan.className = "date";
+                    var date = new Date(item.Time);
+                    dateSpan.innerText = "Uploaded on: " + date.toLocaleString();
+                    detailsDiv.appendChild(dateSpan);
+
+                    alertDiv.appendChild(detailsDiv);
+
+                    // Add delete button
+                    var deleteBtn = document.createElement("span");
+                    deleteBtn.className = "delete-btn";
+                    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                    deleteBtn.onclick = function() {
+                        showDeleteModal(item.ID, storageFolder); // Ensure Name is used
+                    };
+                    alertDiv.appendChild(deleteBtn);
+
+                    notesContainer.appendChild(alertDiv);
+                });
+            });
+        }
+
+        //------------------------------------------SHOW DELETE MODAL-----------------------
+        function showDeleteModal(image_id, storageFolder) {
+            $('#deleteModal').modal('show');
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                deleteNote(image_id, storageFolder);
+            };
+        }
+
+        //------------------------------------------DELETE NOTE-----------------------
+        function deleteNote(image_id, storageFolder) {
+            console.log("Deleting note:", image_id, "from folder:", storageFolder); // Debugging line
+            // Delete from Firebase Realtime Database
+            firebase.database().ref(storageFolder + '/' + image_id).remove()
+                .then(function() {
+                    console.log("Deleted from database"); // Debugging line
+                    // Remove the note from the UI
+                    var notesContainer = document.getElementById('notesContainer');
+                    var alertDivs = notesContainer.getElementsByClassName('alert');
+                    for (var i = 0; i < alertDivs.length; i++) {
+                        if (alertDivs[i].querySelector('.name').innerText === "Image Name: " + image_id) {
+                            notesContainer.removeChild(alertDivs[i]);
+                            break;
+                        }
+                    }
+                    $('#deleteModal').modal('hide');
+                    nativeToast({
+                        message: 'Note was deleted successfully!',
+                        position: 'center',
+                        rounded: true,
+                        timeout: 5000,
+                        type: 'success',
+                        icon: false,
+                        edge: true,
+                        closeOnClick: false
+                    });
+                    // Refresh the page after the toast appears
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000); // Shorter timeout to refresh the page
+                }).catch(function(error) {
+                    console.error('Error deleting note from database:', error);
+                });
+        }
+    </script>
 </body>
 </html>
