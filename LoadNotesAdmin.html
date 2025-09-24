@@ -253,20 +253,13 @@
                         img.onclick = function() {
                             $('#noPreviewModal').modal('show');
                             document.getElementById('downloadBtn').onclick = function() {
-                                fetch(item.Link)
-                                    .then(response => response.blob())
-                                    .then(blob => {
-                                        let url = window.URL.createObjectURL(blob);
-                                        let a = document.createElement("a");
-                                        a.href = url;
-                                        a.download = item.Name;  // ensures filename + extension
-                                        document.body.appendChild(a);
-                                        a.click();
-                                        document.body.removeChild(a);
-                                        window.URL.revokeObjectURL(url);
-                                        $('#noPreviewModal').modal('hide');
-                                    })
-                                    .catch(err => console.error("Download failed:", err));
+                                let a = document.createElement("a");
+                                a.href = item.Link;
+                                a.download = item.Name;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                $('#noPreviewModal').modal('hide');
                             };
                         };
                     }
