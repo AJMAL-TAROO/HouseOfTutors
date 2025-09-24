@@ -14,27 +14,25 @@
   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
   <style>
     html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
-
     body {
-    display: flex;
-    flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
-
     .container {
-    flex: 1;              /* expand to fill space below navbar */
-    display: flex;
-    flex-direction: column;
-    height: 100%;         /* full available height */
+      flex: 1;                /* take remaining height under navbar */
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
-
     #notesContainer {
-    flex: 1;              /* take all remaining space */
-    overflow-y: auto;     /* scroll if too many notes */
-    padding-bottom: 20px;
+      flex: 1;
+      overflow-y: auto;       /* scroll when too many notes */
+      margin-top: 15px;
+      padding-bottom: 20px;
     }
 
     .alert img { border: 2px solid gray; border-radius: 8px; cursor: pointer; margin-right: 10px; }
@@ -46,9 +44,11 @@
     .details .separator { border-top: 1px solid #ddd; margin: 10px 0; }
     .delete-btn { position: absolute; top: 10px; right: 10px; cursor: pointer; color: red; }
     .delete-btn i { font-size: 1.5em; }
+    @media (min-width: 769px) { .alert img { height: 200px; width: 200px; } }
+    @media (max-width: 768px) { .alert img { height: 100px; width: 100px; } }
   </style>
 </head>
-<body style="height:100%" onload="readData()">
+<body onload="readData()">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
@@ -85,6 +85,7 @@
   </div>
 
   <script>
+    // ---- Firebase config ----
     var firebaseConfig = {
       apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
       authDomain: "houseoftutors-f398e.firebaseapp.com",
@@ -96,21 +97,10 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    function getIconByExtension(filename) {
-      if (!filename) return "img/uploadnote_icons/icon-img.png";
-      let ext = filename.split('.').pop().toLowerCase();
-      switch(ext) {
-        case "pdf": return "img/uploadnote_icons/icon-pdf.png";
-        case "doc": case "docx": return "img/uploadnote_icons/icon-docx.png";
-        case "jpg": case "jpeg": case "png": case "gif": return "img/uploadnote_icons/icon-img.png";
-        case "mp4": case "avi": case "mov": return "img/uploadnote_icons/icon-video.png";
-        default: return "img/uploadnote_icons/icon-img.png";
-      }
-    }
-
     function readData() {
       var storageFolder = localStorage.getItem('storage_folder');
       if (!storageFolder) return;
+
       var itemsRef = firebase.database().ref(storageFolder);
       var notesContainer = document.getElementById('notesContainer');
 
@@ -126,8 +116,7 @@
           alertDiv.className = "alert";
 
           var img = document.createElement("img");
-          img.src = getIconByExtension(item.Name || item.Link);
-
+          img.src = item.Link;
           img.onclick = function() {
             if (/\.(jpg|jpeg|png|gif)$/i.test(item.Name)) {
               document.getElementById('modalImage').src = item.Link;
