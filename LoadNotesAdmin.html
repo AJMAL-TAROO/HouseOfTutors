@@ -253,20 +253,14 @@
                         img.onclick = function() {
                             $('#noPreviewModal').modal('show');
                             document.getElementById('downloadBtn').onclick = function() {
-                                fetch(item.Link)
-                                    .then(response => response.blob())
-                                    .then(blob => {
-                                        let url = window.URL.createObjectURL(blob);
-                                        let a = document.createElement("a");
-                                        a.href = url;
-                                        a.download = item.Name;  // ensures filename + extension
-                                        document.body.appendChild(a);
-                                        a.click();
-                                        document.body.removeChild(a);
-                                        window.URL.revokeObjectURL(url);
-                                        $('#noPreviewModal').modal('hide');
-                                    })
-                                    .catch(err => console.error("Download failed:", err));
+                                let a = document.createElement("a");
+                                a.href = item.Link;      // direct Firebase Storage URL
+                                a.setAttribute("download", item.Name);  // hint to browser
+                                a.target = "_blank";     // force download in some browsers
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                $('#noPreviewModal').modal('hide');
                             };
                         };
                     }
