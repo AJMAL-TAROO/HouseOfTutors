@@ -13,6 +13,21 @@
   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
   <style>
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    #notesContainer {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 20px;
+    }
     .alert img { border: 2px solid gray; border-radius: 8px; cursor: pointer; margin-right: 10px; }
     .alert { display: flex; align-items: center; margin-bottom: 10px; background-color: #f8f9fa;
              box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px; padding: 10px; position: relative; }
