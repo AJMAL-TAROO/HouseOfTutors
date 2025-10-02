@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
     <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <style>
-                .alert img { 
+        .alert img { 
             border: 2px solid gray; 
             border-radius: 8px; /* Rounded corners */
             cursor: pointer; 
@@ -255,7 +255,16 @@
                             document.getElementById('downloadBtn').onclick = function() {
                                 let a = document.createElement("a");
                                 a.href = item.Link;      // direct Firebase Storage URL
-                                a.setAttribute("download", item.Name);  // hint to browser
+
+                                // Ensure file name has extension
+                                let fileName = item.Name || "downloaded_file";
+                                if (!/\.[a-z0-9]+$/i.test(fileName)) {
+                                    // Try to extract extension from the link if missing
+                                    const urlExt = item.Link.split('.').pop().split(/\#|\?/)[0];
+                                    if (urlExt.length <= 5) fileName += '.' + urlExt;
+                                }
+                                a.setAttribute("download", fileName);  // hint to browser
+
                                 a.target = "_blank";     // force download in some browsers
                                 document.body.appendChild(a);
                                 a.click();
