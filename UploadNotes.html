@@ -90,6 +90,10 @@
 
         //------------------------------------------UPLOAD PROCESS-----------------------
         document.getElementById('upload').onclick = function() {
+            // Disable buttons during upload
+            document.getElementById('select').disabled = true;
+            document.getElementById('upload').disabled = true;
+
             // Prepare metadata with Content-Disposition
             var metadata = {
                 contentDisposition: 'attachment; filename="' + ImgName + '"'
@@ -104,6 +108,9 @@
                 },
                 function(error) {
                     alert('error in saving the image');
+                    // Re-enable buttons if error occurs
+                    document.getElementById('select').disabled = false;
+                    document.getElementById('upload').disabled = false;
                 },
                 function() {
                     uploadTask.snapshot.ref.getDownloadURL().then(function(url) {
@@ -136,6 +143,9 @@
                         }, 2000);
 
                         document.getElementById('myimg').src = '//:0'
+                        // Re-enable buttons after upload (optional, since page reloads)
+                        document.getElementById('select').disabled = false;
+                        document.getElementById('upload').disabled = false;
                     });
                 });
         }
