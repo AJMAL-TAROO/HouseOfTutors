@@ -202,6 +202,7 @@
             if (ext === "pdf") return "img/uploadnote_icons/icon-pdf.png";
             if (ext === "docx" || ext === "doc") return "img/uploadnote_icons/icon-docx.png";
             if (["mp4","mov","avi","mkv"].includes(ext)) return "img/uploadnote_icons/icon-video.png";
+            if (ext === "ppt" || ext === "pptx") return "img/uploadnote_icons/icon-pptx.png";
             return "img/uploadnote_icons/icon-img.png"; // fallback
         }
 
@@ -257,7 +258,7 @@
                                 a.href = item.Link; // direct Firebase Storage URL
 
                                 // Always append .docx directly (for testing)
-                                let fileName = (item.Name || "downloaded_file") + ".docx";
+                                let fileName = (item.Name || "downloaded_file");
 
                                 a.setAttribute("download", fileName); // hint to browser
                                 a.target = "_blank";
