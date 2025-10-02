@@ -254,18 +254,26 @@
                             $('#noPreviewModal').modal('show');
                             document.getElementById('downloadBtn').onclick = function() {
                                 let a = document.createElement("a");
-                                a.href = item.Link;      // direct Firebase Storage URL
+                                a.href = item.Link; // direct Firebase Storage URL
 
-                                // Ensure file name has extension
+                                // Get extension from item.Name or fallback to URL
                                 let fileName = item.Name || "downloaded_file";
-                                if (!/\.[a-z0-9]+$/i.test(fileName)) {
+                                let extMatch = fileName.match(/\.([a-z0-9]+)$/i);
+                                let extension = "";
+                                if (extMatch) {
+                                    extension = extMatch[0]; // includes the dot
+                                } else {
                                     // Try to extract extension from the link if missing
                                     const urlExt = item.Link.split('.').pop().split(/\#|\?/)[0];
-                                    if (urlExt.length <= 5) fileName += '.' + urlExt;
+                                    if (urlExt.length <= 5) extension = '.' + urlExt;
                                 }
-                                a.setAttribute("download", fileName);  // hint to browser
 
-                                a.target = "_blank";     // force download in some browsers
+                                // Remove any existing extension before appending
+                                fileName = fileName.replace(/\.[a-z0-9]+$/i, '');
+                                fileName = fileName + extension;
+
+                                a.setAttribute("download", fileName); // hint to browser
+                                a.target = "_blank";
                                 document.body.appendChild(a);
                                 a.click();
                                 document.body.removeChild(a);
