@@ -203,7 +203,8 @@
             if (ext === "docx" || ext === "doc") return "img/uploadnote_icons/icon-docx.png";
             if (["mp4","mov","avi","mkv"].includes(ext)) return "img/uploadnote_icons/icon-video.png";
             if (ext === "ppt" || ext === "pptx") return "img/uploadnote_icons/icon-pptx.png";
-            return "img/uploadnote_icons/icon-img.png"; // fallback
+            if (["zip","rar","7z","tar","gz"].includes(ext)) return "img/uploadnote_icons/icon-zip.png";
+            return "img/uploadnote_icons/icon-unknown.png"; // fallback for unknown files
         }
 
         //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
