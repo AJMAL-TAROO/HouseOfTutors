@@ -249,28 +249,15 @@
                             window.location.href = 'PdfViewer.html';
                         };
                     } else {
-                        // Other → show No Preview modal with download
+                        // Replace the download handler inside img.onclick for non-previewable files with:
                         img.onclick = function() {
                             $('#noPreviewModal').modal('show');
                             document.getElementById('downloadBtn').onclick = function() {
                                 let a = document.createElement("a");
                                 a.href = item.Link; // direct Firebase Storage URL
 
-                                // Get extension from item.Name or fallback to URL
-                                let fileName = item.Name || "downloaded_file";
-                                let extMatch = fileName.match(/\.([a-z0-9]+)$/i);
-                                let extension = "";
-                                if (extMatch) {
-                                    extension = extMatch[0]; // includes the dot
-                                } else {
-                                    // Try to extract extension from the link if missing
-                                    const urlExt = item.Link.split('.').pop().split(/\#|\?/)[0];
-                                    if (urlExt.length <= 5) extension = '.' + urlExt;
-                                }
-
-                                // Remove any existing extension before appending
-                                fileName = fileName.replace(/\.[a-z0-9]+$/i, '');
-                                fileName = fileName + extension;
+                                // Always append .docx directly (for testing)
+                                let fileName = (item.Name || "downloaded_file") + ".docx";
 
                                 a.setAttribute("download", fileName); // hint to browser
                                 a.target = "_blank";
