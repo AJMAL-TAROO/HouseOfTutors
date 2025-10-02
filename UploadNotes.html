@@ -90,7 +90,13 @@
 
         //------------------------------------------UPLOAD PROCESS-----------------------
         document.getElementById('upload').onclick = function() {
-            var uploadTask = firebase.storage().ref(classroomId + '_NOTES/' + id_classroom_notes).put(files[0]);
+            // Prepare metadata with Content-Disposition
+            var metadata = {
+                contentDisposition: 'attachment; filename="' + ImgName + '"'
+            };
+
+            // Use metadata in the upload
+            var uploadTask = firebase.storage().ref(classroomId + '_NOTES/' + id_classroom_notes).put(files[0], metadata);
 
             uploadTask.on('state_changed', function(snapshot) {
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -125,10 +131,9 @@
                             closeOnClick: false
                         });
 
-                        // Refresh the page after the toast appears
                         setTimeout(function() {
                             location.reload();
-                        }, 2000); // 2 seconds delay before reloading
+                        }, 2000);
 
                         document.getElementById('myimg').src = '//:0'
                     });
