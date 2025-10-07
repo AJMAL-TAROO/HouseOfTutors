@@ -208,12 +208,6 @@
                             document.getElementById('modalImage').src = item.Link;
                             $('#imageModal').modal('show');
                         };
-                    } else if (ext === "pdf") {
-                        // PDF → open PDF viewer
-                        img.onclick = function() {
-                            localStorage.setItem('pdf_link', item.Link);
-                            window.location.href = 'PdfViewer.html';
-                        };
                     } else {
                         // No preview available, show modal with download
                         img.onclick = function() {
