@@ -231,6 +231,8 @@
                 });
 
                 items.forEach(function(item) {
+
+                    let ext = item.Name ? item.Name.split('.').pop().toLowerCase() : "";
                     var alertDiv = document.createElement("div");
                     alertDiv.className = "alert";
                     alertDiv.setAttribute("role", "alert");
@@ -239,21 +241,17 @@
                     img.src = getIconByExtension(item.Name);
 
                     // Check file type for preview or download modal
-                    let ext = item.Name ? item.Name.split('.').pop().toLowerCase() : "";
-                    if (["jpg","jpeg","png","gif"].includes(ext)) {
-                        // Image → show in modal
-                        img.onclick = function() {
-                            document.getElementById('modalImage').src = item.Link;
-                            $('#imageModal').modal('show');
-                        };
-                    } else if (ext === "pdf") {
-                        // PDF → open PDF viewer
+                    if (item.Name && item.Name.toLowerCase().endsWith(".pdf")) {
                         img.onclick = function() {
                             localStorage.setItem('pdf_link', item.Link);
                             window.location.href = 'PdfViewer.html';
                         };
+                    } else if (item.Name && /\.(jpg|jpeg|png|gif)$/i.test(item.Name)) {
+                        img.onclick = function() {
+                            document.getElementById('modalImage').src = item.Link;
+                            $('#imageModal').modal('show');
+                        };
                     } else {
-                        // No preview available, show modal with download
                         img.onclick = function() {
                             $('#noPreviewModal').modal('show');
                             document.getElementById('downloadBtn').onclick = function() {
