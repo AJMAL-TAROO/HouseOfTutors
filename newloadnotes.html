@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
     <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <style>
-                .alert img { 
+        .alert img { 
             border: 2px solid gray; 
             border-radius: 8px; /* Rounded corners */
             cursor: pointer; 
@@ -160,6 +160,24 @@
         </div>
     </div>
 
+    <!-- No Preview Modal -->
+    <div class="modal fade" id="noPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+        <div class="modal-header">
+            <h5 class="modal-title">No Preview Available</h5>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        </div>
+        <div class="modal-body">
+            <p>This file type cannot be previewed. Please download to view offline.</p>
+            <button id="downloadBtn" class="btn btn-primary">
+            <i class="fas fa-download"></i> Download
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+
     <script>
         //------------------------------------------CONFIGURATIONS-----------------------
         var firebaseConfig = {
@@ -175,6 +193,20 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+
+        //------------------------------------------HELPER: PICK ICON-----------------------
+        function getIconByExtension(filename) {
+            if (!filename) return "img/uploadnote_icons/icon-img.png";
+            let ext = filename.split('.').pop().toLowerCase();
+            if (["jpg","jpeg","png","gif"].includes(ext)) return "img/uploadnote_icons/icon-img.png";
+            if (ext === "pdf") return "img/uploadnote_icons/icon-pdf.png";
+            if (ext === "docx" || ext === "doc") return "img/uploadnote_icons/icon-docx.png";
+            if (["mp4","mov","avi","mkv"].includes(ext)) return "img/uploadnote_icons/icon-video.png";
+            if (ext === "ppt" || ext === "pptx") return "img/uploadnote_icons/icon-pptx.png";
+            if (["zip","rar","7z","tar","gz"].includes(ext)) return "img/uploadnote_icons/icon-zip.png";
+            if (ext === "txt") return "img/uploadnote_icons/icon-txt.png";
+            return "img/uploadnote_icons/icon-unknown.png"; // fallback for unknown files
+        }
 
         //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
         function readData() {
@@ -199,25 +231,43 @@
                 });
 
                 items.forEach(function(item) {
+
+                    let ext = item.Name ? item.Name.split('.').pop().toLowerCase() : "";
                     var alertDiv = document.createElement("div");
                     alertDiv.className = "alert";
                     alertDiv.setAttribute("role", "alert");
 
                     var img = document.createElement("img");
-                    img.src = item.Link;
+                    img.src = getIconByExtension(item.Name);
 
-                    // Check if the file is a PDF
-                    if (item.Name.endsWith(".pdf")) {
+                    // Check file type for preview or download modal
+                    if (item.Name.toLowerCase().endsWith(".pdf")) {
                         img.onclick = function() {
                             localStorage.setItem('pdf_link', item.Link);
                             window.location.href = 'PdfViewer.html';
                         };
-                    } else {
+                    } else if (item.Name && /\.(jpg|jpeg|png|gif)$/i.test(item.Name)) {
                         img.onclick = function() {
                             document.getElementById('modalImage').src = item.Link;
                             $('#imageModal').modal('show');
                         };
+                    } else {
+                        img.onclick = function() {
+                            $('#noPreviewModal').modal('show');
+                            document.getElementById('downloadBtn').onclick = function() {
+                                let a = document.createElement("a");
+                                a.href = item.Link;
+                                let fileName = item.Name || "downloaded_file";
+                                a.setAttribute("download", fileName);
+                                a.target = "_blank";
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                $('#noPreviewModal').modal('hide');
+                            };
+                        };
                     }
+
                     alertDiv.appendChild(img);
 
                     var detailsDiv = document.createElement("div");
@@ -225,7 +275,7 @@
 
                     var nameSpan = document.createElement("span");
                     nameSpan.className = "name";
-                    nameSpan.innerText = "Image Name: " + item.Name; // Ensure Name is used
+                    nameSpan.innerText = item.Name; // Ensure Name is used
                     detailsDiv.appendChild(nameSpan);
 
                     var separator = document.createElement("div");
