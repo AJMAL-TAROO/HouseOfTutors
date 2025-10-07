@@ -238,7 +238,8 @@
                     var img = document.createElement("img");
                     img.src = getIconByExtension(item.Name);
 
-                    // Check if the file is a PDF
+                    // Check file type for preview or download modal
+                    let ext = item.Name ? item.Name.split('.').pop().toLowerCase() : "";
                     if (["jpg","jpeg","png","gif"].includes(ext)) {
                         // Image → show in modal
                         img.onclick = function() {
