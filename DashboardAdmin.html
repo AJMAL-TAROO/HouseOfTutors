@@ -34,6 +34,11 @@
                     <a class="btn btn-ghost text-xl" onclick="openSuperUserModal()">House Of Tutors</a>
                 </div>
                 <div class="navbar-end">
+                    <button class="btn btn-ghost btn-circle" onclick="openAdminDetailsModal()" title="View Dashboard Details">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </button>
                     <button class="btn btn-ghost btn-circle" onclick="openLogoutModal()">
                         <img src="img/logout.png" alt="logout" class="h-5 w-5">
                     </button>
@@ -112,6 +117,69 @@
                     <div class="modal-action">
                         <button class="btn btn-primary" onclick="verifySuperUser()">Login</button>
                         <button class="btn" onclick="closeSuperUserModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Details Modal -->
+            <div id="adminDetailsModal" class="modal">
+                <div class="modal-box max-w-4xl">
+                    <h2 class="text-2xl font-bold mb-4 text-purple-800">Dashboard Details</h2>
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeAdminDetailsModal()">✕</button>
+                    
+                    <!-- Summary Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="stat bg-purple-100 rounded-lg shadow">
+                            <div class="stat-title">Total Classrooms</div>
+                            <div class="stat-value text-purple-800" id="totalClassrooms">0</div>
+                        </div>
+                        <div class="stat bg-purple-100 rounded-lg shadow">
+                            <div class="stat-title">Total Students</div>
+                            <div class="stat-value text-purple-800" id="totalStudents">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Classrooms Details Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">My Classrooms</h3>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Teacher</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="classroomsTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Students Details Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">My Students</h3>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="closeAdminDetailsModal()">Close</button>
                     </div>
                 </div>
             </div>
@@ -655,6 +723,127 @@
                 document.getElementById('superLoginError').classList.remove('hidden');
             }
         };
+
+        // Admin Details Modal Functions
+        window.openAdminDetailsModal = async function () {
+            document.getElementById('adminDetailsModal').classList.add('modal-open');
+            await loadAdminDetails();
+        };
+
+        window.closeAdminDetailsModal = function () {
+            document.getElementById('adminDetailsModal').classList.remove('modal-open');
+        };
+
+        // Load and display admin details
+        async function loadAdminDetails() {
+            if (!email) {
+                console.error('No email found in local storage');
+                return;
+            }
+
+            try {
+                // Get admin data
+                const adminRef = ref(database, "ADMIN");
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    console.error('Admin data not found');
+                    return;
+                }
+
+                const admins = adminSnapshot.val();
+                let adminData = null;
+                let adminKey = null;
+
+                // Find the admin with matching email
+                for (const key in admins) {
+                    if (admins[key].EMAIL === email) {
+                        adminData = admins[key];
+                        adminKey = key;
+                        break;
+                    }
+                }
+
+                if (!adminData) {
+                    console.error('Admin not found');
+                    return;
+                }
+
+                // Get classroom and student IDs
+                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',').filter(room => room.trim()).map(Number) : [];
+                const studentIds = adminData.STUDENTS ? adminData.STUDENTS.split(',').filter(id => id.trim()) : [];
+
+                // Update totals
+                document.getElementById('totalClassrooms').textContent = virtualRooms.length;
+                document.getElementById('totalStudents').textContent = studentIds.length;
+
+                // Fetch and display classroom details
+                const classroomsRef = ref(database, "CLASSROOMS");
+                const classroomsSnapshot = await get(classroomsRef);
+                const classroomsTableBody = document.getElementById('classroomsTableBody');
+                classroomsTableBody.innerHTML = '';
+
+                if (classroomsSnapshot.exists()) {
+                    const classrooms = classroomsSnapshot.val();
+                    let hasClassrooms = false;
+
+                    for (const classroomKey in classrooms) {
+                        const classroom = classrooms[classroomKey];
+                        if (virtualRooms.includes(classroom.CLASSROOM_ID)) {
+                            hasClassrooms = true;
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${classroom.CLASSROOM_ID}</td>
+                                <td>${classroom.TITLE}</td>
+                                <td>${classroom.TEACHER_FULL_NAME}</td>
+                            `;
+                            classroomsTableBody.appendChild(row);
+                        }
+                    }
+
+                    if (!hasClassrooms) {
+                        classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
+                    }
+                } else {
+                    classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
+                }
+
+                // Fetch and display student details
+                const studentsRef = ref(database, "STUDENTS");
+                const studentsSnapshot = await get(studentsRef);
+                const studentsTableBody = document.getElementById('studentsTableBody');
+                studentsTableBody.innerHTML = '';
+
+                if (studentsSnapshot.exists()) {
+                    const students = studentsSnapshot.val();
+                    let hasStudents = false;
+
+                    for (const studentKey in students) {
+                        if (studentIds.includes(studentKey)) {
+                            hasStudents = true;
+                            const student = students[studentKey];
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${studentKey}</td>
+                                <td>${student.FULL_NAME}</td>
+                                <td>${student.EMAIL}</td>
+                                <td>${student.TEL || 'N/A'}</td>
+                            `;
+                            studentsTableBody.appendChild(row);
+                        }
+                    }
+
+                    if (!hasStudents) {
+                        studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                    }
+                } else {
+                    studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Error loading admin details:', error);
+            }
+        }
     </script>
 
 </body>
