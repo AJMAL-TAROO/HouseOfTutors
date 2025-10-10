@@ -250,9 +250,16 @@
         function checkForInfoEndpoint() {
             const currentPath = window.location.pathname;
             const currentHash = window.location.hash;
+            const currentHref = window.location.href;
             
-            // Check if URL ends with /info or contains /info in the path or hash
-            if (currentPath.endsWith('/info') || currentHash.includes('/info')) {
+            // Check multiple ways the /info endpoint might be accessed:
+            // 1. DashboardAdmin.html/info
+            // 2. DashboardAdmin.html#/info or DashboardAdmin.html#info
+            // 3. URL parameter like DashboardAdmin.html?path=/info
+            if (currentPath.includes('/info') || 
+                currentHash.includes('/info') || 
+                currentHash === '#info' ||
+                currentHref.includes('DashboardAdmin.html/info')) {
                 return true;
             }
             return false;

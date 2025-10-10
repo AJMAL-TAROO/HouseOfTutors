@@ -1,0 +1,28 @@
+{
+  "LOGS": {
+    "LOG_1734567890123": {
+      "ADMIN_EMAIL": "ajtaroo@gmail.com",
+      "ADMIN_KEY": "ADMIN_1",
+      "CLASSROOM_COUNT": 4,
+      "STUDENT_COUNT": 3,
+      "TIMESTAMP": 1734567890123,
+      "DATE": "2025-10-10T18:25:17.473Z"
+    },
+    "LOG_1734567901234": {
+      "ADMIN_EMAIL": "house.of.tutors.48@gmail.com",
+      "ADMIN_KEY": "ADMIN_2",
+      "CLASSROOM_COUNT": 6,
+      "STUDENT_COUNT": 13,
+      "TIMESTAMP": 1734567901234,
+      "DATE": "2025-10-10T18:26:30.234Z"
+    },
+    "LOG_1734567912345": {
+      "ADMIN_EMAIL": "yuveshramiad@gmail.com",
+      "ADMIN_KEY": "ADMIN_3",
+      "CLASSROOM_COUNT": 2,
+      "STUDENT_COUNT": 0,
+      "TIMESTAMP": 1734567912345,
+      "DATE": "2025-10-10T18:27:45.345Z"
+    }
+  }
+}
