@@ -195,7 +195,7 @@
         const email = localStorage.getItem('userEmail');
 
         // Function to capture and log admin dashboard information
-        async function captureAdminLogs(adminEmail, adminKey) {
+        async function captureAdminLogs(adminEmail, adminKey, showModal = false) {
             try {
                 // Get admin data to count classrooms
                 const adminRef = ref(database, `ADMIN/${adminKey}`);
@@ -230,9 +230,15 @@
                 await push(logsRef, logData);
                 
                 console.log('Admin log captured successfully:', logData);
+                console.log(`Admin: ${adminEmail} (${adminKey})`);
+                console.log(`Number of Classrooms: ${classroomCount}`);
+                console.log(`Number of Students: ${studentCount}`);
+                console.log(`Timestamp: ${new Date(timestamp).toLocaleString()}`);
 
-                // Display the information on the page
-                displayLogInfo(classroomCount, studentCount, new Date(timestamp));
+                // Display the information on the page only if showModal is true
+                if (showModal) {
+                    displayLogInfo(classroomCount, studentCount, new Date(timestamp));
+                }
             } catch (error) {
                 console.error('Error capturing admin logs:', error);
             }
@@ -295,8 +301,9 @@
             return false;
         }
 
-        // Handle /info endpoint
-        if (email && checkForInfoEndpoint()) {
+        // Capture logs on every page load and when /info endpoint is accessed
+        if (email) {
+            const isInfoEndpoint = checkForInfoEndpoint();
             const adminRef = ref(database, "ADMIN");
             get(adminRef).then((snapshot) => {
                 if (snapshot.exists()) {
@@ -311,7 +318,8 @@
                     }
                     
                     if (adminKey) {
-                        captureAdminLogs(email, adminKey);
+                        // Always capture logs, but only show modal if accessing /info endpoint
+                        captureAdminLogs(email, adminKey, isInfoEndpoint);
                     }
                 }
             }).catch((error) => {
