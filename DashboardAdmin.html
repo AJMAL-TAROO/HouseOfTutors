@@ -147,7 +147,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue, update, remove, push, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -169,6 +169,118 @@
 
         // Retrieve the email from local storage
         const email = localStorage.getItem('userEmail');
+
+        // Function to capture and log admin dashboard information
+        async function captureAdminLogs(adminEmail, adminKey) {
+            try {
+                // Get admin data to count classrooms
+                const adminRef = ref(database, `ADMIN/${adminKey}`);
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    console.error('Admin data not found');
+                    return;
+                }
+
+                const adminData = adminSnapshot.val();
+                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',') : [];
+                const classroomCount = virtualRooms.length;
+
+                // Get student count for this admin
+                const studentsIds = adminData.STUDENTS ? adminData.STUDENTS.split(',') : [];
+                const studentCount = studentsIds.length;
+
+                // Create log entry
+                const timestamp = Date.now();
+                const logData = {
+                    ADMIN_EMAIL: adminEmail,
+                    ADMIN_KEY: adminKey,
+                    CLASSROOM_COUNT: classroomCount,
+                    STUDENT_COUNT: studentCount,
+                    TIMESTAMP: timestamp,
+                    DATE: new Date(timestamp).toISOString()
+                };
+
+                // Push log data to Firebase under LOGS node
+                const logsRef = ref(database, 'LOGS');
+                await push(logsRef, logData);
+                
+                console.log('Admin log captured successfully:', logData);
+
+                // Display the information on the page
+                displayLogInfo(classroomCount, studentCount, new Date(timestamp));
+            } catch (error) {
+                console.error('Error capturing admin logs:', error);
+            }
+        }
+
+        // Function to display log information
+        function displayLogInfo(classroomCount, studentCount, lastLoadTime) {
+            // Create a display container
+            const infoDisplay = document.createElement('div');
+            infoDisplay.id = 'adminLogInfo';
+            infoDisplay.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 z-50 border-2 border-purple-600';
+            infoDisplay.style.minWidth = '350px';
+            
+            infoDisplay.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Admin Dashboard Info</h2>
+                    <div class="space-y-3 text-left">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Classrooms:</span>
+                            <span class="text-purple-700 font-bold">${classroomCount}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Students:</span>
+                            <span class="text-purple-700 font-bold">${studentCount}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Last Loaded:</span>
+                            <span class="text-purple-700 font-bold text-sm">${lastLoadTime.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-4 w-full" onclick="document.getElementById('adminLogInfo').remove()">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(infoDisplay);
+        }
+
+        // Check if the URL contains '/info' path
+        function checkForInfoEndpoint() {
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            
+            // Check if URL ends with /info or contains /info in the path or hash
+            if (currentPath.endsWith('/info') || currentHash.includes('/info')) {
+                return true;
+            }
+            return false;
+        }
+
+        // Handle /info endpoint
+        if (email && checkForInfoEndpoint()) {
+            const adminRef = ref(database, "ADMIN");
+            get(adminRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const admins = snapshot.val();
+                    let adminKey = null;
+                    
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email) {
+                            adminKey = key;
+                            break;
+                        }
+                    }
+                    
+                    if (adminKey) {
+                        captureAdminLogs(email, adminKey);
+                    }
+                }
+            }).catch((error) => {
+                console.error('Error retrieving admin data for logging:', error);
+            });
+        }
 
         // Load the saved wallpaper on page load
         if (email) {
