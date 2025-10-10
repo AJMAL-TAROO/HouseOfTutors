@@ -154,6 +154,7 @@
 
             await update(commentRef, {
                 [newCommentKey]: {
+                    EMAIL: adminEmail || 'Unknown',
                     DATE: currentDate,
                     COMMENT: commentText
                 }
