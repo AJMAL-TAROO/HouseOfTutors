@@ -4,13 +4,24 @@
 
 1. Log in as an admin user at `LoginAdmin.html`
 2. After successful login, you'll be redirected to `DashboardAdmin.html`
-3. Manually change the URL in the browser to: `DashboardAdmin.html/info`
+3. Manually change the URL in the browser to access the info endpoint. You can use any of these formats:
+   - `DashboardAdmin.html/info` (path-based)
+   - `DashboardAdmin.html#info` (hash-based)
+   - `DashboardAdmin.html#/info` (hash with slash)
+   
 4. The page will:
    - Display a modal showing:
      - Number of classrooms assigned to the admin
      - Number of students assigned to the admin
      - Timestamp when the dashboard was loaded
    - Automatically log this information to Firebase Realtime Database under the `LOGS` node
+
+## Supported URL Formats
+
+The following URL formats will all trigger the logging functionality:
+- `https://www.housesoftutors.com/DashboardAdmin.html/info`
+- `https://www.housesoftutors.com/DashboardAdmin.html#info`
+- `https://www.housesoftutors.com/DashboardAdmin.html#/info`
 
 ## Firebase Database Structure
 
