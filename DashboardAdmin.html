@@ -770,8 +770,16 @@
                 }
 
                 // Get classroom and student IDs
-                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',').filter(room => room.trim()).map(Number) : [];
-                const studentIds = adminData.STUDENTS ? adminData.STUDENTS.split(',').filter(id => id.trim()) : [];
+                const virtualRoomsStr = adminData.VIRTUAL_ROOMS || '';
+                const virtualRooms = virtualRoomsStr
+                    .split(',')
+                    .filter(room => room.trim())
+                    .map(Number);
+                
+                const studentsStr = adminData.STUDENTS || '';
+                const studentIds = studentsStr
+                    .split(',')
+                    .filter(id => id.trim());
 
                 // Update totals
                 document.getElementById('totalClassrooms').textContent = virtualRooms.length;
@@ -792,11 +800,21 @@
                         if (virtualRooms.includes(classroom.CLASSROOM_ID)) {
                             hasClassrooms = true;
                             const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${classroom.CLASSROOM_ID}</td>
-                                <td>${classroom.TITLE}</td>
-                                <td>${classroom.TEACHER_FULL_NAME}</td>
-                            `;
+                            
+                            // Create cells and use textContent to prevent XSS
+                            const idCell = document.createElement('td');
+                            idCell.textContent = classroom.CLASSROOM_ID;
+                            
+                            const titleCell = document.createElement('td');
+                            titleCell.textContent = classroom.TITLE;
+                            
+                            const teacherCell = document.createElement('td');
+                            teacherCell.textContent = classroom.TEACHER_FULL_NAME;
+                            
+                            row.appendChild(idCell);
+                            row.appendChild(titleCell);
+                            row.appendChild(teacherCell);
+                            
                             classroomsTableBody.appendChild(row);
                         }
                     }
@@ -818,17 +836,33 @@
                     const students = studentsSnapshot.val();
                     let hasStudents = false;
 
+                    // Default value constant
+                    const NOT_AVAILABLE = 'N/A';
+                    
                     for (const studentKey in students) {
                         if (studentIds.includes(studentKey)) {
                             hasStudents = true;
                             const student = students[studentKey];
                             const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${studentKey}</td>
-                                <td>${student.FULL_NAME}</td>
-                                <td>${student.EMAIL}</td>
-                                <td>${student.TEL || 'N/A'}</td>
-                            `;
+                            
+                            // Create cells and use textContent to prevent XSS
+                            const idCell = document.createElement('td');
+                            idCell.textContent = studentKey;
+                            
+                            const nameCell = document.createElement('td');
+                            nameCell.textContent = student.FULL_NAME;
+                            
+                            const emailCell = document.createElement('td');
+                            emailCell.textContent = student.EMAIL;
+                            
+                            const telCell = document.createElement('td');
+                            telCell.textContent = student.TEL || NOT_AVAILABLE;
+                            
+                            row.appendChild(idCell);
+                            row.appendChild(nameCell);
+                            row.appendChild(emailCell);
+                            row.appendChild(telCell);
+                            
                             studentsTableBody.appendChild(row);
                         }
                     }
