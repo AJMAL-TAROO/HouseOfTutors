@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Admin Dashboard Info</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body onload="loadAdminDashboardInfo()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors - Admin Info</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="text-center text-purple-800 font-bold text-3xl mb-5">Admin Dashboard Logs</h2>
+                        
+                        <div class="row" id="statsContainer">
+                            <!-- Stats will be dynamically loaded here -->
+                        </div>
+
+                        <div class="mt-5">
+                            <h3 class="text-center text-purple-700 font-bold text-2xl mb-4">Recent Dashboard Loads</h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="bg-purple-800 text-white">
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Admin Email</th>
+                                            <th>Classrooms</th>
+                                            <th>Students</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logsTableBody">
+                                        <!-- Logs will be dynamically loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Check for super user authentication
+        window.onload = function() {
+            const superUserAuth = localStorage.getItem('superUserAuth');
+            if (superUserAuth !== 'true') {
+                alert('Unauthorized access! Redirecting to admin dashboard.');
+                window.location.href = 'DashboardAdmin.html';
+                return;
+            }
+            loadAdminDashboardInfo();
+        };
+
+        window.loadAdminDashboardInfo = async function() {
+            try {
+                // Get total classroom count
+                const classroomsRef = ref(database, 'CLASSROOMS');
+                const classroomsSnapshot = await get(classroomsRef);
+                let totalClassrooms = 0;
+                if (classroomsSnapshot.exists()) {
+                    totalClassrooms = Object.keys(classroomsSnapshot.val()).length;
+                }
+
+                // Get total student count
+                const studentsRef = ref(database, 'STUDENTS');
+                const studentsSnapshot = await get(studentsRef);
+                let totalStudents = 0;
+                if (studentsSnapshot.exists()) {
+                    totalStudents = Object.keys(studentsSnapshot.val()).length;
+                }
+
+                // Get the latest log entry
+                const logsRef = ref(database, 'LOGS');
+                const logsSnapshot = await get(logsRef);
+                
+                let lastLoadTime = 'N/A';
+                let recentLogs = [];
+                
+                if (logsSnapshot.exists()) {
+                    const logs = logsSnapshot.val();
+                    const logsArray = Object.entries(logs).map(([key, value]) => ({
+                        key,
+                        ...value
+                    }));
+                    
+                    // Sort by timestamp descending
+                    logsArray.sort((a, b) => b.TIMESTAMP - a.TIMESTAMP);
+                    
+                    // Get the most recent log
+                    if (logsArray.length > 0) {
+                        lastLoadTime = new Date(logsArray[0].TIMESTAMP).toLocaleString();
+                    }
+                    
+                    // Get last 10 logs
+                    recentLogs = logsArray.slice(0, 10);
+                }
+
+                // Display stats
+                displayStats(totalClassrooms, totalStudents, lastLoadTime);
+                
+                // Display logs table
+                displayLogsTable(recentLogs);
+                
+            } catch (error) {
+                console.error('Error loading admin dashboard info:', error);
+                alert('Error loading dashboard information. Please try again.');
+            }
+        };
+
+        function displayStats(classrooms, students, lastLoad) {
+            const statsContainer = document.getElementById('statsContainer');
+            statsContainer.innerHTML = `
+                <div class="col-md-4 mb-4">
+                    <div class="card stat-card bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chalkboard-teacher fa-3x mb-3"></i>
+                            <h3 class="text-4xl font-bold">${classrooms}</h3>
+                            <p class="text-lg">Total Classrooms</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card stat-card bg-gradient-to-br from-green-500 to-green-700 text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-graduate fa-3x mb-3"></i>
+                            <h3 class="text-4xl font-bold">${students}</h3>
+                            <p class="text-lg">Total Students</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card stat-card bg-gradient-to-br from-purple-500 to-purple-700 text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-3x mb-3"></i>
+                            <h5 class="text-lg font-bold mb-2">Last Dashboard Load</h5>
+                            <p class="text-sm">${lastLoad}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayLogsTable(logs) {
+            const tableBody = document.getElementById('logsTableBody');
+            
+            if (logs.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No logs available</td></tr>';
+                return;
+            }
+            
+            tableBody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${new Date(log.TIMESTAMP).toLocaleString()}</td>
+                    <td>${log.ADMIN_EMAIL || 'N/A'}</td>
+                    <td>${log.CLASSROOM_COUNT || 0}</td>
+                    <td>${log.STUDENT_COUNT || 0}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>

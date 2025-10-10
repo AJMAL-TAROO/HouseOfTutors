@@ -31,7 +31,7 @@
                     </label>
                 </div>
                 <div class="navbar-center">
-                    <a class="btn btn-ghost text-xl">House Of Tutors</a>
+                    <a class="btn btn-ghost text-xl" onclick="openSuperUserModal()">House Of Tutors</a>
                 </div>
                 <div class="navbar-end">
                     <button class="btn btn-ghost btn-circle" onclick="openLogoutModal()">
@@ -88,6 +88,30 @@
                     <div class="modal-action">
                         <button class="btn btn-primary" onclick="confirmLogout()">Yes</button>
                         <button class="btn" onclick="closeLogoutModal()">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Super User Login Modal -->
+            <div id="superUserModal" class="modal">
+                <div class="modal-box">
+                    <h2 class="text-xl font-bold mb-4">Super User Login</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Username</span>
+                        </label>
+                        <input type="text" id="superUsername" placeholder="Enter username" class="input input-bordered" />
+                    </div>
+                    <div class="form-control mt-4">
+                        <label class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="password" id="superPassword" placeholder="Enter password" class="input input-bordered" />
+                    </div>
+                    <div id="superLoginError" class="text-red-500 text-sm mt-2 hidden">Invalid credentials!</div>
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="verifySuperUser()">Login</button>
+                        <button class="btn" onclick="closeSuperUserModal()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -562,6 +586,32 @@
             }
 
             closeBackgroundModal();
+        };
+
+        // Super User Modal Functions
+        window.openSuperUserModal = function () {
+            document.getElementById('superUserModal').classList.add('modal-open');
+            document.getElementById('superUsername').value = '';
+            document.getElementById('superPassword').value = '';
+            document.getElementById('superLoginError').classList.add('hidden');
+        };
+
+        window.closeSuperUserModal = function () {
+            document.getElementById('superUserModal').classList.remove('modal-open');
+        };
+
+        window.verifySuperUser = function () {
+            const username = document.getElementById('superUsername').value;
+            const password = document.getElementById('superPassword').value;
+            
+            if (username === 'admin' && password === 'admin123') {
+                // Store super user flag
+                localStorage.setItem('superUserAuth', 'true');
+                // Redirect to info.html
+                window.location.href = 'info.html';
+            } else {
+                document.getElementById('superLoginError').classList.remove('hidden');
+            }
         };
     </script>
 
