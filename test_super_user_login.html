@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super User Login Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        .navbar a:hover {
+            background: #555;
+            border-radius: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.modal-open {
+            display: flex;
+        }
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            min-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .modal-box h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .form-control label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-control input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .error.show {
+            display: block;
+        }
+        .modal-action {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+        }
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4f46e5;
+        }
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+        .info {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .info h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        .info p {
+            color: #1e3a8a;
+            line-height: 1.6;
+        }
+        .success {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .success.show {
+            display: block;
+        }
+        .success h3 {
+            color: #15803d;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a onclick="openSuperUserModal()">🏠 House Of Tutors (Click Me)</a>
+    </div>
+
+    <div class="info">
+        <h3>ℹ️ Super User Login Test</h3>
+        <p>Click on "House Of Tutors" in the navbar above to open the super user login modal.</p>
+        <p><strong>Test Credentials:</strong></p>
+        <ul>
+            <li>Username: <code>admin</code></li>
+            <li>Password: <code>admin123</code></li>
+        </ul>
+        <p style="margin-top: 10px;">Try entering wrong credentials to see the error message!</p>
+    </div>
+
+    <div id="successMessage" class="success">
+        <h3>✅ Login Successful!</h3>
+        <p>Credentials validated. In the actual application, this would redirect to info.html</p>
+    </div>
+
+    <!-- Super User Login Modal -->
+    <div id="superUserModal" class="modal">
+        <div class="modal-box">
+            <h2>🔐 Super User Login</h2>
+            <div class="form-control">
+                <label>Username</label>
+                <input type="text" id="superUsername" placeholder="Enter username" />
+            </div>
+            <div class="form-control">
+                <label>Password</label>
+                <input type="password" id="superPassword" placeholder="Enter password" />
+            </div>
+            <div id="superLoginError" class="error">❌ Invalid credentials!</div>
+            <div class="modal-action">
+                <button class="btn btn-primary" onclick="verifySuperUser()">Login</button>
+                <button class="btn btn-secondary" onclick="closeSuperUserModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openSuperUserModal() {
+            document.getElementById('superUserModal').classList.add('modal-open');
+            document.getElementById('superUsername').value = '';
+            document.getElementById('superPassword').value = '';
+            document.getElementById('superLoginError').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        function closeSuperUserModal() {
+            document.getElementById('superUserModal').classList.remove('modal-open');
+        }
+
+        function verifySuperUser() {
+            const username = document.getElementById('superUsername').value;
+            const password = document.getElementById('superPassword').value;
+            
+            if (username === 'admin' && password === 'admin123') {
+                // In the actual application, this would:
+                // localStorage.setItem('superUserAuth', 'true');
+                // window.location.href = 'info.html';
+                
+                // For this test, show success message
+                closeSuperUserModal();
+                document.getElementById('successMessage').classList.add('show');
+                console.log('✅ Login successful! Would redirect to info.html');
+            } else {
+                document.getElementById('superLoginError').classList.add('show');
+                console.log('❌ Invalid credentials');
+            }
+        }
+
+        // Allow Enter key to submit
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && document.getElementById('superUserModal').classList.contains('modal-open')) {
+                verifySuperUser();
+            }
+        });
+
+        // Allow Escape key to close modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && document.getElementById('superUserModal').classList.contains('modal-open')) {
+                closeSuperUserModal();
+            }
+        });
+    </script>
+</body>
+</html>
