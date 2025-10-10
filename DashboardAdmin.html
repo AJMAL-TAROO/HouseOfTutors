@@ -183,11 +183,11 @@
                 }
 
                 const adminData = adminSnapshot.val();
-                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',') : [];
+                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',').filter(room => room.trim()) : [];
                 const classroomCount = virtualRooms.length;
 
                 // Get student count for this admin
-                const studentsIds = adminData.STUDENTS ? adminData.STUDENTS.split(',') : [];
+                const studentsIds = adminData.STUDENTS ? adminData.STUDENTS.split(',').filter(id => id.trim()) : [];
                 const studentCount = studentsIds.length;
 
                 // Create log entry
@@ -239,11 +239,16 @@
                             <span class="text-purple-700 font-bold text-sm">${lastLoadTime.toLocaleString()}</span>
                         </div>
                     </div>
-                    <button class="btn btn-primary mt-4 w-full" onclick="document.getElementById('adminLogInfo').remove()">Close</button>
+                    <button id="closeLogInfoBtn" class="btn btn-primary mt-4 w-full">Close</button>
                 </div>
             `;
             
             document.body.appendChild(infoDisplay);
+            
+            // Add event listener for close button
+            document.getElementById('closeLogInfoBtn').addEventListener('click', function() {
+                document.getElementById('adminLogInfo').remove();
+            });
         }
 
         // Check if the URL contains '/info' path
@@ -251,15 +256,16 @@
             const currentPath = window.location.pathname;
             const currentHash = window.location.hash;
             const currentHref = window.location.href;
+            const currentPageName = currentPath.split('/').pop();
             
             // Check multiple ways the /info endpoint might be accessed:
-            // 1. DashboardAdmin.html/info
-            // 2. DashboardAdmin.html#/info or DashboardAdmin.html#info
-            // 3. URL parameter like DashboardAdmin.html?path=/info
+            // 1. Any path that includes /info
+            // 2. Hash formats: #/info or #info
+            // 3. Current page followed by /info
             if (currentPath.includes('/info') || 
                 currentHash.includes('/info') || 
                 currentHash === '#info' ||
-                currentHref.includes('DashboardAdmin.html/info')) {
+                (currentPageName && currentHref.includes(`${currentPageName}/info`))) {
                 return true;
             }
             return false;
