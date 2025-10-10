@@ -177,6 +177,8 @@
             const output = document.getElementById('test2-output');
             output.innerHTML = '';
             
+            // Note: This replicates the logic from DashboardAdmin.html for testing purposes
+            // In production, this would ideally import the actual function
             function checkForInfoEndpoint() {
                 const currentPath = window.location.pathname;
                 const currentHash = window.location.hash;
@@ -236,10 +238,10 @@
             const output = document.getElementById('test4-output');
             output.innerHTML = '';
             
-            // Simulate admin data from Firebase
+            // Simulate admin data from Firebase (using test data, not real emails)
             const adminData = {
-                EMAIL: "ajtaroo@gmail.com",
-                FULL_NAME: "Ajmal Taroo",
+                EMAIL: "test.admin@example.com",
+                FULL_NAME: "Test Admin",
                 STUDENTS: "STUDENTS_12,STUDENTS_13,STUDENTS_14",
                 VIRTUAL_ROOMS: "1001,1002,1007,1008"
             };
