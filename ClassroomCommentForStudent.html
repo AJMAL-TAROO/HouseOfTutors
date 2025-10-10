@@ -66,6 +66,7 @@
 
         // Retrieve the classroom ID from local storage
         const classroomId = localStorage.getItem('CLASSROOM_ID');
+        const studentEmail = localStorage.getItem('student_email');
 
         if (classroomId) {
             // Reference to the COMMENTS node for the specific classroom
@@ -93,7 +94,10 @@
                         );
 
                         commentDiv.innerHTML = `
-                <h3 class="text-lg font-bold">Date: ${comment.DATE}</h3>
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-gray-500">${comment.EMAIL || 'Unknown'}</span>
+                    <span class="text-xs text-gray-500">${comment.DATE}</span>
+                </div>
                 <p>${commentText}</p>
             `;
                         commentsContainer.appendChild(commentDiv);
@@ -146,6 +150,7 @@
 
             update(commentRef, {
                 [newCommentKey]: {
+                    EMAIL: studentEmail || 'Unknown',
                     DATE: currentDate,
                     COMMENT: commentText
                 }
