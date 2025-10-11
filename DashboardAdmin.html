@@ -367,19 +367,16 @@
                     const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
                     await remove(classroomRef);
 
-                    // Remove classroom ID from admin's VIRTUAL_ROOMS
-                    if (email) {
-                        const adminRef = ref(database, "ADMIN");
-                        const adminSnapshot = await get(adminRef);
-                        if (adminSnapshot.exists()) {
-                            const admins = adminSnapshot.val();
-                            for (const key in admins) {
-                                if (admins[key].EMAIL === email) {
-                                    const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
-                                    const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
-                                    await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
-                                    break;
-                                }
+                    // Remove classroom ID from all admins' VIRTUAL_ROOMS
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        for (const key in admins) {
+                            const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            if (virtualRooms.includes(selectedClassroomId.toString())) {
+                                const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
+                                await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
                             }
                         }
                     }
