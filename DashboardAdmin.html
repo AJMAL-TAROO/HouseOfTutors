@@ -373,7 +373,8 @@
                     if (adminSnapshot.exists()) {
                         const admins = adminSnapshot.val();
                         for (const key in admins) {
-                            const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            const virtualRoomsStr = admins[key].VIRTUAL_ROOMS || '';
+                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
                             if (virtualRooms.includes(selectedClassroomId.toString())) {
                                 const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
                                 await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
@@ -387,7 +388,8 @@
                     if (studentsSnapshot.exists()) {
                         const students = studentsSnapshot.val();
                         for (const studentKey in students) {
-                            const virtualRooms = students[studentKey].VIRTUAL_ROOMS ? students[studentKey].VIRTUAL_ROOMS.split(',') : [];
+                            const virtualRoomsStr = students[studentKey].VIRTUAL_ROOMS || '';
+                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
                             if (virtualRooms.includes(selectedClassroomId.toString())) {
                                 const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
                                 await update(ref(database, `STUDENTS/${studentKey}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
