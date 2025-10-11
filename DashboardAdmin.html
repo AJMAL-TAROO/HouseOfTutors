@@ -360,15 +360,50 @@
             document.getElementById('deleteClassroomModal').classList.remove('modal-open');
         };
 
-        window.confirmDeleteClassroom = function () {
+        window.confirmDeleteClassroom = async function () {
             if (selectedClassroomId) {
-                const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
-                remove(classroomRef).then(() => {
+                try {
+                    // Delete the classroom from CLASSROOMS node
+                    const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
+                    await remove(classroomRef);
+
+                    // Remove classroom ID from admin's VIRTUAL_ROOMS
+                    if (email) {
+                        const adminRef = ref(database, "ADMIN");
+                        const adminSnapshot = await get(adminRef);
+                        if (adminSnapshot.exists()) {
+                            const admins = adminSnapshot.val();
+                            for (const key in admins) {
+                                if (admins[key].EMAIL === email) {
+                                    const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                                    const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
+                                    await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Remove classroom ID from all students' VIRTUAL_ROOMS
+                    const studentsRef = ref(database, "STUDENTS");
+                    const studentsSnapshot = await get(studentsRef);
+                    if (studentsSnapshot.exists()) {
+                        const students = studentsSnapshot.val();
+                        for (const studentKey in students) {
+                            const virtualRooms = students[studentKey].VIRTUAL_ROOMS ? students[studentKey].VIRTUAL_ROOMS.split(',') : [];
+                            if (virtualRooms.includes(selectedClassroomId.toString())) {
+                                const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
+                                await update(ref(database, `STUDENTS/${studentKey}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
+                            }
+                        }
+                    }
+
                     alert('Classroom deleted successfully!');
                     closeDeleteClassroomModal();
-                }).catch((error) => {
+                } catch (error) {
                     console.error('Error deleting classroom:', error);
-                });
+                    alert('Error deleting classroom. Please try again.');
+                }
             }
         };
 
