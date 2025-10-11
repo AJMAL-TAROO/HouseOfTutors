@@ -149,7 +149,7 @@
             try {
                 await set(newStudentRef, studentData);
 
-                // Append student ID to the admin's STUDENTS sub node
+                // Append student ID to the admin's STUDENTS sub node and log the action
                 const adminEmail = localStorage.getItem('userEmail');
                 if (adminEmail) {
                     const adminRef = ref(database, "ADMIN");
@@ -170,6 +170,15 @@
                             // Remove duplicates and join back to string
                             studentsList = [...new Set(studentsList)].join(',');
                             await set(ref(database, `ADMIN/${adminKey}/STUDENTS`), studentsList);
+                            
+                            // Log the successful student creation
+                            const logData = {
+                                STUDENT_ID: `STUDENTS_${studentId}`,
+                                STUDENT_NAME: fullName,
+                                TIMESTAMP: Date.now(),
+                                DATE: new Date().toISOString()
+                            };
+                            await set(ref(database, `ADMIN/${adminKey}/LOGS/LAST_CREATED_STUDENT`), logData);
                         }
                     }
                 }
