@@ -127,6 +127,27 @@
                             NUMBER: id_classroom_notes
                         });
 
+                        // Log the successful upload for the admin
+                        const adminEmail = localStorage.getItem('userEmail');
+                        if (adminEmail) {
+                            firebase.database().ref('ADMIN').once('value', function(adminSnapshot) {
+                                if (adminSnapshot.exists()) {
+                                    const admins = adminSnapshot.val();
+                                    for (const key in admins) {
+                                        if (admins[key].EMAIL === adminEmail) {
+                                            const logData = {
+                                                CLASSROOM_ID: classroomId,
+                                                TIMESTAMP: Date.now(),
+                                                DATE: new Date().toISOString()
+                                            };
+                                            firebase.database().ref(`ADMIN/${key}/LOGS/LAST_UPLOAD_NOTES`).set(logData);
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
                         nativeToast({
                             message: 'Note was uploaded successfully!',
                             position: 'center',

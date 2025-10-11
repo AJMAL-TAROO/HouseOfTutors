@@ -158,7 +158,7 @@
                 await set(ref(database, "NUMBERS/CURRENT_ID_CLASSROOM/NUMBER"), classroomId);
                 await set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
 
-                // Add classroom to admin's VIRTUAL_ROOMS list
+                // Add classroom to admin's VIRTUAL_ROOMS list and log the action
                 const email = localStorage.getItem('userEmail');
                 if (email) {
                     const adminRef = ref(database, "ADMIN");
@@ -170,6 +170,15 @@
                                 const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
                                 virtualRooms.push(classroomId.toString());
                                 await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
+                                
+                                // Log the successful classroom creation
+                                const logData = {
+                                    CLASSROOM_ID: classroomId,
+                                    CLASSROOM_TITLE: title,
+                                    TIMESTAMP: Date.now(),
+                                    DATE: new Date().toISOString()
+                                };
+                                await set(ref(database, `ADMIN/${key}/LOGS/LAST_CREATED_CLASSROOM`), logData);
                                 break;
                             }
                         }

@@ -474,7 +474,7 @@
                                         </div>
                                     </div>
                                     <div class="card-actions justify-center space-x-2 mt-4 flex flex-col items-center sm:flex-row sm:items-start">
-                                        <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); openModal('${classroomLink}')">
+                                        <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); openModal('${classroomLink}', ${classroom.CLASSROOM_ID}, '${classroom.TITLE}')">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h16M4 12h16M4 18h7" />
                                             </svg>
@@ -511,7 +511,33 @@
             window.location.href = 'LoadNotesAdmin.html'; // Redirect to notes.html
         };
 
-        window.openModal = function (url) {
+        window.openModal = async function (url, classroomId, classroomTitle) {
+            // Log the VR classroom join action
+            const adminEmail = localStorage.getItem('userEmail');
+            if (adminEmail) {
+                try {
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === adminEmail) {
+                                const logData = {
+                                    CLASSROOM_ID: classroomId,
+                                    CLASSROOM_TITLE: classroomTitle,
+                                    TIMESTAMP: Date.now(),
+                                    DATE: new Date().toISOString()
+                                };
+                                await set(ref(database, `ADMIN/${key}/LOGS/LAST_JOINED_VR_CLASSROOM`), logData);
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error logging VR classroom join:", error);
+                }
+            }
+            
             window.open(`OnlineClass.html?vrLink=${encodeURIComponent(url)}`, '_blank');
         };
 
