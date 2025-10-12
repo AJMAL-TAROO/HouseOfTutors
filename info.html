@@ -354,14 +354,28 @@
                 return;
             }
             
-            tableBody.innerHTML = logs.map(log => `
-                <tr>
-                    <td>${new Date(log.TIMESTAMP).toLocaleString()}</td>
-                    <td>${log.ADMIN_EMAIL || 'N/A'}</td>
-                    <td>${log.CLASSROOM_COUNT || 0}</td>
-                    <td>${log.STUDENT_COUNT || 0}</td>
-                </tr>
-            `).join('');
+            tableBody.innerHTML = logs.map(log => {
+                // Validate timestamp
+                let timestamp = 'N/A';
+                if (log.TIMESTAMP && !isNaN(log.TIMESTAMP)) {
+                    try {
+                        const date = new Date(log.TIMESTAMP);
+                        timestamp = date.toLocaleString();
+                    } catch (e) {
+                        console.error('Invalid timestamp:', log.TIMESTAMP);
+                        timestamp = 'N/A';
+                    }
+                }
+                
+                return `
+                    <tr>
+                        <td>${timestamp}</td>
+                        <td>${log.ADMIN_EMAIL || 'N/A'}</td>
+                        <td>${log.CLASSROOM_COUNT || 0}</td>
+                        <td>${log.STUDENT_COUNT || 0}</td>
+                    </tr>
+                `;
+            }).join('');
         }
     </script>
 </body>
