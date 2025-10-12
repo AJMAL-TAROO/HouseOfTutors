@@ -296,7 +296,16 @@
 
             logs.forEach(log => {
                 // Validate timestamp
-                const timestamp = log.TIMESTAMP ? new Date(log.TIMESTAMP).toLocaleString() : 'N/A';
+                let timestamp = 'N/A';
+                if (log.TIMESTAMP && !isNaN(log.TIMESTAMP)) {
+                    try {
+                        const date = new Date(log.TIMESTAMP);
+                        timestamp = date.toLocaleString();
+                    } catch (e) {
+                        console.error('Invalid timestamp:', log.TIMESTAMP);
+                        timestamp = 'N/A';
+                    }
+                }
                 let actionType = '';
                 let details = '';
 
@@ -328,7 +337,7 @@
                         <td>${actionType}</td>
                         <td>${escapeHtml(log.adminName)}<br><small class="text-muted">${escapeHtml(log.adminEmail)}</small></td>
                         <td>${details}</td>
-                        <td>${escapeHtml(timestamp)}</td>
+                        <td>${timestamp}</td>
                     </tr>
                 `;
             });
