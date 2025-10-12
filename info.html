@@ -99,8 +99,11 @@
 
         // Helper function to escape HTML (shared across display functions)
         function escapeHtml(text) {
+            if (text === null || text === undefined) {
+                return '';
+            }
             const div = document.createElement('div');
-            div.textContent = text || '';
+            div.textContent = String(text);
             return div.innerHTML;
         }
 
@@ -312,19 +315,19 @@
                 switch (log.type) {
                     case 'UPLOAD_NOTES':
                         actionType = '<i class="fas fa-upload text-primary"></i> Uploaded Notes';
-                        details = `Classroom ID: ${escapeHtml(log.CLASSROOM_ID)}`;
+                        details = `Classroom ID: ${escapeHtml(log.CLASSROOM_ID || 'Unknown')}`;
                         break;
                     case 'CREATED_CLASSROOM':
                         actionType = '<i class="fas fa-plus-circle text-success"></i> Created Classroom';
-                        details = `${escapeHtml(log.CLASSROOM_TITLE)} (ID: ${escapeHtml(log.CLASSROOM_ID)})`;
+                        details = `${escapeHtml(log.CLASSROOM_TITLE || 'Untitled')} (ID: ${escapeHtml(log.CLASSROOM_ID || 'Unknown')})`;
                         break;
                     case 'CREATED_STUDENT':
                         actionType = '<i class="fas fa-user-plus text-info"></i> Created Student';
-                        details = `${escapeHtml(log.STUDENT_NAME)} (${escapeHtml(log.STUDENT_ID)})`;
+                        details = `${escapeHtml(log.STUDENT_NAME || 'Unnamed')} (${escapeHtml(log.STUDENT_ID || 'Unknown')})`;
                         break;
                     case 'JOINED_VR_CLASSROOM':
                         actionType = '<i class="fas fa-vr-cardboard text-warning"></i> Joined VR Class';
-                        details = `${escapeHtml(log.CLASSROOM_TITLE)} (ID: ${escapeHtml(log.CLASSROOM_ID)})`;
+                        details = `${escapeHtml(log.CLASSROOM_TITLE || 'Untitled')} (ID: ${escapeHtml(log.CLASSROOM_ID || 'Unknown')})`;
                         break;
                     default:
                         actionType = '<i class="fas fa-question-circle text-secondary"></i> Unknown Action';
@@ -335,7 +338,7 @@
                 html += `
                     <tr>
                         <td>${actionType}</td>
-                        <td>${escapeHtml(log.adminName)}<br><small class="text-muted">${escapeHtml(log.adminEmail)}</small></td>
+                        <td>${escapeHtml(log.adminName || 'Unknown Admin')}<br><small class="text-muted">${escapeHtml(log.adminEmail || 'No email')}</small></td>
                         <td>${details}</td>
                         <td>${timestamp}</td>
                     </tr>
