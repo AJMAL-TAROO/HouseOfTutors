@@ -274,6 +274,13 @@
                 return;
             }
 
+            // Helper function to escape HTML
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text || '';
+                return div.innerHTML;
+            }
+
             let html = '<div class="table-responsive"><table class="table table-striped table-hover">';
             html += `
                 <thead class="bg-purple-800 text-white">
@@ -288,35 +295,40 @@
             `;
 
             logs.forEach(log => {
-                const timestamp = new Date(log.TIMESTAMP).toLocaleString();
+                // Validate timestamp
+                const timestamp = log.TIMESTAMP ? new Date(log.TIMESTAMP).toLocaleString() : 'N/A';
                 let actionType = '';
                 let details = '';
 
                 switch (log.type) {
                     case 'UPLOAD_NOTES':
                         actionType = '<i class="fas fa-upload text-primary"></i> Uploaded Notes';
-                        details = `Classroom ID: ${log.CLASSROOM_ID}`;
+                        details = `Classroom ID: ${escapeHtml(log.CLASSROOM_ID)}`;
                         break;
                     case 'CREATED_CLASSROOM':
                         actionType = '<i class="fas fa-plus-circle text-success"></i> Created Classroom';
-                        details = `${log.CLASSROOM_TITLE} (ID: ${log.CLASSROOM_ID})`;
+                        details = `${escapeHtml(log.CLASSROOM_TITLE)} (ID: ${escapeHtml(log.CLASSROOM_ID)})`;
                         break;
                     case 'CREATED_STUDENT':
                         actionType = '<i class="fas fa-user-plus text-info"></i> Created Student';
-                        details = `${log.STUDENT_NAME} (${log.STUDENT_ID})`;
+                        details = `${escapeHtml(log.STUDENT_NAME)} (${escapeHtml(log.STUDENT_ID)})`;
                         break;
                     case 'JOINED_VR_CLASSROOM':
                         actionType = '<i class="fas fa-vr-cardboard text-warning"></i> Joined VR Class';
-                        details = `${log.CLASSROOM_TITLE} (ID: ${log.CLASSROOM_ID})`;
+                        details = `${escapeHtml(log.CLASSROOM_TITLE)} (ID: ${escapeHtml(log.CLASSROOM_ID)})`;
+                        break;
+                    default:
+                        actionType = '<i class="fas fa-question-circle text-secondary"></i> Unknown Action';
+                        details = 'No details available';
                         break;
                 }
 
                 html += `
                     <tr>
                         <td>${actionType}</td>
-                        <td>${log.adminName}<br><small class="text-muted">${log.adminEmail}</small></td>
+                        <td>${escapeHtml(log.adminName)}<br><small class="text-muted">${escapeHtml(log.adminEmail)}</small></td>
                         <td>${details}</td>
-                        <td>${timestamp}</td>
+                        <td>${escapeHtml(timestamp)}</td>
                     </tr>
                 `;
             });
