@@ -127,7 +127,7 @@
                                 <span class="text-xs text-gray-500">${comment.EMAIL || 'Unknown'}</span>
                                 <span class="text-xs text-gray-500">${comment.DATE}</span>
                             </div>
-                            <p id="commentText-${commentId}">${commentText}</p>
+                            <p id="commentText-${commentId}" style="word-wrap: break-word; word-break: break-word; overflow-wrap: break-word;">${commentText}</p>
                             <div class="flex justify-end space-x-2 mt-2">
                                 <button class="btn btn-sm btn-warning" onclick="openEditModal('${commentId}', '${comment.COMMENT}')">Edit</button>
                                 <button class="btn btn-sm btn-danger" onclick="openDeleteModal('${commentId}')">Delete</button>
