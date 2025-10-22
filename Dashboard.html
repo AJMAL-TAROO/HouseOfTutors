@@ -11,6 +11,13 @@
         .card:hover {
             background-color: #4c1d95; /* Darker shade of purple */
         }
+
+        /* Hide change background button on mobile devices */
+        @media (max-width: 768px) {
+            #changeBackgroundBtn {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -71,7 +78,7 @@
         </div>
     </div>
 
-    <button class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
+    <button id="changeBackgroundBtn" class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
         onclick="openBackgroundModal()">
         Change Background
     </button>
@@ -110,12 +117,51 @@
         const email = localStorage.getItem('student_email');
         const studentKey = localStorage.getItem('STUDENT_KEY');
 
+        // Function to check if device is mobile
+        function isMobileDevice() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Function to detect dark mode preference
+        function isDarkMode() {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        // Function to apply mobile background
+        function applyMobileBackground() {
+            if (isMobileDevice()) {
+                // Clear any wallpaper image
+                document.body.style.backgroundImage = 'none';
+                
+                // Apply white or black based on dark mode preference
+                if (isDarkMode()) {
+                    document.body.style.backgroundColor = '#000000'; // Black for dark mode
+                } else {
+                    document.body.style.backgroundColor = '#ffffff'; // White for light mode
+                }
+                
+                document.body.style.backgroundSize = 'auto';
+                document.body.style.backgroundPosition = 'initial';
+                document.body.style.backgroundRepeat = 'initial';
+                document.body.style.backgroundAttachment = 'initial';
+                document.body.style.height = '100vh';
+                document.body.style.margin = '0';
+                
+                console.log('Mobile device detected - Applied ' + (isDarkMode() ? 'black' : 'white') + ' background');
+            }
+        }
+
         if (studentKey) {
             const studentWallpaperRef = ref(database, `STUDENTS/${studentKey}`);
             onValue(studentWallpaperRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const studentData = snapshot.val();
-                    if (studentData.WALLPAPER) {
+                    
+                    // Check if mobile device first
+                    if (isMobileDevice()) {
+                        applyMobileBackground();
+                    } else if (studentData.WALLPAPER) {
+                        // Only apply wallpaper on desktop
                         const savedWallpaper = studentData.WALLPAPER;
                         document.body.style.backgroundImage = `url('${savedWallpaper}')`;
                         document.body.style.backgroundSize = 'cover'; // Ensures the image covers the entire screen
@@ -127,12 +173,33 @@
                     }
                 } else {
                     console.error('No wallpaper data found for the student.');
+                    // Still apply mobile background if on mobile
+                    if (isMobileDevice()) {
+                        applyMobileBackground();
+                    }
                 }
             }, (error) => {
                 console.error('Error retrieving wallpaper data from Firebase:', error);
+                // Still apply mobile background if on mobile
+                if (isMobileDevice()) {
+                    applyMobileBackground();
+                }
             });
         } else {
             console.error('No student key found in local storage.');
+            // Still apply mobile background if on mobile
+            if (isMobileDevice()) {
+                applyMobileBackground();
+            }
+        }
+
+        // Listen for dark mode changes on mobile
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (isMobileDevice()) {
+                    applyMobileBackground();
+                }
+            });
         }
 
         onValue(classroomsRef, (snapshot) => {
