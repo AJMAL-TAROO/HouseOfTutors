@@ -19,11 +19,27 @@
                 display: none !important;
             }
         }
+
+        /* Fix drawer width for mobile landscape mode */
+        @media (max-width: 926px) and (orientation: landscape) {
+            .drawer-side > .menu {
+                width: 60% !important;
+                max-width: 280px !important;
+            }
+        }
+
+        /* Fix drawer width for mobile portrait mode */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .drawer-side > .menu {
+                width: 75% !important;
+                max-width: 320px !important;
+            }
+        }
     </style>
 </head>
 
 <body style="padding: 10px;">
-    <div class="drawer drawer-mobile h-full">
+    <div class="drawer h-full">
         <input id="my-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Page content here -->
@@ -193,8 +209,8 @@
 
         </div>
         <div class="drawer-side">
-            <label for="my-drawer" class="drawer-overlay"></label>
-            <div class="menu p-4 w-80 bg-base-100 text-base-content h-full">
+            <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold">Menu</h2>
                     <label for="my-drawer" class="btn btn-ghost btn-circle drawer-button">
