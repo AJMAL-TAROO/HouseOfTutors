@@ -12,11 +12,34 @@
             background-color: #4c1d95;
             /* Darker shade of purple */
         }
+
+        /* Hide change background button on mobile devices */
+        @media (max-width: 768px) {
+            #changeBackgroundBtn {
+                display: none !important;
+            }
+        }
+
+        /* Fix drawer width for mobile landscape mode */
+        @media (max-width: 926px) and (orientation: landscape) {
+            .drawer-side > .menu {
+                width: 60% !important;
+                max-width: 280px !important;
+            }
+        }
+
+        /* Fix drawer width for mobile portrait mode */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .drawer-side > .menu {
+                width: 75% !important;
+                max-width: 320px !important;
+            }
+        }
     </style>
 </head>
 
 <body style="padding: 10px;">
-    <div class="drawer drawer-mobile h-full">
+    <div class="drawer h-full">
         <input id="my-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Page content here -->
@@ -31,9 +54,14 @@
                     </label>
                 </div>
                 <div class="navbar-center">
-                    <a class="btn btn-ghost text-xl">House Of Tutors</a>
+                    <a class="btn btn-ghost text-xl" onclick="openSuperUserModal()">House Of Tutors</a>
                 </div>
                 <div class="navbar-end">
+                    <button class="btn btn-ghost btn-circle" onclick="openAdminDetailsModal()" title="View Dashboard Details">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </button>
                     <button class="btn btn-ghost btn-circle" onclick="openLogoutModal()">
                         <img src="img/logout.png" alt="logout" class="h-5 w-5">
                     </button>
@@ -92,10 +120,97 @@
                 </div>
             </div>
 
+            <!-- Super User Login Modal -->
+            <div id="superUserModal" class="modal">
+                <div class="modal-box">
+                    <h2 class="text-xl font-bold mb-4">Super User Login</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Username</span>
+                        </label>
+                        <input type="text" id="superUsername" placeholder="Enter username" class="input input-bordered" />
+                    </div>
+                    <div class="form-control mt-4">
+                        <label class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="password" id="superPassword" placeholder="Enter password" class="input input-bordered" />
+                    </div>
+                    <div id="superLoginError" class="text-red-500 text-sm mt-2 hidden">Invalid credentials!</div>
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="verifySuperUser()">Login</button>
+                        <button class="btn" onclick="closeSuperUserModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Details Modal -->
+            <div id="adminDetailsModal" class="modal">
+                <div class="modal-box max-w-4xl">
+                    <h2 class="text-2xl font-bold mb-4 text-purple-800">Dashboard Details</h2>
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeAdminDetailsModal()">✕</button>
+                    
+                    <!-- Summary Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="stat bg-purple-100 rounded-lg shadow">
+                            <div class="stat-title">Total Classrooms</div>
+                            <div class="stat-value text-purple-800" id="totalClassrooms">0</div>
+                        </div>
+                        <div class="stat bg-purple-100 rounded-lg shadow">
+                            <div class="stat-title">Total Students</div>
+                            <div class="stat-value text-purple-800" id="totalStudents">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Classrooms Details Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">My Classrooms</h3>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Teacher</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="classroomsTableBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Students Details Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">My Students</h3>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="closeAdminDetailsModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="drawer-side">
-            <label for="my-drawer" class="drawer-overlay"></label>
-            <div class="menu p-4 w-80 bg-base-100 text-base-content h-full">
+            <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <div class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold">Menu</h2>
                     <label for="my-drawer" class="btn btn-ghost btn-circle drawer-button">
@@ -139,7 +254,7 @@
         </div>
     </div>
 
-    <button class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
+    <button id="changeBackgroundBtn" class="btn btn-primary shadow-lg fixed bottom-5 right-5 z-50 rounded-lg px-4 py-2"
         onclick="openBackgroundModal()">
         Change Background
     </button>
@@ -147,7 +262,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, onValue, update, remove, push, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -170,28 +285,220 @@
         // Retrieve the email from local storage
         const email = localStorage.getItem('userEmail');
 
+        // Function to capture and log admin dashboard information
+        async function captureAdminLogs(adminEmail, adminKey, showModal = false) {
+            try {
+                // Get admin data to count classrooms
+                const adminRef = ref(database, `ADMIN/${adminKey}`);
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    console.error('Admin data not found');
+                    return;
+                }
+
+                const adminData = adminSnapshot.val();
+                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',').filter(room => room.trim()) : [];
+                const classroomCount = virtualRooms.length;
+
+                // Get student count for this admin
+                const studentsIds = adminData.STUDENTS ? adminData.STUDENTS.split(',').filter(id => id.trim()) : [];
+                const studentCount = studentsIds.length;
+
+                // Create log entry
+                const timestamp = Date.now();
+                const logData = {
+                    ADMIN_EMAIL: adminEmail,
+                    ADMIN_KEY: adminKey,
+                    CLASSROOM_COUNT: classroomCount,
+                    STUDENT_COUNT: studentCount,
+                    TIMESTAMP: timestamp,
+                    DATE: new Date(timestamp).toISOString()
+                };
+
+                // Push log data to Firebase under LOGS node
+                const logsRef = ref(database, 'LOGS');
+                await push(logsRef, logData);
+                
+                console.log('Admin log captured successfully:', logData);
+                console.log(`Admin: ${adminEmail} (${adminKey})`);
+                console.log(`Number of Classrooms: ${classroomCount}`);
+                console.log(`Number of Students: ${studentCount}`);
+                console.log(`Timestamp: ${new Date(timestamp).toLocaleString()}`);
+
+                // Display the information on the page only if showModal is true
+                if (showModal) {
+                    displayLogInfo(classroomCount, studentCount, new Date(timestamp));
+                }
+            } catch (error) {
+                console.error('Error capturing admin logs:', error);
+            }
+        }
+
+        // Function to display log information
+        function displayLogInfo(classroomCount, studentCount, lastLoadTime) {
+            // Create a display container
+            const infoDisplay = document.createElement('div');
+            infoDisplay.id = 'adminLogInfo';
+            infoDisplay.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 z-50 border-2 border-purple-600';
+            infoDisplay.style.minWidth = '350px';
+            
+            infoDisplay.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Admin Dashboard Info</h2>
+                    <div class="space-y-3 text-left">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Classrooms:</span>
+                            <span class="text-purple-700 font-bold">${classroomCount}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Students:</span>
+                            <span class="text-purple-700 font-bold">${studentCount}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="font-semibold text-gray-700">Last Loaded:</span>
+                            <span class="text-purple-700 font-bold text-sm">${lastLoadTime.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <button id="closeLogInfoBtn" class="btn btn-primary mt-4 w-full">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(infoDisplay);
+            
+            // Add event listener for close button
+            document.getElementById('closeLogInfoBtn').addEventListener('click', function() {
+                document.getElementById('adminLogInfo').remove();
+            });
+        }
+
+        // Check if the URL contains '/info' path
+        function checkForInfoEndpoint() {
+            const currentPath = window.location.pathname;
+            const currentHash = window.location.hash;
+            const currentHref = window.location.href;
+            const currentPageName = currentPath.split('/').pop();
+            
+            // Check multiple ways the /info endpoint might be accessed:
+            // 1. Any path that includes /info
+            // 2. Hash formats: #/info or #info
+            // 3. Current page followed by /info
+            if (currentPath.includes('/info') || 
+                currentHash.includes('/info') || 
+                currentHash === '#info' ||
+                (currentPageName && currentHref.includes(`${currentPageName}/info`))) {
+                return true;
+            }
+            return false;
+        }
+
+        // Capture logs on every page load and when /info endpoint is accessed
+        if (email) {
+            const isInfoEndpoint = checkForInfoEndpoint();
+            const adminRef = ref(database, "ADMIN");
+            get(adminRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const admins = snapshot.val();
+                    let adminKey = null;
+                    
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email) {
+                            adminKey = key;
+                            break;
+                        }
+                    }
+                    
+                    if (adminKey) {
+                        // Always capture logs, but only show modal if accessing /info endpoint
+                        captureAdminLogs(email, adminKey, isInfoEndpoint);
+                    }
+                }
+            }).catch((error) => {
+                console.error('Error retrieving admin data for logging:', error);
+            });
+        }
+
+        // Function to check if device is mobile
+        function isMobileDevice() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Function to detect dark mode preference
+        function isDarkMode() {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        // Function to apply mobile background
+        function applyMobileBackground() {
+            if (isMobileDevice()) {
+                // Clear any wallpaper image
+                document.body.style.backgroundImage = 'none';
+                
+                // Apply white or black based on dark mode preference
+                if (isDarkMode()) {
+                    document.body.style.backgroundColor = '#000000'; // Black for dark mode
+                } else {
+                    document.body.style.backgroundColor = '#ffffff'; // White for light mode
+                }
+                
+                document.body.style.backgroundSize = 'auto';
+                document.body.style.backgroundPosition = 'initial';
+                document.body.style.backgroundRepeat = 'initial';
+                document.body.style.backgroundAttachment = 'initial';
+                document.body.style.height = '100vh';
+                document.body.style.margin = '0';
+                
+                console.log('Mobile device detected - Applied ' + (isDarkMode() ? 'black' : 'white') + ' background');
+            }
+        }
+
         // Load the saved wallpaper on page load
         if (email) {
             const adminRef = ref(database, "ADMIN");
             get(adminRef).then((snapshot) => {
                 if (snapshot.exists()) {
                     const admins = snapshot.val();
-                    for (const key in admins) {
-                        if (admins[key].EMAIL === email && admins[key].WALLPAPER) {
-                            const savedWallpaper = admins[key].WALLPAPER;
-                            document.body.style.backgroundImage = `url('${savedWallpaper}')`;
-                            document.body.style.backgroundSize = 'cover';
-                            document.body.style.backgroundPosition = 'center';
-                            document.body.style.backgroundRepeat = 'no-repeat';
-                            document.body.style.backgroundAttachment = 'fixed';
-                            document.body.style.height = '100vh';
-                            document.body.style.margin = '0';
-                            break;
+                    
+                    // Check if mobile device first
+                    if (isMobileDevice()) {
+                        applyMobileBackground();
+                    } else {
+                        // Only apply wallpaper on desktop
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === email && admins[key].WALLPAPER) {
+                                const savedWallpaper = admins[key].WALLPAPER;
+                                document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+                                document.body.style.backgroundSize = 'cover';
+                                document.body.style.backgroundPosition = 'center';
+                                document.body.style.backgroundRepeat = 'no-repeat';
+                                document.body.style.backgroundAttachment = 'fixed';
+                                document.body.style.height = '100vh';
+                                document.body.style.margin = '0';
+                                break;
+                            }
                         }
                     }
                 }
             }).catch((error) => {
                 console.error('Error retrieving admin data:', error);
+                // Still apply mobile background if on mobile
+                if (isMobileDevice()) {
+                    applyMobileBackground();
+                }
+            });
+        } else {
+            // If no email, still apply mobile background if on mobile
+            if (isMobileDevice()) {
+                applyMobileBackground();
+            }
+        }
+
+        // Listen for dark mode changes on mobile
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (isMobileDevice()) {
+                    applyMobileBackground();
+                }
             });
         }
 
@@ -234,48 +541,40 @@
                                 const card = document.createElement("div");
                                 card.className = "card bg-purple-800 text-white w-full sm:w-96 h-auto sm:h-64 shadow-lg cursor-pointer"; // Adjust width and height for responsiveness
                                 card.innerHTML = `
-                            <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID}, '${email}')">
-                                <div class="flex flex-row justify-between items-start sm:items-center">
-                                    <h3 class="card-title text-lg sm:text-2xl font-bold" onclick="event.stopPropagation(); openEditClassroomModal(${classroom.CLASSROOM_ID})">${classroom.TITLE}</h3>
-                                    <div class="dropdown dropdown-end">
-                                        <label tabindex="0" class="btn btn-ghost btn-circle" onclick="event.stopPropagation();">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01" />
+                                <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID}, '${email}')">
+                                    <div class="flex flex-row justify-between items-start sm:items-center">
+                                        <h3 class="card-title text-lg sm:text-2xl font-bold" onclick="event.stopPropagation(); openEditClassroomModal(${classroom.CLASSROOM_ID})">${classroom.TITLE}</h3>
+                                        <div class="dropdown dropdown-end">
+                                            <label tabindex="0" class="btn btn-ghost btn-circle" onclick="event.stopPropagation();">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01" />
+                                                </svg>
+                                            </label>
+                                            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
+                                                <li><a onclick="event.stopPropagation(); openDeleteClassroomModal(${classroom.CLASSROOM_ID})">Delete Classroom</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-actions justify-center space-x-2 mt-4 flex flex-col items-center sm:flex-row sm:items-start">
+                                        <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); openModal('${classroomLink}', ${classroom.CLASSROOM_ID}, '${classroom.TITLE}')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h16M4 12h16M4 18h7" />
                                             </svg>
-                                        </label>
-                                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
-                                            <li><a onclick="event.stopPropagation(); openDeleteClassroomModal(${classroom.CLASSROOM_ID})">Delete Classroom</a></li>
-                                        </ul>
+                                            Join VR Class
+                                        </button>
+                                        <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); storeStorageFolder('${classroom.STORAGE_FOLDER}')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8m8 4H8m8 4H8" />
+                                            </svg>
+                                            View Notes
+                                        </button>
+                                        <button class="btn btn-circle btn-sm btn-outline text-white border-white mt-2 sm:mt-0" onclick="event.stopPropagation(); redirectToUploadNotes(${classroom.CLASSROOM_ID})">+</button>
                                     </div>
                                 </div>
-                                <div class="card-actions justify-center space-x-2 mt-4 flex flex-col items-center sm:flex-row sm:items-start">
-                                    <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); openModal('${classroomLink}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h16M4 12h16M4 18h7" />
-                                        </svg>
-                                        Join VR Class
-                                    </button>
-                                    <button class="btn btn-outline text-white border-white w-full sm:w-auto" onclick="event.stopPropagation(); storeStorageFolder('${classroom.STORAGE_FOLDER}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8m8 4H8m8-8H8m8-4H8m8 4H8m8 4H8m8 4H8m8 4H8m8 4H8" />
-                                        </svg>
-                                        View Notes
-                                    </button>
-                                    <button class="btn btn-circle btn-sm btn-outline text-white border-white mt-2 sm:mt-0" onclick="event.stopPropagation(); redirectToUploadNotes(${classroom.CLASSROOM_ID})">+</button>
-                                </div>
-                            </div>
                             `;
                                 // Append the card to the container
                                 classroomContainer.appendChild(card);
-                            } else {
-                                // Create the card for classrooms not in allowedClassroomIds
-                                const card = document.createElement("div");
-                                card.className = "card bg-gray-400 text-white w-full sm:w-96 h-auto sm:h-64 shadow-lg cursor-not-allowed"; // Adjust width and height for responsiveness
-                                card.innerHTML = `
-                            <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentAdmin(${classroom.CLASSROOM_ID}, '${email}')">          
-`;
-                                classroomContainer.appendChild(card);
-                            }
+                            } 
                         });
                     });
                 } else {
@@ -294,7 +593,33 @@
             window.location.href = 'LoadNotesAdmin.html'; // Redirect to notes.html
         };
 
-        window.openModal = function (url) {
+        window.openModal = async function (url, classroomId, classroomTitle) {
+            // Log the VR classroom join action
+            const adminEmail = localStorage.getItem('userEmail');
+            if (adminEmail) {
+                try {
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        for (const key in admins) {
+                            if (admins[key].EMAIL === adminEmail) {
+                                const logData = {
+                                    CLASSROOM_ID: classroomId,
+                                    CLASSROOM_TITLE: classroomTitle,
+                                    TIMESTAMP: Date.now(),
+                                    DATE: new Date().toISOString()
+                                };
+                                await set(ref(database, `ADMIN/${key}/LOGS/LAST_JOINED_VR_CLASSROOM`), logData);
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error logging VR classroom join:", error);
+                }
+            }
+            
             window.open(`OnlineClass.html?vrLink=${encodeURIComponent(url)}`, '_blank');
         };
 
@@ -360,15 +685,49 @@
             document.getElementById('deleteClassroomModal').classList.remove('modal-open');
         };
 
-        window.confirmDeleteClassroom = function () {
+        window.confirmDeleteClassroom = async function () {
             if (selectedClassroomId) {
-                const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
-                remove(classroomRef).then(() => {
+                try {
+                    // Delete the classroom from CLASSROOMS node
+                    const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${selectedClassroomId}`);
+                    await remove(classroomRef);
+
+                    // Remove classroom ID from all admins' VIRTUAL_ROOMS
+                    const adminRef = ref(database, "ADMIN");
+                    const adminSnapshot = await get(adminRef);
+                    if (adminSnapshot.exists()) {
+                        const admins = adminSnapshot.val();
+                        for (const key in admins) {
+                            const virtualRoomsStr = admins[key].VIRTUAL_ROOMS || '';
+                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
+                            if (virtualRooms.includes(selectedClassroomId.toString())) {
+                                const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
+                                await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
+                            }
+                        }
+                    }
+
+                    // Remove classroom ID from all students' VIRTUAL_ROOMS
+                    const studentsRef = ref(database, "STUDENTS");
+                    const studentsSnapshot = await get(studentsRef);
+                    if (studentsSnapshot.exists()) {
+                        const students = studentsSnapshot.val();
+                        for (const studentKey in students) {
+                            const virtualRoomsStr = students[studentKey].VIRTUAL_ROOMS || '';
+                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
+                            if (virtualRooms.includes(selectedClassroomId.toString())) {
+                                const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
+                                await update(ref(database, `STUDENTS/${studentKey}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
+                            }
+                        }
+                    }
+
                     alert('Classroom deleted successfully!');
                     closeDeleteClassroomModal();
-                }).catch((error) => {
+                } catch (error) {
                     console.error('Error deleting classroom:', error);
-                });
+                    alert('Error deleting classroom. Please try again.');
+                }
             }
         };
 
@@ -446,6 +805,187 @@
 
             closeBackgroundModal();
         };
+
+        // Super User Modal Functions
+        window.openSuperUserModal = function () {
+            document.getElementById('superUserModal').classList.add('modal-open');
+            document.getElementById('superUsername').value = '';
+            document.getElementById('superPassword').value = '';
+            document.getElementById('superLoginError').classList.add('hidden');
+        };
+
+        window.closeSuperUserModal = function () {
+            document.getElementById('superUserModal').classList.remove('modal-open');
+        };
+
+        window.verifySuperUser = function () {
+            const username = document.getElementById('superUsername').value;
+            const password = document.getElementById('superPassword').value;
+            
+            if (username === 'admin' && password === 'admin123') {
+                // Store super user flag
+                localStorage.setItem('superUserAuth', 'true');
+                // Redirect to info.html
+                window.location.href = 'info.html';
+            } else {
+                document.getElementById('superLoginError').classList.remove('hidden');
+            }
+        };
+
+        // Admin Details Modal Functions
+        window.openAdminDetailsModal = async function () {
+            document.getElementById('adminDetailsModal').classList.add('modal-open');
+            await loadAdminDetails();
+        };
+
+        window.closeAdminDetailsModal = function () {
+            document.getElementById('adminDetailsModal').classList.remove('modal-open');
+        };
+
+        // Load and display admin details
+        async function loadAdminDetails() {
+            if (!email) {
+                console.error('No email found in local storage');
+                return;
+            }
+
+            try {
+                // Get admin data
+                const adminRef = ref(database, "ADMIN");
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    console.error('Admin data not found');
+                    return;
+                }
+
+                const admins = adminSnapshot.val();
+                let adminData = null;
+                let adminKey = null;
+
+                // Find the admin with matching email
+                for (const key in admins) {
+                    if (admins[key].EMAIL === email) {
+                        adminData = admins[key];
+                        adminKey = key;
+                        break;
+                    }
+                }
+
+                if (!adminData) {
+                    console.error('Admin not found');
+                    return;
+                }
+
+                // Get classroom and student IDs
+                const virtualRoomsStr = adminData.VIRTUAL_ROOMS || '';
+                const virtualRooms = virtualRoomsStr
+                    .split(',')
+                    .filter(room => room.trim())
+                    .map(Number);
+                
+                const studentsStr = adminData.STUDENTS || '';
+                const studentIds = studentsStr
+                    .split(',')
+                    .filter(id => id.trim());
+
+                // Update totals
+                document.getElementById('totalClassrooms').textContent = virtualRooms.length;
+                document.getElementById('totalStudents').textContent = studentIds.length;
+
+                // Fetch and display classroom details
+                const classroomsRef = ref(database, "CLASSROOMS");
+                const classroomsSnapshot = await get(classroomsRef);
+                const classroomsTableBody = document.getElementById('classroomsTableBody');
+                classroomsTableBody.innerHTML = '';
+
+                if (classroomsSnapshot.exists()) {
+                    const classrooms = classroomsSnapshot.val();
+                    let hasClassrooms = false;
+
+                    for (const classroomKey in classrooms) {
+                        const classroom = classrooms[classroomKey];
+                        if (virtualRooms.includes(classroom.CLASSROOM_ID)) {
+                            hasClassrooms = true;
+                            const row = document.createElement('tr');
+                            
+                            // Create cells and use textContent to prevent XSS
+                            const idCell = document.createElement('td');
+                            idCell.textContent = classroom.CLASSROOM_ID;
+                            
+                            const titleCell = document.createElement('td');
+                            titleCell.textContent = classroom.TITLE;
+                            
+                            const teacherCell = document.createElement('td');
+                            teacherCell.textContent = classroom.TEACHER_FULL_NAME;
+                            
+                            row.appendChild(idCell);
+                            row.appendChild(titleCell);
+                            row.appendChild(teacherCell);
+                            
+                            classroomsTableBody.appendChild(row);
+                        }
+                    }
+
+                    if (!hasClassrooms) {
+                        classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
+                    }
+                } else {
+                    classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
+                }
+
+                // Fetch and display student details
+                const studentsRef = ref(database, "STUDENTS");
+                const studentsSnapshot = await get(studentsRef);
+                const studentsTableBody = document.getElementById('studentsTableBody');
+                studentsTableBody.innerHTML = '';
+
+                if (studentsSnapshot.exists()) {
+                    const students = studentsSnapshot.val();
+                    let hasStudents = false;
+
+                    // Default value constant
+                    const NOT_AVAILABLE = 'N/A';
+                    
+                    for (const studentKey in students) {
+                        if (studentIds.includes(studentKey)) {
+                            hasStudents = true;
+                            const student = students[studentKey];
+                            const row = document.createElement('tr');
+                            
+                            // Create cells and use textContent to prevent XSS
+                            const idCell = document.createElement('td');
+                            idCell.textContent = studentKey;
+                            
+                            const nameCell = document.createElement('td');
+                            nameCell.textContent = student.FULL_NAME;
+                            
+                            const emailCell = document.createElement('td');
+                            emailCell.textContent = student.EMAIL;
+                            
+                            const telCell = document.createElement('td');
+                            telCell.textContent = student.TEL || NOT_AVAILABLE;
+                            
+                            row.appendChild(idCell);
+                            row.appendChild(nameCell);
+                            row.appendChild(emailCell);
+                            row.appendChild(telCell);
+                            
+                            studentsTableBody.appendChild(row);
+                        }
+                    }
+
+                    if (!hasStudents) {
+                        studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                    }
+                } else {
+                    studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Error loading admin details:', error);
+            }
+        }
     </script>
 
 </body>

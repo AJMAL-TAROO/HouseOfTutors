@@ -17,7 +17,7 @@
     <style>
         .alert img { 
             border: 2px solid gray; 
-            border-radius: 8px; /* Rounded corners */
+            border-radius: 8px;
             cursor: pointer; 
             margin-right: 10px; 
         }
@@ -25,13 +25,13 @@
             display: flex; 
             align-items: center; 
             margin-bottom: 10px; 
-            background-color: #f8f9fa; /* Off-white color */
+            background-color: #f8f9fa;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
             border-radius: 8px; 
             padding: 10px; 
         }
         .modal img { width: 100%; }
-        .modal-dialog { max-height: calc(100% * 4); } /* Increase height by 4 times */
+        .modal-dialog { max-height: calc(100% * 4); }
         @media (max-width: 768px) {
             .modal-dialog {
                 max-width: 90%;
@@ -49,21 +49,21 @@
         }
         @media (min-width: 769px) {
             .alert img {
-                height: 200px; /* Larger size for laptop */
+                height: 200px;
                 width: 200px;
             }
             .modal img {
-                height: 80vh; /* Increase height for laptop */
+                height: 80vh;
                 width: auto;
             }
         }
         @media (max-width: 768px) {
             .alert img {
-                height: 100px; /* Normal size for mobile */
+                height: 100px;
                 width: 100px;
             }
             .modal img {
-                height: 60vh; /* Increase height for mobile */
+                height: 60vh;
                 width: auto;
             }
         }
@@ -105,7 +105,7 @@
         <div id="notesContainer"></div>
     </div>
 
-    <!-- Modal -->
+    <!-- Image Preview Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -117,6 +117,24 @@
                 </div>
                 <div class="modal-body">
                     <img id="modalImage" src="" alt="Image Preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Preview Modal -->
+    <div class="modal fade" id="noPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h5 class="modal-title">No Preview Available</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>This file type cannot be previewed. Please download to view offline.</p>
+                    <button id="downloadBtn" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download
+                    </button>
                 </div>
             </div>
         </div>
@@ -137,6 +155,20 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+
+        //------------------------------------------HELPER: PICK ICON-----------------------
+        function getIconByExtension(filename) {
+            if (!filename) return "img/uploadnote_icons/icon-img.png";
+            let ext = filename.split('.').pop().toLowerCase();
+            if (["jpg","jpeg","png","gif"].includes(ext)) return "img/uploadnote_icons/icon-img.png";
+            if (ext === "pdf") return "img/uploadnote_icons/icon-pdf.png";
+            if (ext === "docx" || ext === "doc") return "img/uploadnote_icons/icon-docx.png";
+            if (["mp4","mov","avi","mkv"].includes(ext)) return "img/uploadnote_icons/icon-video.png";
+            if (ext === "ppt" || ext === "pptx") return "img/uploadnote_icons/icon-pptx.png";
+            if (["zip","rar","7z","tar","gz"].includes(ext)) return "img/uploadnote_icons/icon-zip.png";
+            if (ext === "txt") return "img/uploadnote_icons/icon-txt.png";
+            return "img/uploadnote_icons/icon-unknown.png"; // fallback for unknown files
+        }
 
         //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
         function readData() {
@@ -166,11 +198,38 @@
                     alertDiv.setAttribute("role", "alert");
 
                     var img = document.createElement("img");
-                    img.src = item.Link;
-                    img.onclick = function() {
-                        document.getElementById('modalImage').src = item.Link;
-                        $('#imageModal').modal('show');
-                    };
+                    img.src = getIconByExtension(item.Name);
+
+                    // Check file type for preview or download modal
+                    let ext = item.Name ? item.Name.split('.').pop().toLowerCase() : "";
+                    if (["jpg","jpeg","png","gif"].includes(ext)) {
+                        // Image → show in modal
+                        img.onclick = function() {
+                            document.getElementById('modalImage').src = item.Link;
+                            $('#imageModal').modal('show');
+                        };
+                    } else {
+                        // No preview available, show modal with download
+                        img.onclick = function() {
+                            $('#noPreviewModal').modal('show');
+                            // Remove previous click handlers to avoid stacking
+                            let downloadBtn = document.getElementById('downloadBtn');
+                            let newBtn = downloadBtn.cloneNode(true);
+                            downloadBtn.parentNode.replaceChild(newBtn, downloadBtn);
+                            newBtn.onclick = function() {
+                                let a = document.createElement("a");
+                                a.href = item.Link;
+                                let fileName = item.Name || "downloaded_file";
+                                a.setAttribute("download", fileName);
+                                a.target = "_blank";
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                $('#noPreviewModal').modal('hide');
+                            };
+                        };
+                    }
+
                     alertDiv.appendChild(img);
 
                     var detailsDiv = document.createElement("div");
@@ -178,7 +237,7 @@
 
                     var nameSpan = document.createElement("span");
                     nameSpan.className = "name";
-                    nameSpan.innerText = "Image Name: " + item.ID + ".png";
+                    nameSpan.innerText = item.Name;
                     detailsDiv.appendChild(nameSpan);
 
                     var separator = document.createElement("div");
@@ -188,7 +247,14 @@
                     var dateSpan = document.createElement("span");
                     dateSpan.className = "date";
                     var date = new Date(item.Time);
-                    dateSpan.innerText = "Uploaded on: " + date.toLocaleString();
+                    var day = String(date.getDate()).padStart(2, '0');
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var year = date.getFullYear();
+                    var hours = String(date.getHours()).padStart(2, '0');
+                    var minutes = String(date.getMinutes()).padStart(2, '0');
+                    var seconds = String(date.getSeconds()).padStart(2, '0');
+                    var formattedDate = day + '/' + month + '/' + year + ', ' + hours + ':' + minutes + ':' + seconds;
+                    dateSpan.innerText = "Uploaded on: " + formattedDate;
                     detailsDiv.appendChild(dateSpan);
 
                     alertDiv.appendChild(detailsDiv);

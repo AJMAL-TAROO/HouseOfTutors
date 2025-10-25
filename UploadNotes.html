@@ -90,14 +90,27 @@
 
         //------------------------------------------UPLOAD PROCESS-----------------------
         document.getElementById('upload').onclick = function() {
-            var uploadTask = firebase.storage().ref(classroomId + '_NOTES/' + id_classroom_notes).put(files[0]);
+            // Disable buttons during upload
+            document.getElementById('select').disabled = true;
+            document.getElementById('upload').disabled = true;
+
+            // Prepare metadata with Content-Disposition
+            var metadata = {
+                contentDisposition: 'attachment; filename="' + ImgName + '"'
+            };
+
+            // Use metadata in the upload
+            var uploadTask = firebase.storage().ref(classroomId + '_NOTES/' + id_classroom_notes).put(files[0], metadata);
 
             uploadTask.on('state_changed', function(snapshot) {
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    document.getElementById('upProgress').innerHTML = 'Upload - ' + progress + '%';
+                    document.getElementById('upProgress').innerHTML = 'Upload - ' + Math.floor(progress) + '%';
                 },
                 function(error) {
                     alert('error in saving the image');
+                    // Re-enable buttons if error occurs
+                    document.getElementById('select').disabled = false;
+                    document.getElementById('upload').disabled = false;
                 },
                 function() {
                     uploadTask.snapshot.ref.getDownloadURL().then(function(url) {
@@ -114,6 +127,27 @@
                             NUMBER: id_classroom_notes
                         });
 
+                        // Log the successful upload for the admin
+                        const adminEmail = localStorage.getItem('userEmail');
+                        if (adminEmail) {
+                            firebase.database().ref('ADMIN').once('value', function(adminSnapshot) {
+                                if (adminSnapshot.exists()) {
+                                    const admins = adminSnapshot.val();
+                                    for (const key in admins) {
+                                        if (admins[key].EMAIL === adminEmail) {
+                                            const logData = {
+                                                CLASSROOM_ID: classroomId,
+                                                TIMESTAMP: Date.now(),
+                                                DATE: new Date().toISOString()
+                                            };
+                                            firebase.database().ref(`ADMIN/${key}/LOGS/LAST_UPLOAD_NOTES`).set(logData);
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
                         nativeToast({
                             message: 'Note was uploaded successfully!',
                             position: 'center',
@@ -125,12 +159,14 @@
                             closeOnClick: false
                         });
 
-                        // Refresh the page after the toast appears
                         setTimeout(function() {
                             location.reload();
-                        }, 2000); // 2 seconds delay before reloading
+                        }, 2000);
 
                         document.getElementById('myimg').src = '//:0'
+                        // Re-enable buttons after upload (optional, since page reloads)
+                        document.getElementById('select').disabled = false;
+                        document.getElementById('upload').disabled = false;
                     });
                 });
         }

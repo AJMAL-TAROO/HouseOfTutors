@@ -6,6 +6,7 @@
     <title>Whiteboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -14,9 +15,20 @@
             width: 100%;
             overflow: hidden;
         }
-        iframe {
+
+        /* Wrapper to crop top 50px of the whiteboard */
+        .iframe-wrapper {
+            position: relative;
+            height: calc(100% - 56px);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #whiteboardFrame {
             border: none;
-            height: calc(100% - 56px); /* Adjust for navbar height */
+            position: absolute;
+            top: -60px; /* hides top 50px */
+            height: calc(100% + 60px); /* extend so no empty space */
             width: 100%;
         }
     </style>
@@ -24,12 +36,76 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+            <button class="btn btn-dark" id="backBtn">
                 <i class="fas fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
-    <iframe src="https://www.whiteboard.team/app/board/aI7kaY6e"></iframe>
+
+    <!-- Wrapper hides 50px of the top of the iframe -->
+    <div class="iframe-wrapper">
+        <iframe id="whiteboardFrame"></iframe>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const adminEmail = localStorage.getItem('userEmail');
+        let adminKey = null;
+        let latestWhiteboardUrl = "https://www.whiteboard.team/app/board/new";
+        let currentWhiteboardUrl = "";
+
+        async function getAdminInfo() {
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        latestWhiteboardUrl = admins[key].WHITEBOARD || "https://www.whiteboard.team/app/board/new";
+                        break;
+                    }
+                }
+            }
+        }
+
+        function loadWhiteboard(url) {
+            const frame = document.getElementById('whiteboardFrame');
+            frame.src = url;
+            currentWhiteboardUrl = url;
+        }
+
+        // Track the latest URL loaded in the iframe
+        const frame = document.getElementById('whiteboardFrame');
+        frame.addEventListener('load', function() {
+            currentWhiteboardUrl = frame.src;
+        });
+
+        document.getElementById('backBtn').onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'DashboardAdmin.html';
+        };
+
+        window.onload = async function() {
+            await getAdminInfo();
+            loadWhiteboard(latestWhiteboardUrl);
+        };
+    </script>
 </body>
 </html>

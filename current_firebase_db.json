@@ -1,4 +1,134 @@
 {
+  "1001_NOTES": [
+    null,
+    null,
+    {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F2?alt=media&token=2e2dffe8-ab1e-446f-9e4b-061faeeb94fe",
+      "Name": "Science Book Pg1.jpeg",
+      "Time": 1742579741690
+    },
+    {
+      "ID": 3,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F3?alt=media&token=65ba6e08-d125-4855-a375-e3abe329ff7d",
+      "Name": "Science Book Pg2.jpeg",
+      "Time": 1742579955409
+    },
+    {
+      "ID": 4,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F4?alt=media&token=36ce75aa-c45e-4a90-8e6c-873b06000c43",
+      "Name": "Science Book Pg3.jpeg",
+      "Time": 1742580332857
+    },
+    {
+      "ID": 5,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F5?alt=media&token=ab2e6eda-fc5b-491c-8667-bb27c6e3f2e5",
+      "Name": "Science Book Pg4.jpeg",
+      "Time": 1742580357873
+    },
+    {
+      "ID": 6,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F6?alt=media&token=2be16ec4-b3e6-4f88-ae27-518e07ff03b3",
+      "Name": "Science Book Pg5.jpeg",
+      "Time": 1742580436871
+    },
+    {
+      "ID": 7,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F7?alt=media&token=51af2a47-ebc4-4a68-b17e-85274b82a363",
+      "Name": "Science Book Pg6.jpeg",
+      "Time": 1742580456766
+    },
+    {
+      "ID": 8,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F8?alt=media&token=887e4c25-b94e-40ff-935f-c23b8453a0a9",
+      "Name": "Science Book Pg7.jpeg",
+      "Time": 1742580800474
+    },
+    {
+      "ID": 9,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F9?alt=media&token=9936c34a-e8a0-4e93-8bf2-aec0d941efda",
+      "Name": "Science Book Pg8.jpeg",
+      "Time": 1742580846854
+    },
+    {
+      "ID": 10,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F10?alt=media&token=bc2f66f9-ba58-438f-8590-4bc9a90984cb",
+      "Name": "Science Book Pg9.jpeg",
+      "Time": 1742580907982
+    },
+    {
+      "ID": 11,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F11?alt=media&token=737138c0-5322-4f15-8521-ebd980f50b6f",
+      "Name": "Science Book Pg11.jpeg",
+      "Time": 1742581022428
+    },
+    {
+      "ID": 12,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F12?alt=media&token=aa8d679f-c9d6-4071-b020-6a59a94d1a8d",
+      "Name": "Science Book Pg12.jpeg",
+      "Time": 1742581052349
+    },
+    {
+      "ID": 13,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F13?alt=media&token=55bacd21-9b90-4c6d-8e9e-6049e13e428d",
+      "Name": "Science Book Pg13.jpeg",
+      "Time": 1742581104216
+    },
+    {
+      "ID": 14,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F14?alt=media&token=af5ffae9-70dd-4dc4-be58-672029c104e6",
+      "Name": "Science Book Pg14.jpeg",
+      "Time": 1742581209664
+    },
+    {
+      "ID": 15,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F15?alt=media&token=cfba3493-4518-4fb5-856d-d44aabbe004a",
+      "Name": "Science Book Pg15.jpeg",
+      "Time": 1742581243027
+    },
+    {
+      "ID": 16,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F16?alt=media&token=96797fc1-25b8-4a6f-815f-37bfdff60009",
+      "Name": "Science Book Pg16.jpeg",
+      "Time": 1742581355218
+    },
+    {
+      "ID": 17,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F17?alt=media&token=c269d7f7-cc23-4eca-a78f-19131aff5ceb",
+      "Name": "Science Book Pg17.jpeg",
+      "Time": 1742581493781
+    },
+    {
+      "ID": 18,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F18?alt=media&token=badf96f6-77d7-4f5e-9b3c-a81c134061ff",
+      "Name": "Science Book Pg18.jpeg",
+      "Time": 1742581528151
+    },
+    {
+      "ID": 19,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F19?alt=media&token=b21dada6-ea95-4286-bc43-ca71448c4c2a",
+      "Name": "Science Book Pg19.jpeg",
+      "Time": 1742581579864
+    },
+    {
+      "ID": 20,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F20?alt=media&token=3ac5f09a-29fa-48cd-ab6d-6504dd6e5e1d",
+      "Name": "Science Book Pg20.jpeg",
+      "Time": 1742581599650
+    },
+    {
+      "ID": 21,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F21?alt=media&token=28b63844-893e-45a6-a723-793a2da100b2",
+      "Name": "Science Book Pg21.jpeg",
+      "Time": 1742581656092
+    },
+    {
+      "ID": 22,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1001_NOTES%2F22?alt=media&token=c8b184e3-1a9e-4085-b1f6-ad9db4bf9667",
+      "Name": "Science Book Pg22.jpeg",
+      "Time": 1742581775411
+    }
+  ],
   "1002_NOTES": [
     null,
     null,
@@ -79,6 +209,144 @@
       "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F14?alt=media&token=db778fd9-4b36-474a-b291-a89bc2751237",
       "Name": "G7 -English Paper 1 Pg 17.jpeg",
       "Time": 1741364483867
+    },
+    {
+      "ID": 15,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F15?alt=media&token=46ec280d-a25b-40f6-90a3-4a64af3a48f5",
+      "Name": "Science Book Pg1.jpeg",
+      "Time": 1742575623571
+    },
+    {
+      "ID": 16,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F16?alt=media&token=3d24054b-39bc-4322-9bd1-a2ad14e75514",
+      "Name": "Science Book Pg2.jpeg",
+      "Time": 1742575641787
+    },
+    {
+      "ID": 17,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F17?alt=media&token=48e3a089-541e-4f0b-affe-637eebc21a18",
+      "Name": "Science Book Pg3.jpeg",
+      "Time": 1742575671281
+    },
+    {
+      "ID": 18,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F18?alt=media&token=b3936534-8a05-41e3-8a9b-32b145bd66fc",
+      "Name": "Science Book Pg4.jpeg",
+      "Time": 1742575685263
+    },
+    {
+      "ID": 19,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F19?alt=media&token=97c24a68-e758-4514-9c43-d96d5e50c277",
+      "Name": "Science Book Pg5.jpeg",
+      "Time": 1742575731344
+    },
+    {
+      "ID": 20,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F20?alt=media&token=7dd21b56-0048-4670-9cad-0c6598056bb8",
+      "Name": "Science Book Pg6.jpeg",
+      "Time": 1742575750174
+    },
+    {
+      "ID": 21,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F21?alt=media&token=0e9333b5-3d43-48de-b346-910ddb7c543e",
+      "Name": "Science Book Pg7.jpeg",
+      "Time": 1742575774693
+    },
+    {
+      "ID": 22,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F22?alt=media&token=00ef8d54-7bf3-4634-913e-c1721f65d852",
+      "Name": "Science Book Pg8.jpeg",
+      "Time": 1742575798304
+    },
+    {
+      "ID": 23,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F23?alt=media&token=0686a809-574d-42c1-b7ef-3dcf313a9cc4",
+      "Name": "Science Book Pg9.jpeg",
+      "Time": 1742575817861
+    },
+    {
+      "ID": 24,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F24?alt=media&token=01537af9-d551-4924-9515-9a6c2a762685",
+      "Name": "Science Book Pg10.jpeg",
+      "Time": 1742575887409
+    },
+    {
+      "ID": 25,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F25?alt=media&token=0af6b3dd-a0e8-4120-86a9-c090293aee96",
+      "Name": "Science Book Pg11.jpeg",
+      "Time": 1742575924283
+    },
+    {
+      "ID": 26,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F26?alt=media&token=d2cf709a-48ac-4347-86eb-b4ca9d6ad193",
+      "Name": "Science Book Pg12.jpeg",
+      "Time": 1742575945473
+    },
+    {
+      "ID": 27,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F27?alt=media&token=b76c4029-21b1-4172-adf9-62bc897aeec7",
+      "Name": "Science Book Pg13.jpeg",
+      "Time": 1742575969741
+    },
+    {
+      "ID": 28,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F28?alt=media&token=53984f55-9321-4012-87b3-65c3c0a53fd9",
+      "Name": "Science Book Pg14.jpeg",
+      "Time": 1742575988866
+    },
+    {
+      "ID": 29,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F29?alt=media&token=281ae275-a345-4c12-941c-95d009cf672d",
+      "Name": "Science Book Pg16.jpeg",
+      "Time": 1742576575416
+    },
+    {
+      "ID": 30,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F30?alt=media&token=aa5273b2-22f9-4e46-a2c4-1bfb1f5c8748",
+      "Name": "Science Book Pg17.jpeg",
+      "Time": 1742576652622
+    },
+    {
+      "ID": 31,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F31?alt=media&token=47f786f0-522a-49af-a8ad-62ce3a3f4ac0",
+      "Name": "Science Book Pg18.jpeg",
+      "Time": 1742576672976
+    },
+    {
+      "ID": 32,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F32?alt=media&token=6a53be3e-51e4-4ba3-9578-745789604da6",
+      "Name": "Science Book Pg19.jpeg",
+      "Time": 1742576694971
+    },
+    {
+      "ID": 33,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F33?alt=media&token=2a4d199e-887c-447b-9c53-7bb7c169f0e2",
+      "Name": "Science Book Pg20.jpeg",
+      "Time": 1742576719185
+    },
+    {
+      "ID": 34,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F34?alt=media&token=af51eca8-0678-4577-8edf-3982d2d856eb",
+      "Name": "Science Book Pg21.jpeg",
+      "Time": 1742577938771
+    },
+    {
+      "ID": 35,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F35?alt=media&token=a131f3bd-a725-4b6b-b1bd-bd84aa0d6ae7",
+      "Name": "Science Book Pg22.jpeg",
+      "Time": 1742578121751
+    },
+    {
+      "ID": 36,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F36?alt=media&token=83eb0887-2fbc-47fb-800f-600424a16ed0",
+      "Name": "Science Book Pg24.jpeg",
+      "Time": 1742578280433
+    },
+    {
+      "ID": 37,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1002_NOTES%2F37?alt=media&token=15443bc9-ae5f-4c8e-9cf2-57099662f626",
+      "Name": "Science Book Pg25.jpeg",
+      "Time": 1742578307388
     }
   ],
   "1004_NOTES": [
@@ -164,6 +432,28 @@
       "Time": 1741366096097
     }
   ],
+  "1008_NOTES": [
+    null,
+    null,
+    {
+      "ID": 2,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1008_NOTES%2F2?alt=media&token=e80d9f09-09a9-441b-adff-6a084bbcce72",
+      "Name": "assignment.docx",
+      "Time": 1758220263493
+    },
+    {
+      "ID": 3,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1008_NOTES%2F3?alt=media&token=ef30a2aa-b4ce-42e8-a934-8d2bfa66e212",
+      "Name": "sample-1.pdf",
+      "Time": 1758220330180
+    },
+    {
+      "ID": 4,
+      "Link": "https://firebasestorage.googleapis.com/v0/b/houseoftutors-f398e.firebasestorage.app/o/1008_NOTES%2F4?alt=media&token=88ff61fb-32d3-4ae7-9213-33c38e76f148",
+      "Name": "Free_Test_Data_100KB_PPTX.pptx",
+      "Time": 1758220604543
+    }
+  ],
   "ADMIN": {
     "ADMIN_1": {
       "EMAIL": "ajtaroo@gmail.com",
@@ -171,8 +461,12 @@
       "PASSWORD": "585054",
       "R_PARTY": "Ajmal Taroo",
       "R_PARTY_TEL": "57882383",
+      "STUDENTS": "STUDENTS_12,STUDENTS_13,STUDENTS_14",
       "TEL": "59185657",
-      "VIRTUAL_ROOMS": "1001,1005"
+      "VIRTUAL_ROOMS": "1001,1002,1007,1008",
+      "VR_LINK": "https://mindtech.daily.co/AjmalTaroo",
+      "WALLPAPER": "img/wallpapers/wallpaper1.png",
+      "WHITEBOARD": "https://www.whiteboard.team/app/board/KCxxp4Xk"
     },
     "ADMIN_2": {
       "EMAIL": "house.of.tutors.48@gmail.com",
@@ -180,37 +474,131 @@
       "PASSWORD": "890555",
       "R_PARTY": "ajmal taroo",
       "R_PARTY_TEL": "57882383",
+      "STUDENTS": "STUDENTS_1,STUDENTS_2,STUDENTS_3,STUDENTS_4,STUDENTS_5,STUDENTS_6,STUDENTS_7,STUDENTS_8,STUDENTS_9,STUDENTS_10,STUDENTS_11,STUDENTS_15,STUDENTS_14",
       "TEL": "58505488",
-      "VIRTUAL_ROOMS": "1001,1002,1003,1004,1005"
+      "VIRTUAL_ROOMS": "1001,1002,1003,1004,1005,1006",
+      "VR_LINK": "https://mindtech.daily.co/ShaliniLaraRamful",
+      "WALLPAPER": "img/wallpapers/wallpaper6.png",
+      "WHITEBOARD": "https://www.whiteboard.team/app/board/aI7kaY6e"
+    },
+    "ADMIN_3": {
+      "EMAIL": "yuveshramiad@gmail.com",
+      "FULL_NAME": "Yuvesh Ramiad",
+      "PASSWORD": "453366",
+      "STUDENTS": "",
+      "TEL": "59238220",
+      "VIRTUAL_ROOMS": "1009,1010",
+      "VR_LINK": "https://mindtech.daily.co/YuveshRamiad",
+      "WALLPAPER": "img/wallpapers/wallpaper1.png",
+      "WHITEBOARD": "https://www.whiteboard.team/app/board/NGxpmQrQ"
+    }
+  },
+  "ATTENDANCE": {
+    "2025": {
+      "09": {
+        "05": {
+          "ADMIN_1": {
+            "STUDENTS_12": {
+              "attendance": "present",
+              "full_name": "bibi taslima taroo"
+            },
+            "STUDENTS_13": {
+              "attendance": "present",
+              "full_name": "nandinee bistonauth"
+            }
+          },
+          "ADMIN_2": {
+            "STUDENTS_1": {
+              "attendance": "absent",
+              "full_name": "Mohamade Ajmal Taroo"
+            },
+            "STUDENTS_10": {
+              "attendance": "absent",
+              "full_name": "Zafra Soyfoo"
+            },
+            "STUDENTS_11": {
+              "attendance": "present",
+              "full_name": "Shane Sharma"
+            },
+            "STUDENTS_2": {
+              "attendance": "absent",
+              "full_name": "Alishah Hymambaccus"
+            },
+            "STUDENTS_3": {
+              "attendance": "absent",
+              "full_name": "Shahbaz Hymambaccus"
+            },
+            "STUDENTS_4": {
+              "attendance": "absent",
+              "full_name": "Izel Poon Wai Wam"
+            },
+            "STUDENTS_5": {
+              "attendance": "absent",
+              "full_name": "Leah Poon Wai Wam"
+            },
+            "STUDENTS_6": {
+              "attendance": "absent",
+              "full_name": "Adish Dunputh"
+            },
+            "STUDENTS_7": {
+              "attendance": "absent",
+              "full_name": "Alexia Clerisseau "
+            },
+            "STUDENTS_8": {
+              "attendance": "absent",
+              "full_name": "Trisha chummun"
+            },
+            "STUDENTS_9": {
+              "attendance": "absent",
+              "full_name": "Akash Ramphul"
+            }
+          }
+        }
+      }
     }
   },
   "CLASSROOMS": {
     "CLASSROOM_1001": {
       "CLASSROOM_ID": 1001,
+      "COMMENTS": {
+        "COMMENT_1745740972643": {
+          "COMMENT": "completed her last class.",
+          "DATE": "2025-04-27"
+        },
+        "COMMENT_1745741332068": {
+          "COMMENT": "chapter 1 page 20 reached",
+          "DATE": "2025-04-27"
+        },
+        "COMMENT_1745741418562": {
+          "COMMENT": "self study: https://youtu.be/urTfEEsGHds",
+          "DATE": "2025-04-27"
+        },
+        "COMMENT_1745741422738": {
+          "COMMENT": "self study: https://youtu.be/urTfEEsGHds",
+          "DATE": "2025-04-27"
+        }
+      },
       "STORAGE_FOLDER": "1001_NOTES",
       "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
       "TEACHER_FULL_NAME": "Shalini Lara Ramful",
       "TEACHER_TEL": "+230 5797 2469",
-      "TITLE": "Alishah Hymambaccus's Individual Class",
-      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+      "TITLE": "Online Tuition",
+      "VR_LINK": "https://freedomedition.daily.co/houseoftutors"
     },
     "CLASSROOM_1002": {
       "CLASSROOM_ID": 1002,
+      "COMMENTS": {
+        "COMMENT_1745743134452": {
+          "COMMENT": "https://www.whiteboard.team/app/board/aI7kaY6e",
+          "DATE": "2025-04-27"
+        }
+      },
       "STORAGE_FOLDER": "1002_NOTES",
       "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
       "TEACHER_FULL_NAME": "Shalini Lara Ramful",
       "TEACHER_TEL": "+230 5797 2469",
       "TITLE": "Shahbaz Hymambaccus's Individual Class",
-      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
-    },
-    "CLASSROOM_1003": {
-      "CLASSROOM_ID": 1003,
-      "STORAGE_FOLDER": "1003_NOTES",
-      "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
-      "TEACHER_FULL_NAME": "Shalini Lara Ramful",
-      "TEACHER_TEL": "+230 5797 2469",
-      "TITLE": "Izel's Individual Class",
-      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+      "VR_LINK": "https://freedomedition.daily.co/houseoftutors"
     },
     "CLASSROOM_1004": {
       "CLASSROOM_ID": 1004,
@@ -219,7 +607,7 @@
       "TEACHER_FULL_NAME": "Shalini Lara Ramful",
       "TEACHER_TEL": "+230 5797 2469",
       "TITLE": "Leah's Individual Class",
-      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+      "VR_LINK": "https://freedomedition.daily.co/houseoftutors"
     },
     "CLASSROOM_1005": {
       "CLASSROOM_ID": 1005,
@@ -227,22 +615,49 @@
       "TEACHER_ADDRESS": "House Of Tutors, Mauritius",
       "TEACHER_FULL_NAME": "Adish Dunputh & Shalini ",
       "TEACHER_TEL": "+230 5797 2469",
-      "TITLE": "Traditional Massage School",
+      "TITLE": "Adish's Individual Class",
+      "VR_LINK": "https://freedomedition.daily.co/houseoftutors"
+    },
+    "CLASSROOM_1007": {
+      "CLASSROOM_ID": 1007,
+      "STORAGE_FOLDER": "1007_NOTES",
+      "TEACHER_ADDRESS": "15 Avenue St.Louis Belle Rose, Quatre Bornes",
+      "TEACHER_FULL_NAME": "Mohamade Ajmal Taroo",
+      "TEACHER_TEL": "59185657",
+      "TITLE": "History and Geography",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
+    "CLASSROOM_1008": {
+      "CLASSROOM_ID": 1008,
+      "STORAGE_FOLDER": "1008_NOTES",
+      "TEACHER_ADDRESS": "15 Avenue St.Louis Belle Rose, Quatre Bornes",
+      "TEACHER_FULL_NAME": "Mohamade Ajmal Taroo",
+      "TEACHER_TEL": "59185657",
+      "TITLE": "arabic",
+      "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
+    },
+    "CLASSROOM_1010": {
+      "CLASSROOM_ID": 1010,
+      "STORAGE_FOLDER": "1010_NOTES",
+      "TEACHER_ADDRESS": "PR",
+      "TEACHER_FULL_NAME": "sahil ",
+      "TEACHER_TEL": "59238220",
+      "TITLE": "GRADE 8  BEE ",
       "VR_LINK": "https://mindtech.daily.co/HouseOfTutors"
     }
   },
   "NUMBERS": {
     "CURRENT_ID_CLASSROOM": {
-      "NUMBER": 1005
+      "NUMBER": 1010
     },
     "ID_CLASSROOM_1001_NOTES": {
-      "NUMBER": 1
+      "NUMBER": 24
     },
     "ID_CLASSROOM_1002_NOTES": {
-      "NUMBER": 14
+      "NUMBER": 37
     },
     "ID_CLASSROOM_1003_NOTES": {
-      "NUMBER": 1
+      "NUMBER": 2
     },
     "ID_CLASSROOM_1004_NOTES": {
       "NUMBER": 15
@@ -250,11 +665,26 @@
     "ID_CLASSROOM_1005_NOTES": {
       "NUMBER": 1
     },
+    "ID_CLASSROOM_1006_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_CLASSROOM_1007_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_CLASSROOM_1008_NOTES": {
+      "NUMBER": 4
+    },
+    "ID_CLASSROOM_1009_NOTES": {
+      "NUMBER": 1
+    },
+    "ID_CLASSROOM_1010_NOTES": {
+      "NUMBER": 1
+    },
     "ID_NUMBER": {
       "NUMBER": 100
     },
     "ID_STUDENT": {
-      "NUMBER": 7
+      "NUMBER": 15
     }
   },
   "STUDENTS": {
@@ -268,6 +698,14 @@
         "FEEDBACK_1741509774733": {
           "DATE": "2025-03-09",
           "FEEDBACK": "loves shaheena in class"
+        },
+        "FEEDBACK_1745741220576": {
+          "DATE": "2025-04-27",
+          "FEEDBACK": "eau coulee"
+        },
+        "FEEDBACK_1756376449906": {
+          "DATE": "2025-08-28",
+          "FEEDBACK": "Taslima is the best"
         }
       },
       "FULL_NAME": "Mohamade Ajmal Taroo",
@@ -275,10 +713,93 @@
       "R_PARTY": "Ajmal Taroo",
       "R_PARTY_TEL": "57882383",
       "TEL": "59185657",
-      "VIRTUAL_ROOMS": "1001,1002,1005"
+      "VIRTUAL_ROOMS": "1001,1002,1005,1004",
+      "WALLPAPER": "img/wallpapers/wallpaper3.png"
+    },
+    "STUDENTS_10": {
+      "EMAIL": "zafra120311@gmail.com",
+      "FULL_NAME": "Zafra Soyfoo",
+      "PASSWORD": "235155",
+      "R_PARTY": "Grade 6 ",
+      "R_PARTY_TEL": "+230 5812 9164",
+      "TEL": "58076254",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "STUDENTS_11": {
+      "EMAIL": "nsharma_8@hotmail.com",
+      "FULL_NAME": "Shane Sharma",
+      "PASSWORD": "195642",
+      "R_PARTY": "Mrs Nitasha",
+      "R_PARTY_TEL": "57992747",
+      "TEL": "58193630",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "STUDENTS_12": {
+      "EMAIL": "taslima@gmail.com",
+      "FEEDBACK": {
+        "FEEDBACK_1756795569614": {
+          "DATE": "2025-09-02",
+          "FEEDBACK": "test 1"
+        },
+        "FEEDBACK_1758031030196": {
+          "DATE": "2025-09-16",
+          "FEEDBACK": "Very good student..."
+        },
+        "FEEDBACK_1758093056000": {
+          "DATE": "2025-09-17",
+          "FEEDBACK": "test..."
+        }
+      },
+      "FULL_NAME": "bibi taslima taroo",
+      "PASSWORD": "123456",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "59185657",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1008",
+      "WALLPAPER": "img/wallpapers/wallpaper1.png"
+    },
+    "STUDENTS_13": {
+      "EMAIL": "nandinee@gmail.com",
+      "FEEDBACK": {
+        "FEEDBACK_1757005725639": {
+          "DATE": "2025-09-04",
+          "FEEDBACK": "test"
+        }
+      },
+      "FULL_NAME": "nandinee bistonauth",
+      "PASSWORD": "218602",
+      "R_PARTY": "Ajmal Taroo",
+      "R_PARTY_TEL": "59185657",
+      "TEL": "59185657",
+      "VIRTUAL_ROOMS": "1001"
+    },
+    "STUDENTS_14": {
+      "EMAIL": "veronique",
+      "FULL_NAME": "Jeremie Isaure",
+      "PASSWORD": "380474",
+      "R_PARTY": "Veronique Sal",
+      "R_PARTY_TEL": "57416920",
+      "TEL": "54866708",
+      "VIRTUAL_ROOMS": ""
+    },
+    "STUDENTS_15": {
+      "EMAIL": "varshika@gmail.com",
+      "FULL_NAME": "Vishikha Gokool",
+      "PASSWORD": "763931",
+      "R_PARTY": "Varsha Hurree",
+      "R_PARTY_TEL": "57779997",
+      "TEL": "5766 3600",
+      "VIRTUAL_ROOMS": "1001",
+      "WALLPAPER": "img/wallpapers/wallpaper6.png"
     },
     "STUDENTS_2": {
       "EMAIL": "alishahhymambaccus@icloud.com",
+      "FEEDBACK": {
+        "FEEDBACK_1745741185611": {
+          "DATE": "2025-04-27",
+          "FEEDBACK": "finished tuition"
+        }
+      },
       "FULL_NAME": "Alishah Hymambaccus",
       "PASSWORD": "777005",
       "R_PARTY": "Dr Outim",
@@ -316,34 +837,57 @@
     "STUDENTS_6": {
       "EMAIL": "dhunputha@gmail.com",
       "FULL_NAME": "Adish Dunputh",
-      "PASSWORD": "981169",
+      "PASSWORD": "123456",
       "R_PARTY": "Mr Dunputh",
       "R_PARTY_TEL": "58013277",
       "TEL": "58013277",
       "VIRTUAL_ROOMS": "1005"
     },
-    "def_student": "default"
+    "STUDENTS_7": {
+      "EMAIL": "alexia.clerisseau10@gmail.com",
+      "FULL_NAME": "Alexia Clerisseau ",
+      "PASSWORD": "963184",
+      "R_PARTY": "Mrs Stephanie",
+      "R_PARTY_TEL": "+2305779 0646",
+      "TEL": "+2305744 7522",
+      "VIRTUAL_ROOMS": ""
+    },
+    "STUDENTS_8": {
+      "EMAIL": "Aswinkc77@gmail.com",
+      "FULL_NAME": "Trisha chummun",
+      "PASSWORD": "430035",
+      "R_PARTY": "Mr Ashwin Chummun",
+      "R_PARTY_TEL": "+23054973766",
+      "TEL": "+23055168252",
+      "VIRTUAL_ROOMS": "1006"
+    },
+    "STUDENTS_9": {
+      "EMAIL": "Akashramphul12@gmail.com",
+      "FULL_NAME": "Akash Ramphul",
+      "PASSWORD": "963373",
+      "R_PARTY": "Urvashi Lutchmun",
+      "R_PARTY_TEL": "5980 9524",
+      "TEL": "+230 5459 7623",
+      "VIRTUAL_ROOMS": "1006"
+    }
   },
   "TIME_TABLE": {
-    "VALUE": [
-      null,
-      {
-        "00:00 - 00:00": "Leah's Individual Class",
-        "08:00 - 09:00": "Leah's Individual Class",
-        "08:00 - 12:00": "Izel's Individual Class",
-        "10:00 - 11:00": "Shahbaz's Individual Class",
-        "14:00 - 15:00": "Alishah's Individual Class"
-      },
-      {
-        "09:00 - 12:00": "Shahbaz's Individual Class"
-      },
-      null,
-      {
-        "14:00 - 15:00": "Alishah's Individual Class"
-      },
-      {
-        "00:00 - 00:00": "Alishah's Individual Class"
+    "ADMIN_1": {
+      "VALUE": {
+        "5": {
+          "18:00 - 19:00": "Online Tuition"
+        }
       }
-    ]
+    },
+    "ADMIN_2": {
+      "VALUE": {
+        "3": {
+          "00:00 - 00:00": "Grade 6 Online Tuition"
+        },
+        "6": {
+          "10:00 - 12:00": "Grade 6 Online Tuition"
+        }
+      }
+    }
   }
 }

@@ -5,198 +5,281 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Modify Student Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
+    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-auth.js"></script>
-    <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+    <title>Modify Student Details</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            background: white;
+        }
+        .container.centered-content {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-full">
+<body class="bg-gray-100" style="padding: 10px;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
-                <i class="fas fa-arrow-left"></i>
+                <i class="fa-solid fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
         </div>
     </nav>
 
-    <div class="container flex items-center justify-center min-h-screen mt-5 mb-5">
-        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
-            <h1 class="text-3xl font-bold mb-4 text-center">Edit Student Details</h1>
-            <form id="studentForm" class="space-y-4">
-                <div>
-                    <label for="studentSelect" class="block mb-2 text-sm font-medium text-gray-900">Select Student</label>
-                    <select id="studentSelect" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5">
+    <div class="container centered-content">
+        <div class="container mx-auto">
+            <h2 class="text-2xl mb-4 text-center">Modify Student Details</h2>
+            <form id="modifyStudentForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="studentSelect">Select Student</label>
+                    <select id="studentSelect" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white">
                         <option value="">-- Select a student --</option>
-                        <!-- Options will be populated dynamically -->
                     </select>
                 </div>
-                <div id="studentDetails" class="space-y-4">
-                    <!-- Student details will be populated dynamically -->
+                <div id="studentFields" style="display:none;">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="fullName">Full Name</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="fullName" type="text">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="tel">Telephone</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="tel" type="text">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="rParty">Responsible Party</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="rParty" type="text">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="rPartyTel">Responsible Party Telephone</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="rPartyTel" type="text">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="email" type="email">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" id="password" type="text">
+                    </div>
+                    <div class="flex items-center justify-between gap-2">
+                        <button class="btn btn-primary" type="button" id="updateStudentBtn">Update Student</button>
+                        <button class="btn btn-danger" type="button" id="deleteStudentBtn">Delete Student</button>
+                    </div>
                 </div>
-                <button type="submit" class="w-full text-white bg-purple-800 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Submit</button>
             </form>
         </div>
     </div>
 
     <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, get, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
-            authDomain: "houseoftutors-f398e.firebaseapp.com",
-            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
-            projectId: "houseoftutors-f398e",
-            storageBucket: "houseoftutors-f398e.appspot.com",
-            messagingSenderId: "1006665226128",
-            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
-            measurementId: "G-PEM636J9ZD"
-        };
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+        authDomain: "houseoftutors-f398e.firebaseapp.com",
+        databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+        projectId: "houseoftutors-f398e",
+        storageBucket: "houseoftutors-f398e.appspot.com",
+        messagingSenderId: "1006665226128",
+        appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+        measurementId: "G-PEM636J9ZD"
+    };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-        // Populate student dropdown
-        const studentSelect = document.getElementById('studentSelect');
-        const studentsRef = ref(database, 'STUDENTS');
-        onValue(studentsRef, (snapshot) => {
-            const students = snapshot.val();
-            for (const key in students) {
-                if (students.hasOwnProperty(key)) {
-                    const option = document.createElement('option');
-                    option.value = key;
-                    option.textContent = students[key].FULL_NAME;
-                    studentSelect.appendChild(option);
+    const studentSelect = document.getElementById('studentSelect');
+    const adminEmail = localStorage.getItem('userEmail');
+
+    async function populateStudentDropdown() {
+        studentSelect.innerHTML = '<option value="">-- Select a student --</option>';
+        if (!adminEmail) return;
+
+        const adminRef = ref(database, "ADMIN");
+        const adminSnapshot = await get(adminRef);
+        if (adminSnapshot.exists()) {
+            const admins = adminSnapshot.val();
+            let adminKey = null;
+            for (const key in admins) {
+                if (admins[key].EMAIL === adminEmail) {
+                    adminKey = key;
+                    break;
                 }
             }
-        });
-
-        // Handle student selection
-        studentSelect.addEventListener('change', () => {
-            const studentKey = studentSelect.value;
-            const studentDetailsDiv = document.getElementById('studentDetails');
-
-            if (!studentKey) {
-                studentDetailsDiv.innerHTML = '';
-                return;
+            if (adminKey) {
+                const studentsStr = admins[adminKey].STUDENTS || "";
+                const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
+                for (const studentId of studentIds) {
+                    const studentRef = ref(database, `STUDENTS/${studentId}`);
+                    const studentSnapshot = await get(studentRef);
+                    if (studentSnapshot.exists()) {
+                        const student = studentSnapshot.val();
+                        const option = document.createElement('option');
+                        option.value = studentId;
+                        option.textContent = student.FULL_NAME;
+                        studentSelect.appendChild(option);
+                    }
+                }
             }
+        }
+    }
 
-            const studentRef = ref(database, `STUDENTS/${studentKey}`);
-            onValue(studentRef, (snapshot) => {
-                const student = snapshot.val();
-                studentDetailsDiv.innerHTML = `
-                    <div>
-                        <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900">Full Name</label>
-                        <input type="text" id="fullName" value="${student.FULL_NAME}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" required>
-                    </div>
-                    <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-                        <input type="email" id="email" value="${student.EMAIL}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" required>
-                    </div>
-                    <div>
-                        <label for="tel" class="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-                        <input type="tel" id="tel" value="${student.TEL}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" required>
-                    </div>
-                    <div>
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                        <div class="relative">
-                            <input type="password" id="password" value="${student.PASSWORD}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 pr-10" required>
-                            <button type="button" class="absolute inset-y-0 right-0 flex items-center px-2" onclick="togglePasswordVisibility()">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="rParty" class="block mb-2 text-sm font-medium text-gray-900">Responsible Party</label>
-                        <input type="text" id="rParty" value="${student.R_PARTY}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" required>
-                    </div>
-                    <div>
-                        <label for="rPartyTel" class="block mb-2 text-sm font-medium text-gray-900">Responsible Party Phone</label>
-                        <input type="tel" id="rPartyTel" value="${student.R_PARTY_TEL}" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5" required>
-                    </div>
-                `;
+    // Populate students dropdown on page load
+    window.onload = function() {
+        populateStudentDropdown();
+    };
+
+    // Show student details when selected
+    studentSelect.addEventListener('change', async function() {
+        const studentId = this.value;
+        const studentFields = document.getElementById('studentFields');
+        if (!studentId) {
+            studentFields.style.display = 'none';
+            return;
+        }
+        const studentRef = ref(database, `STUDENTS/${studentId}`);
+        const studentSnapshot = await get(studentRef);
+        if (studentSnapshot.exists()) {
+            const student = studentSnapshot.val();
+            document.getElementById('fullName').value = student.FULL_NAME || '';
+            document.getElementById('tel').value = student.TEL || '';
+            document.getElementById('rParty').value = student.R_PARTY || '';
+            document.getElementById('rPartyTel').value = student.R_PARTY_TEL || '';
+            document.getElementById('email').value = student.EMAIL || '';
+            document.getElementById('password').value = student.PASSWORD || '';
+            studentFields.style.display = '';
+        }
+    });
+
+    // Update student details
+    document.getElementById('updateStudentBtn').addEventListener('click', async function() {
+        const studentId = studentSelect.value;
+        if (!studentId) return;
+
+        const fullName = document.getElementById('fullName').value;
+        const tel = document.getElementById('tel').value;
+        const rParty = document.getElementById('rParty').value;
+        const rPartyTel = document.getElementById('rPartyTel').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!fullName || !tel || !rParty || !rPartyTel || !email || !password) {
+            nativeToast({
+                message: 'All fields must be filled!',
+                position: 'center',
+                rounded: true,
+                timeout: 4000,
+                type: 'error',
+                icon: false,
+                edge: true,
+                closeOnClick: false
             });
+            return;
+        }
+
+        const studentRef = ref(database, `STUDENTS/${studentId}`);
+        await update(studentRef, {
+            FULL_NAME: fullName,
+            TEL: tel,
+            R_PARTY: rParty,
+            R_PARTY_TEL: rPartyTel,
+            EMAIL: email,
+            PASSWORD: password
         });
 
-        // Handle form submission
-        document.getElementById('studentForm').addEventListener('submit', (event) => {
-            event.preventDefault();
+        nativeToast({
+            message: 'Student details updated successfully!',
+            position: 'center',
+            rounded: true,
+            timeout: 4000,
+            type: 'success',
+            icon: false,
+            edge: true,
+            closeOnClick: false
+        });
+    });
 
-            const studentKey = studentSelect.value;
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const tel = document.getElementById('tel').value;
-            const password = document.getElementById('password').value;
-            const rParty = document.getElementById('rParty').value;
-            const rPartyTel = document.getElementById('rPartyTel').value;
+    // Delete student
+    document.getElementById('deleteStudentBtn').addEventListener('click', async function() {
+        const studentId = studentSelect.value;
+        if (!studentId) return;
 
-            if (!fullName || !email || !tel || !password || !rParty || !rPartyTel) {
-                alert('All fields are required.');
-                return;
+        // Confirm deletion
+        if (!confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            // Get admin info to remove student from admin's STUDENTS list
+            const adminRef = ref(database, "ADMIN");
+            const adminSnapshot = await get(adminRef);
+            if (adminSnapshot.exists()) {
+                const admins = adminSnapshot.val();
+                let adminKey = null;
+                for (const key in admins) {
+                    if (admins[key].EMAIL === adminEmail) {
+                        adminKey = key;
+                        break;
+                    }
+                }
+                if (adminKey) {
+                    // Remove student from admin's STUDENTS list
+                    const studentsStr = admins[adminKey].STUDENTS || "";
+                    const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
+                    const updatedStudentIds = studentIds.filter(id => id !== studentId);
+                    await update(ref(database, `ADMIN/${adminKey}`), {
+                        STUDENTS: updatedStudentIds.join(',')
+                    });
+                }
             }
 
-            const studentRef = ref(database, `STUDENTS/${studentKey}`);
-            update(studentRef, {
-                FULL_NAME: fullName,
-                EMAIL: email,
-                TEL: tel,
-                PASSWORD: password,
-                R_PARTY: rParty,
-                R_PARTY_TEL: rPartyTel
-            }).then(() => {
-                nativeToast({
-                    message: 'Student details updated successfully!',
-                    position: 'center',
-                    rounded: true,
-                    timeout: 5000,
-                    type: 'success',
-                    icon: false,
-                    edge: true,
-                    closeOnClick: false
-                });
-                setTimeout(() => {
-                    location.reload(); // Refresh the page after a short delay
-                }, 1000);
-            }).catch((error) => {
-                console.error('Error updating student details:', error);
-                nativeToast({
-                    message: 'Error updating student details!',
-                    position: 'center',
-                    rounded: true,
-                    timeout: 5000,
-                    type: 'error',
-                    icon: false,
-                    edge: true,
-                    closeOnClick: false
-                });
+            // Delete student from STUDENTS node
+            const studentRef = ref(database, `STUDENTS/${studentId}`);
+            await remove(studentRef);
+
+            nativeToast({
+                message: 'Student deleted successfully!',
+                position: 'center',
+                rounded: true,
+                timeout: 2000,
+                type: 'success',
+                icon: false,
+                edge: true,
+                closeOnClick: false
             });
-        });
 
-        // Toggle password visibility
-        window.togglePasswordVisibility = function() {
-            const passwordInput = document.getElementById('password');
-            const passwordButton = passwordInput.nextElementSibling;
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
-            } else {
-                passwordInput.type = 'password';
-                passwordButton.innerHTML = '<i class="fas fa-eye"></i>';
-            }
-        };
+            // Redirect to admin dashboard after 2 seconds
+            setTimeout(function() {
+                window.location.href = 'DashboardAdmin.html';
+            }, 2000);
+        } catch (error) {
+            console.error('Error deleting student:', error);
+            nativeToast({
+                message: 'Error deleting student!',
+                position: 'center',
+                rounded: true,
+                timeout: 4000,
+                type: 'error',
+                icon: false,
+                edge: true,
+                closeOnClick: false
+            });
+        }
+    });
     </script>
 </body>
-
 </html>
