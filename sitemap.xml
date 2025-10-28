@@ -4,20 +4,28 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     
-    <!-- Main Landing Page -->
+    <!-- Main Landing Page - Houses of Tutors -->
     <url>
         <loc>https://www.housesoftutors.com/</loc>
-        <lastmod>2025-10-25</lastmod>
+        <lastmod>2025-10-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     
-    <!-- Main entry point -->
+    <!-- Main Entry Point - Houses of Tutors -->
     <url>
         <loc>https://www.housesoftutors.com/index.html</loc>
-        <lastmod>2025-10-25</lastmod>
+        <lastmod>2025-10-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+    </url>
+    
+    <!-- Unified Login - Houses of Tutors -->
+    <url>
+        <loc>https://www.housesoftutors.com/Login.html</loc>
+        <lastmod>2025-10-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
     
 </urlset>
