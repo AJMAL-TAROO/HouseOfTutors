@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Login - House of Tutors | Online Tutoring Platform</title>
+    <meta name="description" content="Sign in to House of Tutors - Access your student dashboard or admin portal for personalized online learning.">
+    <meta name="keywords" content="house of tutors login, student login, admin login, online tutoring, virtual classroom">
+    <meta name="author" content="House of Tutors">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Login - House of Tutors">
+    <meta property="og:description" content="Sign in to access your personalized learning dashboard">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.housesoftutors.com/Login.html">
+    <meta property="og:image" content="https://www.housesoftutors.com/img/houseoftutor_logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.housesoftutors.com/Login.html">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    
+    <style>
+        /* Custom styles for the role toggle */
+        .role-tab {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .role-tab input[type="radio"] {
+            display: none;
+        }
+        
+        .role-tab label {
+            cursor: pointer;
+            padding: 0.75rem 2rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .role-tab input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .role-tab input[type="radio"]:not(:checked) + label {
+            background: transparent;
+            color: #6b7280;
+        }
+        
+        .role-tab input[type="radio"]:not(:checked) + label:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .login-container {
+                background: #1f2937;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <section class="min-h-screen">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen lg:py-0">
+            <!-- Logo and Title -->
+            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                <img class="w-11 h-11 mr-2"
+                    src="img/houseoftutor_logo.png"
+                    alt="House of Tutors logo">
+                House Of Tutors
+            </a>
+            
+            <!-- Login Card -->
+            <div class="login-container w-full md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <!-- Role Selection Toggle -->
+                    <div class="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                        <div class="role-tab">
+                            <input type="radio" id="studentRole" name="userRole" value="student" checked>
+                            <label for="studentRole">Student</label>
+                        </div>
+                        <div class="role-tab">
+                            <input type="radio" id="adminRole" name="userRole" value="admin">
+                            <label for="adminRole">Admin</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+                        Sign in to your account
+                    </h1>
+                    
+                    <!-- Login Form -->
+                    <div class="space-y-4 md:space-y-6">
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Your email
+                            </label>
+                            <input type="email" name="email" id="email"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="name@company.com" required>
+                        </div>
+                        <div>
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Password
+                            </label>
+                            <input type="password" name="password" id="password" placeholder="••••••••"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required>
+                        </div>
+                        
+                        <!-- Login Button -->
+                        <button id="loginBtn" class="gradient-bg w-full text-white hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all">
+                            Sign in
+                        </button>
+                        
+                        <!-- Sign Up Link -->
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
+                            Don't have an account yet? 
+                            <a href="#" id="signUpLink" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                Sign up
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign Up Modal -->
+    <div id="signUpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
+            <h2 class="text-xl font-bold mb-4 dark:text-white">Contact Information</h2>
+            <div id="studentSignupInfo">
+                <p class="dark:text-gray-300">You need to contact your teacher to get your login credentials.</p>
+            </div>
+            <div id="adminSignupInfo" class="hidden">
+                <p class="dark:text-gray-300">To create an admin account, please contact:</p>
+                <p class="mt-2 dark:text-gray-300"><strong>Mr. Mohamade Ajmal Taroo</strong></p>
+                <p class="dark:text-gray-300">Phone: 57882383</p>
+            </div>
+            <button id="closeModalBtn" class="mt-4 w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        //------------------------------------------FIREBASE INITIALIZATION PROCESS-----------------------
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.appspot.com",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        //------------------------------------------ROLE TOGGLE HANDLING-----------------------
+        const studentRoleRadio = document.getElementById('studentRole');
+        const adminRoleRadio = document.getElementById('adminRole');
+        
+        // Get current role selection
+        function getCurrentRole() {
+            return studentRoleRadio.checked ? 'student' : 'admin';
+        }
+
+        //------------------------------------------LOGIN PROCESS-----------------------
+        document.querySelector('#loginBtn').addEventListener('click', async () => {
+            const loginEmail = document.getElementById('email').value;
+            const loginPassword = document.getElementById('password').value;
+            const currentRole = getCurrentRole();
+            
+            if (!loginEmail || !loginPassword) {
+                alert("Please enter both email and password.");
+                return;
+            }
+            
+            console.log("Login button clicked");
+            console.log("Email:", loginEmail);
+            console.log("Role:", currentRole);
+
+            const result = await SearchEmailAndPassword(loginEmail, currentRole);
+
+            if (result.exists) {
+                if (result.password === loginPassword) {
+                    // Role-specific redirection
+                    if (currentRole === 'student') {
+                        localStorage.setItem('student_email', loginEmail);
+                        localStorage.setItem('VIRTUAL_ROOMS', result.virtualRooms || '');
+                        localStorage.setItem('STUDENT_KEY', result.key || '');
+                        window.location.replace("Dashboard.html");
+                    } else {
+                        localStorage.setItem('userEmail', loginEmail);
+                        localStorage.setItem('VIRTUAL_ROOMS', result.virtualRooms || '');
+                        window.location.replace("DashboardAdmin.html");
+                    }
+                } else {
+                    alert("Incorrect password.");
+                }
+            } else {
+                alert(`No ${currentRole} account found with this email address.`);
+            }
+        });
+
+        //------------------------------------------SEARCH IF EMAIL EXISTS OR NOT-----------------------
+        async function SearchEmailAndPassword(email, role) {
+            return new Promise((resolve, reject) => {
+                // Choose database path based on role
+                const dbPath = role === 'student' ? 'STUDENTS' : 'ADMIN';
+                const usersRef = ref(database, dbPath);
+                
+                onValue(
+                    usersRef,
+                    (snapshot) => {
+                        if (snapshot.exists()) {
+                            const users = snapshot.val();
+                            for (const key in users) {
+                                if (users[key].EMAIL === email) {
+                                    resolve({
+                                        exists: true,
+                                        password: users[key].PASSWORD,
+                                        virtualRooms: users[key].VIRTUAL_ROOMS || '',
+                                        key: key
+                                    });
+                                    return;
+                                }
+                            }
+                        }
+                        resolve({ exists: false });
+                    },
+                    (error) => {
+                        console.error("Error fetching data:", error);
+                        reject({ exists: false });
+                    }
+                );
+            });
+        }
+
+        //------------------------------------------SIGN UP MODAL-----------------------
+        document.getElementById('signUpLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentRole = getCurrentRole();
+            
+            // Show appropriate signup info based on role
+            if (currentRole === 'student') {
+                document.getElementById('studentSignupInfo').classList.remove('hidden');
+                document.getElementById('adminSignupInfo').classList.add('hidden');
+            } else {
+                document.getElementById('studentSignupInfo').classList.add('hidden');
+                document.getElementById('adminSignupInfo').classList.remove('hidden');
+            }
+            
+            document.getElementById('signUpModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('signUpModal').classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('signUpModal').addEventListener('click', (e) => {
+            if (e.target.id === 'signUpModal') {
+                document.getElementById('signUpModal').classList.add('hidden');
+            }
+        });
+
+        // Allow Enter key to submit login
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+        
+        document.getElementById('email').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+
+        // Check if admin role should be pre-selected based on URL hash
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#admin') {
+                document.getElementById('adminRole').checked = true;
+            }
+        });
+    </script>
+</body>
+
+</html>
