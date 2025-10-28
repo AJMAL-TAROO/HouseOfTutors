@@ -61,7 +61,7 @@ Added schema.org JSON-LD markup (lines 49-69):
 
 ### 3. Updated sitemap.xml
 
-- Updated `lastmod` dates to 2025-10-28 (current date)
+- Updated `lastmod` dates to 2025-10-28 (deployment date)
 - Added Login.html to the sitemap with priority 0.9
 
 ```xml
@@ -128,7 +128,8 @@ To verify these changes are working:
 
 ## Expected Timeline
 
-- **Immediate**: Social media sharing should show the correct logo after cache is cleared
+- **Immediate**: After deployment, the meta tags will be available for search engines and social media crawlers
+- **Social Media**: May require manual cache clearing through platform-specific debugger tools (Facebook Sharing Debugger, Twitter Card Validator) to see changes immediately
 - **24-48 hours**: Search engines should re-crawl the updated pages
 - **1-2 weeks**: Search engine results should reflect the new logo
 
