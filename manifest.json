@@ -36,13 +36,13 @@
       "src": "/public/images/houseoftutor_logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/public/images/houseoftutor_logo.png",
-      "sizes": "5000x5000",
+      "src": "/public/images/houseoftutor_logo-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     }
   ],
   "categories": ["education", "tutoring", "learning"],
