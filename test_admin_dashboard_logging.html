@@ -142,31 +142,31 @@
         function runTest1() {
             const output = document.getElementById('test1-output');
             output.innerHTML = '';
-            
+
             try {
                 // Simulate the function with default parameter
                 function captureAdminLogs(adminEmail, adminKey, showModal = false) {
                     return { adminEmail, adminKey, showModal };
                 }
-                
+
                 // Test with default parameter
                 const result1 = captureAdminLogs('test@test.com', 'ADMIN_1');
                 if (result1.showModal === false) {
                     output.innerHTML += '<div class="test-result pass">✅ PASS: Default showModal=false works correctly</div>';
                 }
-                
+
                 // Test with explicit true
                 const result2 = captureAdminLogs('test@test.com', 'ADMIN_1', true);
                 if (result2.showModal === true) {
                     output.innerHTML += '<div class="test-result pass">✅ PASS: Explicit showModal=true works correctly</div>';
                 }
-                
+
                 // Test with explicit false
                 const result3 = captureAdminLogs('test@test.com', 'ADMIN_1', false);
                 if (result3.showModal === false) {
                     output.innerHTML += '<div class="test-result pass">✅ PASS: Explicit showModal=false works correctly</div>';
                 }
-                
+
             } catch (error) {
                 output.innerHTML += '<div class="test-result" style="background:#fee; color:#c00;">❌ FAIL: ' + error.message + '</div>';
             }
@@ -176,7 +176,7 @@
         function runTest2() {
             const output = document.getElementById('test2-output');
             output.innerHTML = '';
-            
+
             // Note: This replicates the logic from DashboardAdmin.html for testing purposes
             // In production, this would ideally import the actual function
             function checkForInfoEndpoint() {
@@ -184,21 +184,21 @@
                 const currentHash = window.location.hash;
                 const currentHref = window.location.href;
                 const currentPageName = currentPath.split('/').pop();
-                
-                if (currentPath.includes('/info') || 
-                    currentHash.includes('/info') || 
+
+                if (currentPath.includes('/info') ||
+                    currentHash.includes('/info') ||
                     currentHash === '#info' ||
                     (currentPageName && currentHref.includes(`${currentPageName}/info`))) {
                     return true;
                 }
                 return false;
             }
-            
+
             const result = checkForInfoEndpoint();
             output.innerHTML += '<div class="test-result info">Current URL: <code>' + window.location.href + '</code></div>';
             output.innerHTML += '<div class="test-result info">Current Hash: <code>' + window.location.hash + '</code></div>';
             output.innerHTML += '<div class="test-result info">checkForInfoEndpoint returns: <code>' + result + '</code></div>';
-            
+
             if (!result) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Normal page load correctly returns false</div>';
             } else {
@@ -210,23 +210,23 @@
         function runTest3() {
             const output = document.getElementById('test3-output');
             output.innerHTML = '';
-            
+
             function testModalLogic(showModal) {
                 let modalShown = false;
-                
+
                 // Simulate the logic
                 if (showModal) {
                     modalShown = true;
                 }
-                
+
                 return modalShown;
             }
-            
+
             const result1 = testModalLogic(false);
             if (!result1) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Modal not shown when showModal=false</div>';
             }
-            
+
             const result2 = testModalLogic(true);
             if (result2) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Modal shown when showModal=true</div>';
@@ -237,7 +237,7 @@
         function runTest4() {
             const output = document.getElementById('test4-output');
             output.innerHTML = '';
-            
+
             // Simulate admin data from Firebase (using test data, not real emails)
             const adminData = {
                 EMAIL: "test.admin@example.com",
@@ -245,31 +245,31 @@
                 STUDENTS: "STUDENTS_12,STUDENTS_13,STUDENTS_14",
                 VIRTUAL_ROOMS: "1001,1002,1007,1008"
             };
-            
+
             // Simulate the extraction logic
             const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',').filter(room => room.trim()) : [];
             const classroomCount = virtualRooms.length;
-            
+
             const studentsIds = adminData.STUDENTS ? adminData.STUDENTS.split(',').filter(id => id.trim()) : [];
             const studentCount = studentsIds.length;
-            
+
             output.innerHTML += '<div class="test-result info">Admin: <code>' + adminData.EMAIL + '</code></div>';
             output.innerHTML += '<div class="test-result info">VIRTUAL_ROOMS: <code>' + adminData.VIRTUAL_ROOMS + '</code></div>';
             output.innerHTML += '<div class="test-result info">STUDENTS: <code>' + adminData.STUDENTS + '</code></div>';
-            
+
             if (classroomCount === 4) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Classroom count = ' + classroomCount + ' (extracted from VIRTUAL_ROOMS)</div>';
             }
-            
+
             if (studentCount === 3) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Student count = ' + studentCount + ' (extracted from STUDENTS)</div>';
             }
-            
+
             // Test with empty values
             const emptyAdmin = { STUDENTS: "", VIRTUAL_ROOMS: "" };
             const emptyRooms = emptyAdmin.VIRTUAL_ROOMS ? emptyAdmin.VIRTUAL_ROOMS.split(',').filter(room => room.trim()) : [];
             const emptyStudents = emptyAdmin.STUDENTS ? emptyAdmin.STUDENTS.split(',').filter(id => id.trim()) : [];
-            
+
             if (emptyRooms.length === 0 && emptyStudents.length === 0) {
                 output.innerHTML += '<div class="test-result pass">✅ PASS: Empty values handled correctly (counts = 0)</div>';
             }

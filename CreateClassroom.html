@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO Meta Tags -->
     <title>Create Classroom - House of Tutors | Admin Panel</title>
     <meta name="description" content="Create and manage classrooms at House of Tutors admin panel.">
     <meta name="robots" content="noindex, nofollow">
-    
+
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.housesoftutors.com/CreateClassroom.html">    
+    <link rel="canonical" href="https://www.housesoftutors.com/CreateClassroom.html">
     <!-- Favicon and Site Icons -->
     <link rel="icon" type="image/png" href="img/houseoftutor_logo.png">
     <link rel="apple-touch-icon" href="img/houseoftutor_logo.png">
 
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/native-toast@2.0.0/dist/native-toast.css">
@@ -181,7 +181,7 @@
                                 const virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
                                 virtualRooms.push(classroomId.toString());
                                 await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
-                                
+
                                 // Log the successful classroom creation
                                 const logData = {
                                     CLASSROOM_ID: classroomId,
