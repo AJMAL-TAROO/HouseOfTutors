@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO Meta Tags -->
     <title>Admin Dashboard - House of Tutors | Manage Your Classes</title>
     <meta name="description" content="Manage classrooms, students, and teaching resources at House of Tutors admin dashboard.">
     <meta name="robots" content="noindex, nofollow">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.housesoftutors.com/DashboardAdmin.html">
-    
+    <!-- Favicon and Site Icons -->
+    <link rel="icon" type="image/png" href="img/houseoftutor_logo.png">
+    <link rel="apple-touch-icon" href="img/houseoftutor_logo.png">
+
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <style>
@@ -157,7 +161,7 @@
                 <div class="modal-box max-w-4xl">
                     <h2 class="text-2xl font-bold mb-4 text-purple-800">Dashboard Details</h2>
                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeAdminDetailsModal()">✕</button>
-                    
+
                     <!-- Summary Section -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div class="stat bg-purple-100 rounded-lg shadow">
@@ -299,7 +303,7 @@
                 // Get admin data to count classrooms
                 const adminRef = ref(database, `ADMIN/${adminKey}`);
                 const adminSnapshot = await get(adminRef);
-                
+
                 if (!adminSnapshot.exists()) {
                     console.error('Admin data not found');
                     return;
@@ -327,7 +331,7 @@
                 // Push log data to Firebase under LOGS node
                 const logsRef = ref(database, 'LOGS');
                 await push(logsRef, logData);
-                
+
                 console.log('Admin log captured successfully:', logData);
                 console.log(`Admin: ${adminEmail} (${adminKey})`);
                 console.log(`Number of Classrooms: ${classroomCount}`);
@@ -350,7 +354,7 @@
             infoDisplay.id = 'adminLogInfo';
             infoDisplay.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 z-50 border-2 border-purple-600';
             infoDisplay.style.minWidth = '350px';
-            
+
             infoDisplay.innerHTML = `
                 <div class="text-center">
                     <h2 class="text-2xl font-bold text-purple-800 mb-4">Admin Dashboard Info</h2>
@@ -371,9 +375,9 @@
                     <button id="closeLogInfoBtn" class="btn btn-primary mt-4 w-full">Close</button>
                 </div>
             `;
-            
+
             document.body.appendChild(infoDisplay);
-            
+
             // Add event listener for close button
             document.getElementById('closeLogInfoBtn').addEventListener('click', function() {
                 document.getElementById('adminLogInfo').remove();
@@ -386,13 +390,13 @@
             const currentHash = window.location.hash;
             const currentHref = window.location.href;
             const currentPageName = currentPath.split('/').pop();
-            
+
             // Check multiple ways the /info endpoint might be accessed:
             // 1. Any path that includes /info
             // 2. Hash formats: #/info or #info
             // 3. Current page followed by /info
-            if (currentPath.includes('/info') || 
-                currentHash.includes('/info') || 
+            if (currentPath.includes('/info') ||
+                currentHash.includes('/info') ||
                 currentHash === '#info' ||
                 (currentPageName && currentHref.includes(`${currentPageName}/info`))) {
                 return true;
@@ -408,14 +412,14 @@
                 if (snapshot.exists()) {
                     const admins = snapshot.val();
                     let adminKey = null;
-                    
+
                     for (const key in admins) {
                         if (admins[key].EMAIL === email) {
                             adminKey = key;
                             break;
                         }
                     }
-                    
+
                     if (adminKey) {
                         // Always capture logs, but only show modal if accessing /info endpoint
                         captureAdminLogs(email, adminKey, isInfoEndpoint);
@@ -441,21 +445,21 @@
             if (isMobileDevice()) {
                 // Clear any wallpaper image
                 document.body.style.backgroundImage = 'none';
-                
+
                 // Apply white or black based on dark mode preference
                 if (isDarkMode()) {
                     document.body.style.backgroundColor = '#000000'; // Black for dark mode
                 } else {
                     document.body.style.backgroundColor = '#ffffff'; // White for light mode
                 }
-                
+
                 document.body.style.backgroundSize = 'auto';
                 document.body.style.backgroundPosition = 'initial';
                 document.body.style.backgroundRepeat = 'initial';
                 document.body.style.backgroundAttachment = 'initial';
                 document.body.style.height = '100vh';
                 document.body.style.margin = '0';
-                
+
                 console.log('Mobile device detected - Applied ' + (isDarkMode() ? 'black' : 'white') + ' background');
             }
         }
@@ -466,7 +470,7 @@
             get(adminRef).then((snapshot) => {
                 if (snapshot.exists()) {
                     const admins = snapshot.val();
-                    
+
                     // Check if mobile device first
                     if (isMobileDevice()) {
                         applyMobileBackground();
@@ -582,7 +586,7 @@
                             `;
                                 // Append the card to the container
                                 classroomContainer.appendChild(card);
-                            } 
+                            }
                         });
                     });
                 } else {
@@ -627,7 +631,7 @@
                     console.error("Error logging VR classroom join:", error);
                 }
             }
-            
+
             window.open(`OnlineClass.html?vrLink=${encodeURIComponent(url)}`, '_blank');
         };
 
@@ -829,7 +833,7 @@
         window.verifySuperUser = function () {
             const username = document.getElementById('superUsername').value;
             const password = document.getElementById('superPassword').value;
-            
+
             if (username === 'admin' && password === 'admin123') {
                 // Store super user flag
                 localStorage.setItem('superUserAuth', 'true');
@@ -861,7 +865,7 @@
                 // Get admin data
                 const adminRef = ref(database, "ADMIN");
                 const adminSnapshot = await get(adminRef);
-                
+
                 if (!adminSnapshot.exists()) {
                     console.error('Admin data not found');
                     return;
@@ -891,7 +895,7 @@
                     .split(',')
                     .filter(room => room.trim())
                     .map(Number);
-                
+
                 const studentsStr = adminData.STUDENTS || '';
                 const studentIds = studentsStr
                     .split(',')
@@ -916,21 +920,21 @@
                         if (virtualRooms.includes(classroom.CLASSROOM_ID)) {
                             hasClassrooms = true;
                             const row = document.createElement('tr');
-                            
+
                             // Create cells and use textContent to prevent XSS
                             const idCell = document.createElement('td');
                             idCell.textContent = classroom.CLASSROOM_ID;
-                            
+
                             const titleCell = document.createElement('td');
                             titleCell.textContent = classroom.TITLE;
-                            
+
                             const teacherCell = document.createElement('td');
                             teacherCell.textContent = classroom.TEACHER_FULL_NAME;
-                            
+
                             row.appendChild(idCell);
                             row.appendChild(titleCell);
                             row.appendChild(teacherCell);
-                            
+
                             classroomsTableBody.appendChild(row);
                         }
                     }
@@ -954,31 +958,31 @@
 
                     // Default value constant
                     const NOT_AVAILABLE = 'N/A';
-                    
+
                     for (const studentKey in students) {
                         if (studentIds.includes(studentKey)) {
                             hasStudents = true;
                             const student = students[studentKey];
                             const row = document.createElement('tr');
-                            
+
                             // Create cells and use textContent to prevent XSS
                             const idCell = document.createElement('td');
                             idCell.textContent = studentKey;
-                            
+
                             const nameCell = document.createElement('td');
                             nameCell.textContent = student.FULL_NAME;
-                            
+
                             const emailCell = document.createElement('td');
                             emailCell.textContent = student.EMAIL;
-                            
+
                             const telCell = document.createElement('td');
                             telCell.textContent = student.TEL || NOT_AVAILABLE;
-                            
+
                             row.appendChild(idCell);
                             row.appendChild(nameCell);
                             row.appendChild(emailCell);
                             row.appendChild(telCell);
-                            
+
                             studentsTableBody.appendChild(row);
                         }
                     }
