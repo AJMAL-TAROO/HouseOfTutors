@@ -4,81 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <!-- SEO Meta Tags -->
     <title>Login - House of Tutors | Online Tutoring Platform</title>
     <meta name="description" content="Sign in to House of Tutors - Access your student dashboard or admin portal for personalized online learning.">
     <meta name="keywords" content="house of tutors login, student login, admin login, online tutoring, virtual classroom">
     <meta name="author" content="House of Tutors">
     <meta name="robots" content="index, follow">
-
+    
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Login - House of Tutors">
     <meta property="og:description" content="Sign in to access your personalized learning dashboard">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.housesoftutors.com/Login.html">
-    <meta property="og:image" content="https://www.housesoftutors.com/public/images/houseoftutor_logo.png">
-    <meta property="og:site_name" content="House of Tutors">
-    <meta property="og:image:width" content="5000">
-    <meta property="og:image:height" content="5000">
-    <meta property="og:image:alt" content="House of Tutors Logo">
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Login - House of Tutors">
-    <meta name="twitter:description" content="Sign in to access your personalized learning dashboard">
-    <meta name="twitter:image" content="https://www.housesoftutors.com/public/images/houseoftutor_logo.png">
-    <meta name="twitter:image:alt" content="House of Tutors Logo">
-
+    <meta property="og:image" content="https://www.housesoftutors.com/img/houseoftutor_logo.png">
+    
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.housesoftutors.com/Login.html">
-
-    <!-- Favicon and Site Icons -->
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/houseoftutor_logo-16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/houseoftutor_logo-32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/public/images/houseoftutor_logo-192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/houseoftutor_logo-180.png">
     
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="/manifest.json">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-
-    <!-- Structured Data for Educational Organization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
-      "name": "House of Tutors",
-      "url": "https://www.housesoftutors.com",
-      "logo": "https://www.housesoftutors.com/public/images/houseoftutor_logo.png",
-      "description": "House of Tutors offers personalized online tutoring and virtual classroom services for students seeking academic excellence.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "Online"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "availableLanguage": "English"
-      },
-      "sameAs": []
-    }
-    </script>
-
+    
     <style>
         /* Custom styles for the role toggle */
         .role-tab {
             position: relative;
             transition: all 0.3s ease;
         }
-
+        
         .role-tab input[type="radio"] {
             display: none;
         }
-
+        
         .role-tab label {
             cursor: pointer;
             padding: 0.75rem 2rem;
@@ -87,33 +44,33 @@
             border-radius: 0.5rem;
             font-weight: 500;
         }
-
+        
         .role-tab input[type="radio"]:checked + label {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
+        
         .role-tab input[type="radio"]:not(:checked) + label {
             background: transparent;
             color: #6b7280;
         }
-
+        
         .role-tab input[type="radio"]:not(:checked) + label:hover {
             background: rgba(102, 126, 234, 0.1);
             color: #667eea;
         }
-
+        
         .login-container {
             background: white;
             border-radius: 1rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-
+        
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
+        
         @media (prefers-color-scheme: dark) {
             .login-container {
                 background: #1f2937;
@@ -132,7 +89,7 @@
                     alt="House of Tutors logo">
                 House Of Tutors
             </a>
-
+            
             <!-- Login Card -->
             <div class="login-container w-full md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border dark:border-gray-700">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -147,12 +104,12 @@
                             <label for="adminRole">Admin</label>
                         </div>
                     </div>
-
+                    
                     <!-- Title -->
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
                         Sign in to your account
                     </h1>
-
+                    
                     <!-- Login Form -->
                     <div class="space-y-4 md:space-y-6">
                         <div>
@@ -171,20 +128,20 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required>
                         </div>
-
+                        
                         <!-- Error Message -->
                         <div id="errorMessage" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
                             <p class="text-sm text-red-800 dark:text-red-200" id="errorText"></p>
                         </div>
-
+                        
                         <!-- Login Button -->
                         <button id="loginBtn" class="gradient-bg w-full text-white hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all">
                             Sign in
                         </button>
-
+                        
                         <!-- Sign Up Link -->
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-                            Don't have an account yet?
+                            Don't have an account yet? 
                             <a href="#" id="signUpLink" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
                                 Sign up
                             </a>
@@ -240,7 +197,7 @@
         const adminRoleRadio = document.getElementById('adminRole');
         const errorMessageDiv = document.getElementById('errorMessage');
         const errorTextSpan = document.getElementById('errorText');
-
+        
         // Function to show error message
         function showError(message) {
             errorTextSpan.textContent = message;
@@ -250,12 +207,12 @@
                 errorMessageDiv.classList.add('hidden');
             }, 5000);
         }
-
+        
         // Function to hide error message
         function hideError() {
             errorMessageDiv.classList.add('hidden');
         }
-
+        
         // Get current role selection
         function getCurrentRole() {
             return studentRoleRadio.checked ? 'student' : 'admin';
@@ -266,15 +223,15 @@
             const loginEmail = document.getElementById('email').value;
             const loginPassword = document.getElementById('password').value;
             const currentRole = getCurrentRole();
-
+            
             // Hide any previous errors
             hideError();
-
+            
             if (!loginEmail || !loginPassword) {
                 showError("Please enter both email and password.");
                 return;
             }
-
+            
             console.log("Login button clicked");
             console.log("Email:", loginEmail);
             console.log("Role:", currentRole);
@@ -308,7 +265,7 @@
                 // Choose database path based on role
                 const dbPath = role === 'student' ? 'STUDENTS' : 'ADMIN';
                 const usersRef = ref(database, dbPath);
-
+                
                 onValue(
                     usersRef,
                     (snapshot) => {
@@ -340,7 +297,7 @@
         document.getElementById('signUpLink').addEventListener('click', (e) => {
             e.preventDefault();
             const currentRole = getCurrentRole();
-
+            
             // Show appropriate signup info based on role
             if (currentRole === 'student') {
                 document.getElementById('studentSignupInfo').classList.remove('hidden');
@@ -349,7 +306,7 @@
                 document.getElementById('studentSignupInfo').classList.add('hidden');
                 document.getElementById('adminSignupInfo').classList.remove('hidden');
             }
-
+            
             document.getElementById('signUpModal').classList.remove('hidden');
         });
 
@@ -370,7 +327,7 @@
                 document.getElementById('loginBtn').click();
             }
         });
-
+        
         document.getElementById('email').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 document.getElementById('loginBtn').click();
@@ -383,11 +340,11 @@
                 document.getElementById('adminRole').checked = true;
             }
         });
-
+        
         // Clear error when user types in email or password fields
         document.getElementById('email').addEventListener('input', hideError);
         document.getElementById('password').addEventListener('input', hideError);
-
+        
         // Clear error when switching roles
         studentRoleRadio.addEventListener('change', hideError);
         adminRoleRadio.addEventListener('change', hideError);

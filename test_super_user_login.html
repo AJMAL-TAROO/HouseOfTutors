@@ -200,12 +200,12 @@
         function verifySuperUser() {
             const username = document.getElementById('superUsername').value;
             const password = document.getElementById('superPassword').value;
-
+            
             if (username === 'admin' && password === 'admin123') {
                 // In the actual application, this would:
                 // localStorage.setItem('superUserAuth', 'true');
                 // window.location.href = 'info.html';
-
+                
                 // For this test, show success message
                 closeSuperUserModal();
                 document.getElementById('successMessage').classList.add('show');
