@@ -129,6 +129,11 @@
                                 required>
                         </div>
                         
+                        <!-- Error Message -->
+                        <div id="errorMessage" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
+                            <p class="text-sm text-red-800 dark:text-red-200" id="errorText"></p>
+                        </div>
+                        
                         <!-- Login Button -->
                         <button id="loginBtn" class="gradient-bg w-full text-white hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all">
                             Sign in
@@ -190,6 +195,23 @@
         //------------------------------------------ROLE TOGGLE HANDLING-----------------------
         const studentRoleRadio = document.getElementById('studentRole');
         const adminRoleRadio = document.getElementById('adminRole');
+        const errorMessageDiv = document.getElementById('errorMessage');
+        const errorTextSpan = document.getElementById('errorText');
+        
+        // Function to show error message
+        function showError(message) {
+            errorTextSpan.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorMessageDiv.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Function to hide error message
+        function hideError() {
+            errorMessageDiv.classList.add('hidden');
+        }
         
         // Get current role selection
         function getCurrentRole() {
@@ -202,8 +224,11 @@
             const loginPassword = document.getElementById('password').value;
             const currentRole = getCurrentRole();
             
+            // Hide any previous errors
+            hideError();
+            
             if (!loginEmail || !loginPassword) {
-                alert("Please enter both email and password.");
+                showError("Please enter both email and password.");
                 return;
             }
             
@@ -227,10 +252,10 @@
                         window.location.replace("DashboardAdmin.html");
                     }
                 } else {
-                    alert("Incorrect password.");
+                    showError("Incorrect password.");
                 }
             } else {
-                alert(`No ${currentRole} account found with this email address.`);
+                showError(`No ${currentRole} account found with this email address.`);
             }
         });
 
@@ -315,6 +340,14 @@
                 document.getElementById('adminRole').checked = true;
             }
         });
+        
+        // Clear error when user types in email or password fields
+        document.getElementById('email').addEventListener('input', hideError);
+        document.getElementById('password').addEventListener('input', hideError);
+        
+        // Clear error when switching roles
+        studentRoleRadio.addEventListener('change', hideError);
+        adminRoleRadio.addEventListener('change', hideError);
     </script>
 </body>
 
