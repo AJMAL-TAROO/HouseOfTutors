@@ -4,19 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <!-- SEO Meta Tags -->
     <title>Student Dashboard - House of Tutors | Your Virtual Classrooms</title>
     <meta name="description" content="Access your virtual classrooms, join online classes, and manage your learning at House of Tutors student dashboard.">
     <meta name="robots" content="noindex, nofollow">
-
+    
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.housesoftutors.com/Dashboard.html">
-    <!-- Favicon and Site Icons -->
-    <link rel="icon" type="image/png" href="img/houseoftutor_logo.png">
-    <link rel="apple-touch-icon" href="img/houseoftutor_logo.png">
-
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
     <style>
@@ -144,21 +140,21 @@
             if (isMobileDevice()) {
                 // Clear any wallpaper image
                 document.body.style.backgroundImage = 'none';
-
+                
                 // Apply white or black based on dark mode preference
                 if (isDarkMode()) {
                     document.body.style.backgroundColor = '#000000'; // Black for dark mode
                 } else {
                     document.body.style.backgroundColor = '#ffffff'; // White for light mode
                 }
-
+                
                 document.body.style.backgroundSize = 'auto';
                 document.body.style.backgroundPosition = 'initial';
                 document.body.style.backgroundRepeat = 'initial';
                 document.body.style.backgroundAttachment = 'initial';
                 document.body.style.height = '100vh';
                 document.body.style.margin = '0';
-
+                
                 console.log('Mobile device detected - Applied ' + (isDarkMode() ? 'black' : 'white') + ' background');
             }
         }
@@ -168,7 +164,7 @@
             onValue(studentWallpaperRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const studentData = snapshot.val();
-
+                    
                     // Check if mobile device first
                     if (isMobileDevice()) {
                         applyMobileBackground();
