@@ -206,8 +206,8 @@ Create marketing videos using screen recordings of the House of Tutors platform 
    - Format: MP4 (H.264)
    - Resolution: 1920x1080 for main version
    - Frame rate: 30 fps or higher
-   - Bitrate: High quality (5-10 Mbps)
-   - Audio: AAC, 320 kbps
+   - Video Bitrate: High quality (5-10 Mbps)
+   - Audio: AAC, 128-192 kbps (sufficient for voice content)
 
 ### 7. Create Additional Formats
    - Export square version (1080x1080)
@@ -324,16 +324,16 @@ Track these metrics after posting:
 ### Recommended Tools
 
 **Screen Recording** (Free):
-- OBS Studio (Windows/Mac/Linux)
-- QuickTime (Mac)
-- Windows Game Bar (Windows)
-- ShareX (Windows)
+- OBS Studio (Windows 10+/Mac 10.13+/Linux) - Professional features
+- QuickTime (Mac 10.13+) - Built-in, simple to use
+- Windows Game Bar (Windows 10+) - Built-in
+- ShareX (Windows 7+) - Feature-rich
 
 **Video Editing** (Free):
-- DaVinci Resolve
-- Shotcut
-- iMovie (Mac)
-- OpenShot
+- DaVinci Resolve (Windows 10+/Mac 10.15+/Linux) - Professional
+- Shotcut (Windows 7+/Mac 10.12+/Linux) - Cross-platform
+- iMovie (Mac 10.15.6+) - User-friendly
+- OpenShot (Windows 7+/Mac 10.15+/Linux) - Open source
 
 **Audio Editing**:
 - Audacity (Free)
