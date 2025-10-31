@@ -225,11 +225,11 @@ All teaser videos are approximately 15 seconds long and available in three forma
 
 ### Technical Details
 
-| Format    | Resolution | Aspect Ratio | File Size (Main) | File Size (Feature) |
-|-----------|------------|--------------|------------------|---------------------|
-| Landscape | 1920x1080  | 16:9         | ~0.84 MB         | ~0.30 MB            |
-| Square    | 1080x1080  | 1:1          | ~0.72 MB         | ~0.27 MB            |
-| Vertical  | 1080x1920  | 9:16         | ~0.75 MB         | ~0.31 MB            |
+| Format    | Resolution | Aspect Ratio | File Size (Main) | File Size (Feature) | File Size (Teaser) |
+|-----------|------------|--------------|------------------|---------------------|--------------------|
+| Landscape | 1920x1080  | 16:9         | ~0.84 MB         | ~0.30 MB            | ~0.32 MB           |
+| Square    | 1080x1080  | 1:1          | ~0.72 MB         | ~0.27 MB            | ~0.31 MB           |
+| Vertical  | 1080x1920  | 9:16         | ~0.75 MB         | ~0.31 MB            | ~0.32 MB           |
 
 ### Common Specs
 - **Frame Rate**: 30 FPS

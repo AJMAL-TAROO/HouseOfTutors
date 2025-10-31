@@ -134,4 +134,4 @@ Upload to your chosen platform with appropriate description and hashtags
 **Website**: www.housesoftutors.com
 
 ---
-**Last Updated**: October 2025 | **Videos**: 15 total | **Formats**: 3 aspect ratios
+**Last Updated**: October 2025 | **Videos**: 18 total | **Formats**: 3 aspect ratios
