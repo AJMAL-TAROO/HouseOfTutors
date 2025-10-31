@@ -7,31 +7,36 @@ This folder contains professionally generated marketing videos for the House of 
 
 ```
 video/generated/
-├── main/                          # Main marketing videos (30-60 seconds)
+├── main/                          # Main marketing videos (31 seconds)
 │   ├── main_video_landscape.mp4   # 16:9 - YouTube, Website, LinkedIn
 │   ├── main_video_square.mp4      # 1:1 - Instagram Feed, Facebook
 │   └── main_video_vertical.mp4    # 9:16 - Stories, Reels, TikTok
 │
-└── features/                      # Feature-specific videos (12 seconds each)
-    ├── student_dashboard/
-    │   ├── student_dashboard_landscape.mp4
-    │   ├── student_dashboard_square.mp4
-    │   └── student_dashboard_vertical.mp4
-    │
-    ├── virtual_classroom/
-    │   ├── virtual_classroom_landscape.mp4
-    │   ├── virtual_classroom_square.mp4
-    │   └── virtual_classroom_vertical.mp4
-    │
-    ├── whiteboard/
-    │   ├── whiteboard_landscape.mp4
-    │   ├── whiteboard_square.mp4
-    │   └── whiteboard_vertical.mp4
-    │
-    └── admin_management/
-        ├── admin_management_landscape.mp4
-        ├── admin_management_square.mp4
-        └── admin_management_vertical.mp4
+├── features/                      # Feature-specific videos (12 seconds each)
+│   ├── student_dashboard/
+│   │   ├── student_dashboard_landscape.mp4
+│   │   ├── student_dashboard_square.mp4
+│   │   └── student_dashboard_vertical.mp4
+│   │
+│   ├── virtual_classroom/
+│   │   ├── virtual_classroom_landscape.mp4
+│   │   ├── virtual_classroom_square.mp4
+│   │   └── virtual_classroom_vertical.mp4
+│   │
+│   ├── whiteboard/
+│   │   ├── whiteboard_landscape.mp4
+│   │   ├── whiteboard_square.mp4
+│   │   └── whiteboard_vertical.mp4
+│   │
+│   └── admin_management/
+│       ├── admin_management_landscape.mp4
+│       ├── admin_management_square.mp4
+│       └── admin_management_vertical.mp4
+│
+└── teasers/                       # Teaser videos (15 seconds each)
+    ├── teaser_landscape.mp4       # 16:9 - YouTube, Website, LinkedIn
+    ├── teaser_square.mp4          # 1:1 - Instagram Feed, Facebook
+    └── teaser_vertical.mp4        # 9:16 - Stories, Reels, TikTok
 ```
 
 ## 🎬 Video Catalog
@@ -115,6 +120,23 @@ All feature videos are approximately 12 seconds long and available in three form
   - Student management tools
   - Easy classroom creation
   - Activity monitoring and tracking
+
+### Teaser Videos
+
+All teaser videos are approximately 15 seconds long and available in three formats (landscape, square, vertical).
+
+#### Quick Promotional Teasers
+- **Focus**: Fast, engaging introduction to the platform
+- **Key Messages**:
+  - House of Tutors brand introduction
+  - Live classes with expert tutors
+  - Interactive tools overview
+  - Clear call-to-action (housesoftutors.com)
+- **Best For**: 
+  - Social media ads
+  - Retargeting campaigns
+  - Quick promotional posts
+  - YouTube pre-roll ads
 
 ## 🎯 Usage Guidelines
 
@@ -371,5 +393,5 @@ All videos in this folder are property of House of Tutors and are intended for o
 
 **Generated**: October 2025  
 **Version**: 1.0  
-**Total Videos**: 15 (3 main + 12 feature-specific)  
+**Total Videos**: 18 (3 main + 12 feature-specific + 3 teasers)  
 **Total Formats**: 3 (Landscape, Square, Vertical)
