@@ -1,0 +1,36 @@
+# robots.txt for House of Tutors - www.housesoftutors.com
+
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow admin and login pages from search engine indexing
+Disallow: /LoginAdmin.html
+Disallow: /DashboardAdmin.html
+Disallow: /CreateStudent.html
+Disallow: /CreateClassroom.html
+Disallow: /AddStudentToClassroom.html
+Disallow: /RemoveStudentFromClassroom.html
+Disallow: /ModifyStudentDetails.html
+Disallow: /StudentAttendance.html
+Disallow: /AddFeedbackToStudent.html
+Disallow: /AddSessionForTimetable.html
+Disallow: /DeleteSessionFromTimetable.html
+Disallow: /AddCommentToClassroom.html
+Disallow: /ClassroomCommentAdmin.html
+Disallow: /LoadNotesAdmin.html
+Disallow: /UploadNotes.html
+Disallow: /test_*.html
+
+# Disallow private student areas
+Disallow: /Dashboard.html
+Disallow: /StudentProfile.html
+Disallow: /MyTimeTable.html
+Disallow: /OnlineClass.html
+Disallow: /Whiteboard.html
+Disallow: /ClassroomCommentForStudent.html
+Disallow: /LoadNotes.html
+Disallow: /PdfViewer.html
+
+# Sitemap location
+Sitemap: https://www.housesoftutors.com/sitemap.xml
