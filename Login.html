@@ -153,18 +153,172 @@
     </section>
 
     <!-- Sign Up Modal -->
-    <div id="signUpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
-            <h2 class="text-xl font-bold mb-4 dark:text-white">Contact Information</h2>
+    <div id="signUpModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-2xl w-full mx-4 my-8">
+            <h2 class="text-xl font-bold mb-4 dark:text-white">Sign Up</h2>
             <div id="studentSignupInfo">
                 <p class="dark:text-gray-300">You need to contact your teacher to get your login credentials.</p>
+                <button id="closeStudentModalBtn" class="mt-4 w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                    Close
+                </button>
             </div>
             <div id="adminSignupInfo" class="hidden">
-                <p class="dark:text-gray-300">To create an admin account, please contact:</p>
-                <p class="mt-2 dark:text-gray-300"><strong>Mr. Mohamade Ajmal Taroo</strong></p>
-                <p class="dark:text-gray-300">Phone: 57882383</p>
+                <form id="adminSignupForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="adminEmail" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Email *</label>
+                            <input type="email" id="adminEmail" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label for="adminPhone" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Phone Number *</label>
+                            <input type="tel" id="adminPhone" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="12345678">
+                        </div>
+                        <div>
+                            <label for="adminFirstName" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">First Name *</label>
+                            <input type="text" id="adminFirstName" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="John">
+                        </div>
+                        <div>
+                            <label for="adminLastName" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Last Name *</label>
+                            <input type="text" id="adminLastName" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Doe">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Subjects to Teach (Select up to 3) *</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <select id="subject1" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Subject 1</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                                <option value="English">English</option>
+                                <option value="French">French</option>
+                                <option value="History">History</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Business Studies">Business Studies</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Art and Design">Art and Design</option>
+                                <option value="Music">Music</option>
+                            </select>
+                            <select id="subject2"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Subject 2</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                                <option value="English">English</option>
+                                <option value="French">French</option>
+                                <option value="History">History</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Business Studies">Business Studies</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Art and Design">Art and Design</option>
+                                <option value="Music">Music</option>
+                            </select>
+                            <select id="subject3"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Subject 3</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                                <option value="English">English</option>
+                                <option value="French">French</option>
+                                <option value="History">History</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Business Studies">Business Studies</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Art and Design">Art and Design</option>
+                                <option value="Music">Music</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="adminFees" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Fees (per hour) *</label>
+                            <input type="number" id="adminFees" required min="0" step="0.01"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="500">
+                        </div>
+                        <div>
+                            <label for="adminPassword" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Password *</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="adminPassword" readonly required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <button type="button" id="generatePasswordBtn"
+                                    class="gradient-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all whitespace-nowrap">
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="adminBio" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Bio (max 25 characters) *</label>
+                        <input type="text" id="adminBio" required maxlength="25"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="Experienced math teacher">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="bioCharCount">0/25 characters</p>
+                    </div>
+                    
+                    <div>
+                        <label for="adminReason" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Reason to Join (min 15 characters) *</label>
+                        <textarea id="adminReason" required rows="3"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="I am passionate about teaching and want to help students succeed..."></textarea>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="reasonCharCount">0 characters (minimum 15)</p>
+                    </div>
+                    
+                    <div>
+                        <label for="adminProfilePic" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Profile Picture *</label>
+                        <input type="file" id="adminProfilePic" required accept="image/*"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 p-2.5">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload a professional profile picture</p>
+                    </div>
+                    
+                    <div id="signupError" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
+                        <p class="text-sm text-red-800 dark:text-red-200" id="signupErrorText"></p>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" id="closeAdminModalBtn"
+                            class="w-full bg-gray-500 text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                            Cancel
+                        </button>
+                        <button type="submit" id="createProfileBtn"
+                            class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                            Create Profile
+                        </button>
+                    </div>
+                </form>
             </div>
-            <button id="closeModalBtn" class="mt-4 w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
+            <h2 class="text-xl font-bold mb-4 text-green-600 dark:text-green-400">Profile Submitted!</h2>
+            <p class="dark:text-gray-300 mb-4">Thank you for your interest! Your profile has been submitted and is pending approval. You will be contacted once your profile is approved.</p>
+            <button id="closeSuccessModalBtn" class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
                 Close
             </button>
         </div>
@@ -174,7 +328,8 @@
         //------------------------------------------FIREBASE INITIALIZATION PROCESS-----------------------
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-storage.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -191,6 +346,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const storage = getStorage(app);
 
         //------------------------------------------ROLE TOGGLE HANDLING-----------------------
         const studentRoleRadio = document.getElementById('studentRole');
@@ -310,7 +466,11 @@
             document.getElementById('signUpModal').classList.remove('hidden');
         });
 
-        document.getElementById('closeModalBtn').addEventListener('click', () => {
+        document.getElementById('closeStudentModalBtn').addEventListener('click', () => {
+            document.getElementById('signUpModal').classList.add('hidden');
+        });
+
+        document.getElementById('closeAdminModalBtn').addEventListener('click', () => {
             document.getElementById('signUpModal').classList.add('hidden');
         });
 
@@ -319,6 +479,158 @@
             if (e.target.id === 'signUpModal') {
                 document.getElementById('signUpModal').classList.add('hidden');
             }
+        });
+
+        //------------------------------------------ADMIN SIGNUP FUNCTIONALITY-----------------------
+        // Generate password for admin
+        document.getElementById('generatePasswordBtn').addEventListener('click', () => {
+            const password = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('adminPassword').value = password;
+        });
+
+        // Bio character counter
+        document.getElementById('adminBio').addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            document.getElementById('bioCharCount').textContent = `${length}/25 characters`;
+        });
+
+        // Reason character counter
+        document.getElementById('adminReason').addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            const minLength = 15;
+            const counter = document.getElementById('reasonCharCount');
+            if (length < minLength) {
+                counter.textContent = `${length} characters (minimum ${minLength})`;
+                counter.classList.add('text-red-500');
+                counter.classList.remove('text-gray-500');
+            } else {
+                counter.textContent = `${length} characters`;
+                counter.classList.remove('text-red-500');
+                counter.classList.add('text-gray-500');
+            }
+        });
+
+        // Show signup error
+        function showSignupError(message) {
+            document.getElementById('signupErrorText').textContent = message;
+            document.getElementById('signupError').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('signupError').classList.add('hidden');
+            }, 5000);
+        }
+
+        // Admin signup form submission
+        document.getElementById('adminSignupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const email = document.getElementById('adminEmail').value.trim();
+            const phone = document.getElementById('adminPhone').value.trim();
+            const firstName = document.getElementById('adminFirstName').value.trim();
+            const lastName = document.getElementById('adminLastName').value.trim();
+            const subject1 = document.getElementById('subject1').value;
+            const subject2 = document.getElementById('subject2').value;
+            const subject3 = document.getElementById('subject3').value;
+            const fees = document.getElementById('adminFees').value;
+            const bio = document.getElementById('adminBio').value.trim();
+            const reason = document.getElementById('adminReason').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const profilePicFile = document.getElementById('adminProfilePic').files[0];
+            
+            // Validation
+            if (!email || !phone || !firstName || !lastName || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
+                showSignupError('Please fill in all required fields');
+                return;
+            }
+            
+            if (reason.length < 15) {
+                showSignupError('Reason must be at least 15 characters long');
+                return;
+            }
+            
+            // Build subjects array
+            const subjects = [subject1];
+            if (subject2) subjects.push(subject2);
+            if (subject3) subjects.push(subject3);
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('createProfileBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Profile...';
+            
+            try {
+                // Check if email already exists
+                const adminRef = ref(database, "ADMIN");
+                const adminSnapshot = await get(adminRef);
+                if (adminSnapshot.exists()) {
+                    const admins = adminSnapshot.val();
+                    for (const key in admins) {
+                        if (admins[key].EMAIL === email) {
+                            showSignupError('An account with this email already exists');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Create Profile';
+                            return;
+                        }
+                    }
+                }
+                
+                // Get next admin ID
+                const adminIdRef = ref(database, "NUMBERS/ID_ADMIN/NUMBER");
+                const adminIdSnapshot = await get(adminIdRef);
+                let adminId = adminIdSnapshot.exists() ? adminIdSnapshot.val() : 1;
+                
+                // Upload profile picture to Firebase Storage
+                const profilePicPath = `profile_pictures/ADMIN_${adminId}/${profilePicFile.name}`;
+                const profilePicRef = storageRef(storage, profilePicPath);
+                await uploadBytes(profilePicRef, profilePicFile);
+                const profilePicUrl = await getDownloadURL(profilePicRef);
+                
+                // Create admin data object
+                const fullName = `${firstName} ${lastName}`;
+                const adminData = {
+                    EMAIL: email,
+                    FULL_NAME: fullName,
+                    TEL: phone,
+                    PASSWORD: password,
+                    SUBJECTS: subjects.join(','),
+                    FEES: parseFloat(fees),
+                    BIO: bio,
+                    REASON: reason,
+                    PROFILE_LINK: profilePicUrl,
+                    VIRTUAL_ROOMS: " ",
+                    VR_LINK: " ",
+                    WHITEBOARD: " ",
+                    WALLPAPER: "img/wallpapers/wallpaper2.png",
+                    STUDENTS: "",
+                    APPROVAL: "pending"
+                };
+                
+                // Save admin data to Firebase
+                await set(ref(database, `ADMIN/ADMIN_${adminId}`), adminData);
+                
+                // Increment admin ID
+                await set(adminIdRef, adminId + 1);
+                
+                // Close signup modal and show success modal
+                document.getElementById('signUpModal').classList.add('hidden');
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Reset form
+                document.getElementById('adminSignupForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Profile';
+                
+            } catch (error) {
+                console.error('Error creating admin profile:', error);
+                showSignupError('An error occurred while creating your profile. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Profile';
+            }
+        });
+
+        // Success modal close button
+        document.getElementById('closeSuccessModalBtn').addEventListener('click', () => {
+            document.getElementById('successModal').classList.add('hidden');
         });
 
         // Allow Enter key to submit login
