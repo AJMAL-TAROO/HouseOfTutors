@@ -148,7 +148,7 @@
             const result = await SearchEmailAndPassword(loginEmail);
 
             if (result.exists) {
-                if (result.password === loginPassword) {
+                if (String(result.password) === String(loginPassword)) {
                     localStorage.setItem('student_email', loginEmail); // Store the email in local storage
                     window.location.replace("Dashboard.html");
                 } else {

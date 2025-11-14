@@ -398,7 +398,7 @@
             const result = await SearchEmailAndPassword(loginEmail, currentRole);
 
             if (result.exists) {
-                if (result.password === loginPassword) {
+                if (String(result.password) === String(loginPassword)) {
                     // Role-specific redirection
                     if (currentRole === 'student') {
                         localStorage.setItem('student_email', loginEmail);
