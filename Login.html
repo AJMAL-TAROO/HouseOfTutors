@@ -292,9 +292,9 @@
                     
                     <div>
                         <label for="adminProfilePic" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Profile Picture *</label>
-                        <input type="file" id="adminProfilePic" required accept="image/*"
+                        <input type="file" id="adminProfilePic" required accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 p-2.5">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload a professional profile picture</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload a professional profile picture (max 5MB, JPEG/PNG/GIF/WebP)</p>
                     </div>
                     
                     <div id="signupError" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
@@ -548,6 +548,20 @@
             
             if (reason.length < 15) {
                 showSignupError('Reason must be at least 15 characters long');
+                return;
+            }
+            
+            // Validate profile picture file
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            
+            if (profilePicFile.size > maxFileSize) {
+                showSignupError('Profile picture must be less than 5MB');
+                return;
+            }
+            
+            if (!allowedTypes.includes(profilePicFile.type)) {
+                showSignupError('Profile picture must be a valid image file (JPEG, PNG, GIF, or WebP)');
                 return;
             }
             
