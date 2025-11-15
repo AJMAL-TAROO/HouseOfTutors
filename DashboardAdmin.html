@@ -699,6 +699,12 @@
         };
 
         window.openModal = async function (url, classroomId, classroomTitle) {
+            // Validate VR link before opening
+            if (!url || url.trim() === '' || url.trim() === '#') {
+                alert('VR Link is not configured for this classroom. Please set up the VR link in your admin profile first.');
+                return;
+            }
+            
             // Log the VR classroom join action
             const adminEmail = localStorage.getItem('userEmail');
             if (adminEmail) {

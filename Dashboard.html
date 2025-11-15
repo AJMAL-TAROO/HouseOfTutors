@@ -272,6 +272,12 @@
         };
 
         window.openModal = function(url) {
+            // Validate VR link before opening
+            if (!url || url.trim() === '' || url.trim() === '#') {
+                alert('VR Link is not configured for this classroom. Please contact your administrator.');
+                return;
+            }
+            
             document.getElementById('vrIframe').src = url;
             document.getElementById('vrModal').classList.add('modal-open');
         };
