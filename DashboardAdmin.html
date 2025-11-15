@@ -564,9 +564,11 @@
                 if (snapshot.exists()) {
                     const admins = snapshot.val();
                     let virtualRooms = [];
+                    let adminVrLink = '';
                     for (const key in admins) {
                         if (admins[key].EMAIL === email) {
                             virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            adminVrLink = admins[key].VR_LINK || '';
                             break;
                         }
                     }
@@ -589,9 +591,8 @@
                         // Iterate over classrooms and filter by allowed IDs
                         Object.values(classrooms).forEach((classroom) => {
                             if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
-                                // Generate the VR link dynamically
-                                const classroomLinkKey = `VR_LINK`;
-                                const classroomLink = classroom[classroomLinkKey] || "#";
+                                // Use admin's VR_LINK instead of classroom's VR_LINK
+                                const classroomLink = adminVrLink || "#";
                                 // Create the card
                                 const card = document.createElement("div");
                                 card.className = "card bg-purple-800 text-white w-full sm:w-96 h-auto sm:h-64 shadow-lg cursor-pointer"; // Adjust width and height for responsiveness
