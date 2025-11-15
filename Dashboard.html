@@ -226,16 +226,39 @@
                     const card = document.createElement("div");
                     card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
                     card.innerHTML = `
-                        <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentForStudent(${classroom.CLASSROOM_ID})">
+                        <div class="card-body flex flex-col justify-between">
                             <h1 class="card-title text-3xl">${classroom.TITLE}</h1>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); openModal('${classroomLink}')">Join VR Class</button>
+                                <button class="btn btn-outline text-white border-white join-vr-btn">Join VR Class</button>
                             </div>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>
+                                <button class="btn btn-outline text-white border-white view-notes-btn">View Notes</button>
                             </div>
                         </div>
                     `;
+                    
+                    // Add event listeners after creating the card
+                    const cardBody = card.querySelector('.card-body');
+                    const joinVrBtn = card.querySelector('.join-vr-btn');
+                    const viewNotesBtn = card.querySelector('.view-notes-btn');
+                    
+                    // Card body click - redirect to comments
+                    cardBody.addEventListener('click', () => {
+                        redirectToClassroomCommentForStudent(classroom.CLASSROOM_ID);
+                    });
+                    
+                    // Join VR button - prevent propagation and open modal
+                    joinVrBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openModal(classroomLink);
+                    });
+                    
+                    // View Notes button - prevent propagation and store folder
+                    viewNotesBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        storeStorageFolder(classroom.STORAGE_FOLDER);
+                    });
+                    
                     classroomContainer.appendChild(card);
                 }
             });
