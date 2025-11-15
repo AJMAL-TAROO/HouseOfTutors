@@ -107,7 +107,7 @@
             const result = await SearchEmailAndPassword(loginEmail);
 
             if (result.exists) {
-                if (result.password === loginPassword) {
+                if (String(result.password) === String(loginPassword)) {
                     await saveUserEmail(loginEmail); // Save email to local storage
                     window.location.replace("DashboardAdmin.html");
                 } else {
