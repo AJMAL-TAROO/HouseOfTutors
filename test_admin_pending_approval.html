@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pending Approval Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: #6366f1;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .test-result.pass {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .test-result.fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        .test-result.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4f46e5;
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Admin Pending Approval Feature Test</h1>
+            <p>Test the admin pending approval overlay functionality</p>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Setup</h3>
+            <p>This test page allows you to simulate logging in with different approval statuses.</p>
+            <div id="setupResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 1: Simulate Pending Approval Status</h3>
+            <p>Click the button below to set approval status to "pending" and navigate to the admin dashboard.</p>
+            <button onclick="testPendingStatus()">Test Pending Status</button>
+            <div id="test1Results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 2: Simulate Approved Status</h3>
+            <p>Click the button below to set approval status to "approved" and navigate to the admin dashboard.</p>
+            <button onclick="testApprovedStatus()">Test Approved Status</button>
+            <div id="test2Results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 3: Manual Testing</h3>
+            <div class="input-group">
+                <label>Email:</label>
+                <input type="email" id="testEmail" value="test@example.com">
+            </div>
+            <div class="input-group">
+                <label>Approval Status:</label>
+                <select id="approvalStatus" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="pending">pending</option>
+                    <option value="approved">approved</option>
+                </select>
+            </div>
+            <button onclick="testManual()">Set and Navigate</button>
+            <div id="test3Results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Current LocalStorage Status</h3>
+            <button onclick="checkLocalStorage()">Check LocalStorage</button>
+            <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+            <div id="storageResults"></div>
+        </div>
+    </div>
+
+    <script>
+        function addResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            const result = document.createElement('div');
+            result.className = `test-result ${type}`;
+            result.textContent = message;
+            element.appendChild(result);
+        }
+
+        function clearResults(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        function testPendingStatus() {
+            clearResults('test1Results');
+            
+            // Set up localStorage with pending status
+            localStorage.setItem('userEmail', 'pending.admin@test.com');
+            localStorage.setItem('adminApproval', 'pending');
+            localStorage.setItem('VIRTUAL_ROOMS', '1001,1002');
+            
+            addResult('test1Results', '✓ Set adminApproval to "pending"', 'pass');
+            addResult('test1Results', '✓ Set userEmail to pending.admin@test.com', 'pass');
+            addResult('test1Results', 'ℹ Redirecting to DashboardAdmin.html in 2 seconds...', 'info');
+            
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 2000);
+        }
+
+        function testApprovedStatus() {
+            clearResults('test2Results');
+            
+            // Set up localStorage with approved status
+            localStorage.setItem('userEmail', 'approved.admin@test.com');
+            localStorage.setItem('adminApproval', 'approved');
+            localStorage.setItem('VIRTUAL_ROOMS', '1001,1002');
+            
+            addResult('test2Results', '✓ Set adminApproval to "approved"', 'pass');
+            addResult('test2Results', '✓ Set userEmail to approved.admin@test.com', 'pass');
+            addResult('test2Results', 'ℹ Redirecting to DashboardAdmin.html in 2 seconds...', 'info');
+            
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 2000);
+        }
+
+        function testManual() {
+            clearResults('test3Results');
+            
+            const email = document.getElementById('testEmail').value;
+            const approval = document.getElementById('approvalStatus').value;
+            
+            if (!email) {
+                addResult('test3Results', '✗ Please enter an email', 'fail');
+                return;
+            }
+            
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('adminApproval', approval);
+            localStorage.setItem('VIRTUAL_ROOMS', '1001,1002');
+            
+            addResult('test3Results', `✓ Set userEmail to ${email}`, 'pass');
+            addResult('test3Results', `✓ Set adminApproval to "${approval}"`, 'pass');
+            addResult('test3Results', 'ℹ Redirecting to DashboardAdmin.html in 2 seconds...', 'info');
+            
+            setTimeout(() => {
+                window.location.href = 'DashboardAdmin.html';
+            }, 2000);
+        }
+
+        function checkLocalStorage() {
+            clearResults('storageResults');
+            
+            const email = localStorage.getItem('userEmail');
+            const approval = localStorage.getItem('adminApproval');
+            const rooms = localStorage.getItem('VIRTUAL_ROOMS');
+            
+            addResult('storageResults', `userEmail: ${email || 'Not set'}`, 'info');
+            addResult('storageResults', `adminApproval: ${approval || 'Not set'}`, 'info');
+            addResult('storageResults', `VIRTUAL_ROOMS: ${rooms || 'Not set'}`, 'info');
+        }
+
+        function clearLocalStorage() {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('adminApproval');
+            localStorage.removeItem('VIRTUAL_ROOMS');
+            
+            clearResults('storageResults');
+            addResult('storageResults', '✓ LocalStorage cleared', 'pass');
+        }
+
+        // Initial check
+        window.onload = function() {
+            addResult('setupResults', '✓ Test page loaded successfully', 'pass');
+            addResult('setupResults', 'ℹ Ready to test pending approval functionality', 'info');
+        };
+    </script>
+</body>
+</html>

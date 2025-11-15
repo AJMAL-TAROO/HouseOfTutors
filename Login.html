@@ -408,6 +408,7 @@
                     } else {
                         localStorage.setItem('userEmail', loginEmail);
                         localStorage.setItem('VIRTUAL_ROOMS', result.virtualRooms || '');
+                        localStorage.setItem('adminApproval', result.approval || 'approved');
                         window.location.replace("DashboardAdmin.html");
                     }
                 } else {
@@ -436,7 +437,8 @@
                                         exists: true,
                                         password: users[key].PASSWORD,
                                         virtualRooms: users[key].VIRTUAL_ROOMS || '',
-                                        key: key
+                                        key: key,
+                                        approval: users[key].APPROVAL || 'approved'
                                     });
                                     return;
                                 }

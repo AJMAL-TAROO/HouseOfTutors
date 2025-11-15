@@ -47,6 +47,21 @@
 </head>
 
 <body style="padding: 10px;">
+    <!-- Pending Approval Overlay -->
+    <div id="pendingApprovalOverlay" class="hidden fixed inset-0 bg-white bg-opacity-80 backdrop-blur-sm z-[9999] flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 border-2 border-purple-300">
+            <div class="text-center">
+                <svg class="mx-auto h-16 w-16 text-yellow-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Approval Pending</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Account's approval is still pending. When approved, you will be contacted. Thank you.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="drawer h-full">
         <input id="my-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
@@ -292,6 +307,38 @@
 
         // Retrieve the email from local storage
         const email = localStorage.getItem('userEmail');
+
+        // Check approval status and show overlay if pending
+        const approvalStatus = localStorage.getItem('adminApproval');
+        if (approvalStatus === 'pending') {
+            // Show the pending approval overlay
+            document.getElementById('pendingApprovalOverlay').classList.remove('hidden');
+            
+            // Disable drawer toggle
+            const drawerToggle = document.getElementById('my-drawer');
+            if (drawerToggle) {
+                drawerToggle.disabled = true;
+            }
+            
+            // Disable all interactive elements
+            const drawerButtons = document.querySelectorAll('.drawer-button');
+            drawerButtons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.5';
+            });
+            
+            // Disable navbar buttons
+            const navbarButtons = document.querySelectorAll('.navbar button');
+            navbarButtons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.5';
+            });
+            
+            // Prevent all clicks on the page
+            document.body.style.pointerEvents = 'none';
+            // But allow pointer events on the overlay itself
+            document.getElementById('pendingApprovalOverlay').style.pointerEvents = 'auto';
+        }
 
         // Function to capture and log admin dashboard information
         async function captureAdminLogs(adminEmail, adminKey, showModal = false) {
