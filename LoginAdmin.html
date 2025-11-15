@@ -109,6 +109,7 @@
             if (result.exists) {
                 if (String(result.password) === String(loginPassword)) {
                     await saveUserEmail(loginEmail); // Save email to local storage
+                    localStorage.setItem('adminApproval', result.approval || 'approved');
                     window.location.replace("DashboardAdmin.html");
                 } else {
                     alert("Incorrect password.");
@@ -139,6 +140,7 @@
                                     resolve({
                                         exists: true,
                                         password: students[key].PASSWORD,
+                                        approval: students[key].APPROVAL || 'approved'
                                     });
                                     var virtual_rooms = students[key].VIRTUAL_ROOMS;
                                     localStorage.setItem("VIRTUAL_ROOMS", virtual_rooms);
