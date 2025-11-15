@@ -37,8 +37,23 @@
         const urlParams = new URLSearchParams(window.location.search);
         const vrLink = urlParams.get('vrLink');
 
-        // Set the iframe source to the VR link
-        document.getElementById('vrIframe').src = vrLink;
+        // Validate and set the iframe source to the VR link
+        if (vrLink && vrLink.trim() !== '' && vrLink.trim() !== '#') {
+            document.getElementById('vrIframe').src = vrLink;
+        } else {
+            // Show error message if VR link is invalid
+            document.body.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; flex-direction: column; padding: 20px;">
+                    <h1 style="color: #e74c3c; margin-bottom: 20px;">Invalid VR Link</h1>
+                    <p style="color: #555; text-align: center; max-width: 600px;">
+                        The VR classroom link is not configured properly. Please contact your administrator to set up the VR link for this classroom.
+                    </p>
+                    <button onclick="window.close()" style="margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                        Close Window
+                    </button>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>

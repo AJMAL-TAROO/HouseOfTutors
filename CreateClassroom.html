@@ -146,6 +146,18 @@
                 return;
             }
 
+            // Validate admin VR_LINK before creating classroom
+            if (!adminVrLink || adminVrLink.trim() === '' || adminVrLink.trim() === '#') {
+                nativeToast({
+                    message: 'Your VR Link is not configured. Please set up your VR Link in your admin profile before creating a classroom.',
+                    position: 'center',
+                    rounded: true,
+                    timeout: 3000,
+                    type: 'error'
+                });
+                return;
+            }
+
             // Always use admin's VR_LINK
             const classroomData = {
                 CLASSROOM_ID: classroomId,
