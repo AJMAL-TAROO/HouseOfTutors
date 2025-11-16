@@ -743,12 +743,11 @@
                 const profilePicPath = `profile_pictures/ADMIN_${adminId}/${sanitizedFileName}`;
                 const profilePicRef = storageRef(storage, profilePicPath);
                 
+                var profilePicUrlToSave;
                 try {
                     await uploadBytes(profilePicRef, profilePicFile);
                     const profilePicUrl = await getDownloadURL(profilePicRef);
-                    submitBtn.textContent = 'Saving profile...';
-                    
-                    var profilePicUrlToSave = profilePicUrl;
+                    profilePicUrlToSave = profilePicUrl;
                 } catch (uploadError) {
                     console.error('Error uploading profile picture:', uploadError);
                     showSignupError('Failed to upload profile picture. Please try again with a different image or check your internet connection.');
@@ -756,6 +755,9 @@
                     submitBtn.textContent = 'Create Profile';
                     return;
                 }
+                
+                // Update button text after successful upload
+                submitBtn.textContent = 'Saving profile...';
                 
                 // Create admin data object
                 const fullName = `${firstName} ${lastName}`;
