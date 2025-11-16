@@ -657,12 +657,19 @@
                 return;
             }
             
-            // Check if user selected primary or tertiary level without students
-            const levels = [];
-            if (level1) levels.push(level1);
-            if (subject2 && level2) levels.push(level2);
-            if (subject3 && level3) levels.push(level3);
+            // Build subjects array and levels array
+            const subjects = [subject1];
+            const levels = [level1];
+            if (subject2) {
+                subjects.push(subject2);
+                levels.push(level2);
+            }
+            if (subject3) {
+                subjects.push(subject3);
+                levels.push(level3);
+            }
             
+            // Check if user selected primary or tertiary level without students
             const hasPrimaryOrTertiary = levels.some(level => level === 'primary' || level === 'tertiary');
             const hasNoStudents = haveStudents === 'no';
             
@@ -694,18 +701,6 @@
             if (!allowedTypes.includes(profilePicFile.type)) {
                 showSignupError('Profile picture must be a valid image file (JPEG, PNG, GIF, or WebP)');
                 return;
-            }
-            
-            // Build subjects array and levels array
-            const subjects = [subject1];
-            const levels = [level1];
-            if (subject2) {
-                subjects.push(subject2);
-                levels.push(level2);
-            }
-            if (subject3) {
-                subjects.push(subject3);
-                levels.push(level3);
             }
             
             // Disable submit button
