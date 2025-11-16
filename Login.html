@@ -217,100 +217,32 @@
                     </div>
                     
                     <div>
+                        <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Select Teaching Level *</label>
+                        <select id="teachingLevel" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white mb-4">
+                            <option value="">Select Level</option>
+                            <option value="primary">Primary</option>
+                            <option value="secondary">Secondary</option>
+                            <option value="tertiary">Tertiary</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+
+                    <div id="subjectsContainer">
                         <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Subjects to Teach (Select up to 3) *</label>
-                        <div class="space-y-4">
-                            <!-- Subject 1 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <select id="subject1" required
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Subject 1</option>
-                                    <option value="Mathematics">Mathematics</option>
-                                    <option value="Physics">Physics</option>
-                                    <option value="Chemistry">Chemistry</option>
-                                    <option value="Biology">Biology</option>
-                                    <option value="English">English</option>
-                                    <option value="French">French</option>
-                                    <option value="History">History</option>
-                                    <option value="Geography">Geography</option>
-                                    <option value="Economics">Economics</option>
-                                    <option value="Accounting">Accounting</option>
-                                    <option value="Business Studies">Business Studies</option>
-                                    <option value="Computer Science">Computer Science</option>
-                                    <option value="Art and Design">Art and Design</option>
-                                    <option value="Arabic">Arabic</option>
-                                    <option value="Music">Music</option>
-                                </select>
-                                <select id="level1" required
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Level</option>
-                                    <option value="primary">Primary</option>
-                                    <option value="secondary">Secondary</option>
-                                    <option value="tertiary">Tertiary</option>
-                                    <option value="others">Others</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Subject 2 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <select id="subject2"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Subject 2 (Optional)</option>
-                                    <option value="Mathematics">Mathematics</option>
-                                    <option value="Physics">Physics</option>
-                                    <option value="Chemistry">Chemistry</option>
-                                    <option value="Biology">Biology</option>
-                                    <option value="English">English</option>
-                                    <option value="French">French</option>
-                                    <option value="History">History</option>
-                                    <option value="Geography">Geography</option>
-                                    <option value="Economics">Economics</option>
-                                    <option value="Accounting">Accounting</option>
-                                    <option value="Business Studies">Business Studies</option>
-                                    <option value="Computer Science">Computer Science</option>
-                                    <option value="Art and Design">Art and Design</option>
-                                    <option value="Arabic">Arabic</option>
-                                    <option value="Music">Music</option>
-                                </select>
-                                <select id="level2"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Level</option>
-                                    <option value="primary">Primary</option>
-                                    <option value="secondary">Secondary</option>
-                                    <option value="tertiary">Tertiary</option>
-                                    <option value="others">Others</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Subject 3 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <select id="subject3"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Subject 3 (Optional)</option>
-                                    <option value="Mathematics">Mathematics</option>
-                                    <option value="Physics">Physics</option>
-                                    <option value="Chemistry">Chemistry</option>
-                                    <option value="Biology">Biology</option>
-                                    <option value="English">English</option>
-                                    <option value="French">French</option>
-                                    <option value="History">History</option>
-                                    <option value="Geography">Geography</option>
-                                    <option value="Economics">Economics</option>
-                                    <option value="Accounting">Accounting</option>
-                                    <option value="Business Studies">Business Studies</option>
-                                    <option value="Computer Science">Computer Science</option>
-                                    <option value="Art and Design">Art and Design</option>
-                                    <option value="Arabic">Arabic</option>
-                                    <option value="Music">Music</option>
-                                </select>
-                                <select id="level3"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                    <option value="">Select Level</option>
-                                    <option value="primary">Primary</option>
-                                    <option value="secondary">Secondary</option>
-                                    <option value="tertiary">Tertiary</option>
-                                    <option value="others">Others</option>
-                                </select>
-                            </div>
+                        <div class="space-y-2">
+                            <select id="subject1" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">First, select a teaching level above</option>
+                            </select>
+                            <select id="subject2"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Subject 2 (Optional)</option>
+                            </select>
+                            <select id="subject3"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select Subject 3 (Optional)</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -387,11 +319,11 @@
         </div>
     </div>
 
-    <!-- Warning Modal for Primary/Tertiary Level -->
+    <!-- Warning Modal for Non-Secondary Level -->
     <div id="warningModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
             <h2 class="text-xl font-bold mb-4 text-yellow-600 dark:text-yellow-400">Platform Notice</h2>
-            <p class="dark:text-gray-300 mb-4">Our platform currently only provides students at the secondary level. You have selected primary or tertiary level teaching without existing students.</p>
+            <p class="dark:text-gray-300 mb-4">Our platform currently only provides students at the secondary level. You have selected a non-secondary level without existing students.</p>
             <button id="closeWarningModalBtn" class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
                 Understood
             </button>
@@ -596,6 +528,81 @@
             }
         });
 
+        // Define available subjects for each level
+        const subjectsByLevel = {
+            primary: [
+                'Mathematics', 'English', 'Science', 'History', 'Geography',
+                'Art and Design', 'Music', 'Physical Education'
+            ],
+            secondary: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'French', 'History', 'Geography', 'Economics', 'Accounting',
+                'Business Studies', 'Computer Science', 'Art and Design',
+                'Arabic', 'Music'
+            ],
+            tertiary: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'Computer Science', 'Economics', 'Accounting', 'Business Studies',
+                'Engineering', 'Medicine', 'Law'
+            ],
+            others: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'French', 'History', 'Geography', 'Economics', 'Accounting',
+                'Business Studies', 'Computer Science', 'Art and Design',
+                'Arabic', 'Music'
+            ]
+        };
+
+        // Handle teaching level change
+        document.getElementById('teachingLevel').addEventListener('change', (e) => {
+            const level = e.target.value;
+            const subject1 = document.getElementById('subject1');
+            const subject2 = document.getElementById('subject2');
+            const subject3 = document.getElementById('subject3');
+            
+            // Clear all subject dropdowns
+            [subject1, subject2, subject3].forEach(select => {
+                select.innerHTML = '';
+            });
+            
+            if (!level) {
+                subject1.innerHTML = '<option value="">First, select a teaching level above</option>';
+                subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+                subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+                return;
+            }
+            
+            // Get subjects for selected level
+            const subjects = subjectsByLevel[level] || [];
+            
+            // Populate subject1 (required)
+            subject1.innerHTML = '<option value="">Select Subject 1</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject1.appendChild(option);
+            });
+            
+            // Populate subject2 (optional)
+            subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject2.appendChild(option);
+            });
+            
+            // Populate subject3 (optional)
+            subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject3.appendChild(option);
+            });
+        });
+
         // Handle "Have Students" radio button change
         document.getElementById('haveStudentsYes').addEventListener('change', () => {
             document.getElementById('numStudentsContainer').classList.remove('hidden');
@@ -611,6 +618,8 @@
         // Warning modal close button
         document.getElementById('closeWarningModalBtn').addEventListener('click', () => {
             document.getElementById('warningModal').classList.add('hidden');
+            // Store that user has seen the warning
+            localStorage.setItem('platformWarningShown', 'true');
         });
 
         // Show signup error
@@ -633,12 +642,10 @@
             const lastName = document.getElementById('adminLastName').value.trim();
             const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
             const numStudents = document.getElementById('numStudents').value;
+            const teachingLevel = document.getElementById('teachingLevel').value;
             const subject1 = document.getElementById('subject1').value;
-            const level1 = document.getElementById('level1').value;
             const subject2 = document.getElementById('subject2').value;
-            const level2 = document.getElementById('level2').value;
             const subject3 = document.getElementById('subject3').value;
-            const level3 = document.getElementById('level3').value;
             const fees = document.getElementById('adminFees').value;
             const bio = document.getElementById('adminBio').value.trim();
             const reason = document.getElementById('adminReason').value.trim();
@@ -646,7 +653,7 @@
             const profilePicFile = document.getElementById('adminProfilePic').files[0];
             
             // Validation
-            if (!email || !phone || !firstName || !lastName || !haveStudents || !subject1 || !level1 || !fees || !bio || !reason || !password || !profilePicFile) {
+            if (!email || !phone || !firstName || !lastName || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
                 showSignupError('Please fill in all required fields');
                 return;
             }
@@ -657,24 +664,22 @@
                 return;
             }
             
-            // Build subjects array and levels array
+            // Build subjects array - all subjects are at the same level now
             const subjects = [subject1];
-            const levels = [level1];
             if (subject2) {
                 subjects.push(subject2);
-                levels.push(level2);
             }
             if (subject3) {
                 subjects.push(subject3);
-                levels.push(level3);
             }
             
-            // Check if user selected primary or tertiary level without students
-            const hasPrimaryOrTertiary = levels.some(level => level === 'primary' || level === 'tertiary');
+            // Check if user selected primary, tertiary, or others level without students
+            const hasNonSecondaryLevel = teachingLevel !== 'secondary';
             const hasNoStudents = haveStudents === 'no';
+            const warningShown = localStorage.getItem('platformWarningShown') === 'true';
             
-            if (hasPrimaryOrTertiary && hasNoStudents) {
-                // Show warning modal
+            if (hasNonSecondaryLevel && hasNoStudents && !warningShown) {
+                // Show warning modal only if it hasn't been shown before
                 document.getElementById('warningModal').classList.remove('hidden');
                 return;
             }
@@ -760,7 +765,7 @@
                     TEL: phone,
                     PASSWORD: password,
                     SUBJECTS: subjects.join(','),
-                    LEVELS: levels.join(','),
+                    LEVELS: teachingLevel, // Store single level
                     HAVE_STUDENTS: haveStudents,
                     NUM_OF_STD: haveStudents === 'yes' ? parseInt(numStudents) : 0,
                     FEES: parseFloat(fees),
@@ -830,6 +835,100 @@
         // Clear error when switching roles
         studentRoleRadio.addEventListener('change', hideError);
         adminRoleRadio.addEventListener('change', hideError);
+    </script>
+    
+    <!-- Non-Firebase dependent UI logic -->
+    <script>
+    (() => {
+        // This runs even if Firebase fails to load
+        try {
+            // Define available subjects for each level
+            const subjectsByLevel = {
+                primary: [
+                    'Mathematics', 'English', 'Science', 'History', 'Geography',
+                    'Art and Design', 'Music', 'Physical Education'
+                ],
+                secondary: [
+                    'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                    'French', 'History', 'Geography', 'Economics', 'Accounting',
+                    'Business Studies', 'Computer Science', 'Art and Design',
+                    'Arabic', 'Music'
+                ],
+                tertiary: [
+                    'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                    'Computer Science', 'Economics', 'Accounting', 'Business Studies',
+                    'Engineering', 'Medicine', 'Law'
+                ],
+                others: [
+                    'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                    'French', 'History', 'Geography', 'Economics', 'Accounting',
+                    'Business Studies', 'Computer Science', 'Art and Design',
+                    'Arabic', 'Music'
+                ]
+            };
+
+            // Handle teaching level change
+            const teachingLevelElement = document.getElementById('teachingLevel');
+            if (teachingLevelElement) {
+                teachingLevelElement.addEventListener('change', (e) => {
+                    const level = e.target.value;
+                    const subject1 = document.getElementById('subject1');
+                    const subject2 = document.getElementById('subject2');
+                    const subject3 = document.getElementById('subject3');
+                    
+                    // Clear all subject dropdowns
+                    [subject1, subject2, subject3].forEach(select => {
+                        if (select) select.innerHTML = '';
+                    });
+                    
+                    if (!level) {
+                        if (subject1) subject1.innerHTML = '<option value="">First, select a teaching level above</option>';
+                        if (subject2) subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+                        if (subject3) subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+                        return;
+                    }
+                    
+                    // Get subjects for selected level
+                    const subjects = subjectsByLevel[level] || [];
+                    
+                    // Populate subject1 (required)
+                    if (subject1) {
+                        subject1.innerHTML = '<option value="">Select Subject 1</option>';
+                        subjects.forEach(subject => {
+                            const option = document.createElement('option');
+                            option.value = subject;
+                            option.textContent = subject;
+                            subject1.appendChild(option);
+                        });
+                    }
+                    
+                    // Populate subject2 (optional)
+                    if (subject2) {
+                        subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+                        subjects.forEach(subject => {
+                            const option = document.createElement('option');
+                            option.value = subject;
+                            option.textContent = subject;
+                            subject2.appendChild(option);
+                        });
+                    }
+                    
+                    // Populate subject3 (optional)
+                    if (subject3) {
+                        subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+                        subjects.forEach(subject => {
+                            const option = document.createElement('option');
+                            option.value = subject;
+                            option.textContent = subject;
+                            subject3.appendChild(option);
+                        });
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error setting up teaching level dropdown:', error);
+        }
+    })();
     </script>
 </body>
 
