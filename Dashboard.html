@@ -210,18 +210,45 @@
             });
         }
 
-        onValue(classroomsRef, (snapshot) => {
-            const classrooms = snapshot.val();
+        // Fetch the student's admin VR link
+        let studentAdminVrLink = '';
+        
+        // First, fetch the admin who owns this student
+        if (studentKey) {
+            const adminRef = ref(database, "ADMIN");
+            onValue(adminRef, (adminSnapshot) => {
+                if (adminSnapshot.exists()) {
+                    const admins = adminSnapshot.val();
+                    for (const key in admins) {
+                        const adminStudents = admins[key].STUDENTS || '';
+                        if (adminStudents.includes(studentKey)) {
+                            studentAdminVrLink = admins[key].VR_LINK || '';
+                            console.log('Found admin VR link:', studentAdminVrLink);
+                            break;
+                        }
+                    }
+                }
+                
+                // Now fetch and render classrooms after we have the admin VR link
+                renderClassrooms();
+            });
+        } else {
+            // If no student key, still render classrooms but without VR link
+            renderClassrooms();
+        }
 
-            // Clear existing content
-            classroomContainer.innerHTML = "";
+        function renderClassrooms() {
+            onValue(classroomsRef, (snapshot) => {
+                const classrooms = snapshot.val();
 
-            // Iterate over classrooms and filter by allowed IDs
-            Object.values(classrooms).forEach((classroom) => {
-                if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
-                    // Generate the VR link dynamically
-                    const classroomLinkKey = `VR_LINK`;
-                    const classroomLink = classroom[classroomLinkKey] || "#";
+                // Clear existing content
+                classroomContainer.innerHTML = "";
+
+                // Iterate over classrooms and filter by allowed IDs
+                Object.values(classrooms).forEach((classroom) => {
+                    if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
+                        // Use admin's VR_LINK instead of classroom's VR_LINK
+                        const classroomLink = studentAdminVrLink || "#";
                    // Create the card
                     const card = document.createElement("div");
                     card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
@@ -264,6 +291,7 @@
             });
 
         });
+        } // End of renderClassrooms function
 
         // Define the function in the global scope
         window.storeStorageFolder = function(storageFolder) {
@@ -278,8 +306,7 @@
                 return;
             }
             
-            document.getElementById('vrIframe').src = url;
-            document.getElementById('vrModal').classList.add('modal-open');
+            window.open(`OnlineClass.html?vrLink=${encodeURIComponent(url)}`, '_blank');
         };
 
         window.closeModal = function() {
