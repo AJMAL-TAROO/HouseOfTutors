@@ -191,66 +191,126 @@
                         </div>
                     </div>
                     
+                    <!-- Have Students Question -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Do you already have students? *</label>
+                        <div class="flex gap-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="haveStudents" id="haveStudentsYes" value="yes" required
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="ml-2 text-sm text-gray-900 dark:text-gray-300">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="haveStudents" id="haveStudentsNo" value="no" required
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="ml-2 text-sm text-gray-900 dark:text-gray-300">No</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Number of Students (conditional) -->
+                    <div id="numStudentsContainer" class="hidden">
+                        <label for="numStudents" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">How many students do you have? *</label>
+                        <input type="number" id="numStudents" min="1" step="1"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="Enter number of students">
+                    </div>
+                    
                     <div>
                         <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Subjects to Teach (Select up to 3) *</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <select id="subject1" required
-                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                <option value="">Select Subject 1</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Biology">Biology</option>
-                                <option value="English">English</option>
-                                <option value="French">French</option>
-                                <option value="History">History</option>
-                                <option value="Geography">Geography</option>
-                                <option value="Economics">Economics</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Business Studies">Business Studies</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Art and Design">Art and Design</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="Music">Music</option>
-                            </select>
-                            <select id="subject2"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                <option value="">Select Subject 2</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Biology">Biology</option>
-                                <option value="English">English</option>
-                                <option value="French">French</option>
-                                <option value="History">History</option>
-                                <option value="Geography">Geography</option>
-                                <option value="Economics">Economics</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Business Studies">Business Studies</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Art and Design">Art and Design</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="Music">Music</option>
-                            </select>
-                            <select id="subject3"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                <option value="">Select Subject 3</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Biology">Biology</option>
-                                <option value="English">English</option>
-                                <option value="French">French</option>
-                                <option value="History">History</option>
-                                <option value="Geography">Geography</option>
-                                <option value="Economics">Economics</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Business Studies">Business Studies</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Art and Design">Art and Design</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="Music">Music</option>
-                            </select>
+                        <div class="space-y-4">
+                            <!-- Subject 1 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <select id="subject1" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Subject 1</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="English">English</option>
+                                    <option value="French">French</option>
+                                    <option value="History">History</option>
+                                    <option value="Geography">Geography</option>
+                                    <option value="Economics">Economics</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Business Studies">Business Studies</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Art and Design">Art and Design</option>
+                                    <option value="Arabic">Arabic</option>
+                                    <option value="Music">Music</option>
+                                </select>
+                                <select id="level1" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Level</option>
+                                    <option value="primary">Primary</option>
+                                    <option value="secondary">Secondary</option>
+                                    <option value="tertiary">Tertiary</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Subject 2 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <select id="subject2"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Subject 2 (Optional)</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="English">English</option>
+                                    <option value="French">French</option>
+                                    <option value="History">History</option>
+                                    <option value="Geography">Geography</option>
+                                    <option value="Economics">Economics</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Business Studies">Business Studies</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Art and Design">Art and Design</option>
+                                    <option value="Arabic">Arabic</option>
+                                    <option value="Music">Music</option>
+                                </select>
+                                <select id="level2"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Level</option>
+                                    <option value="primary">Primary</option>
+                                    <option value="secondary">Secondary</option>
+                                    <option value="tertiary">Tertiary</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Subject 3 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <select id="subject3"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Subject 3 (Optional)</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="English">English</option>
+                                    <option value="French">French</option>
+                                    <option value="History">History</option>
+                                    <option value="Geography">Geography</option>
+                                    <option value="Economics">Economics</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Business Studies">Business Studies</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Art and Design">Art and Design</option>
+                                    <option value="Arabic">Arabic</option>
+                                    <option value="Music">Music</option>
+                                </select>
+                                <select id="level3"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <option value="">Select Level</option>
+                                    <option value="primary">Primary</option>
+                                    <option value="secondary">Secondary</option>
+                                    <option value="tertiary">Tertiary</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
@@ -323,6 +383,17 @@
             <p class="dark:text-gray-300 mb-4">Thank you for your interest! Your profile has been submitted and is pending approval. You will be contacted once your profile is approved.</p>
             <button id="closeSuccessModalBtn" class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
                 Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Warning Modal for Primary/Tertiary Level -->
+    <div id="warningModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
+            <h2 class="text-xl font-bold mb-4 text-yellow-600 dark:text-yellow-400">Platform Notice</h2>
+            <p class="dark:text-gray-300 mb-4">Our platform currently only provides students at the secondary level. You have selected primary or tertiary level teaching without existing students.</p>
+            <button id="closeWarningModalBtn" class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                Understood
             </button>
         </div>
     </div>
@@ -525,6 +596,23 @@
             }
         });
 
+        // Handle "Have Students" radio button change
+        document.getElementById('haveStudentsYes').addEventListener('change', () => {
+            document.getElementById('numStudentsContainer').classList.remove('hidden');
+            document.getElementById('numStudents').required = true;
+        });
+        
+        document.getElementById('haveStudentsNo').addEventListener('change', () => {
+            document.getElementById('numStudentsContainer').classList.add('hidden');
+            document.getElementById('numStudents').required = false;
+            document.getElementById('numStudents').value = '';
+        });
+
+        // Warning modal close button
+        document.getElementById('closeWarningModalBtn').addEventListener('click', () => {
+            document.getElementById('warningModal').classList.add('hidden');
+        });
+
         // Show signup error
         function showSignupError(message) {
             document.getElementById('signupErrorText').textContent = message;
@@ -543,9 +631,14 @@
             const phone = document.getElementById('adminPhone').value.trim();
             const firstName = document.getElementById('adminFirstName').value.trim();
             const lastName = document.getElementById('adminLastName').value.trim();
+            const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
+            const numStudents = document.getElementById('numStudents').value;
             const subject1 = document.getElementById('subject1').value;
+            const level1 = document.getElementById('level1').value;
             const subject2 = document.getElementById('subject2').value;
+            const level2 = document.getElementById('level2').value;
             const subject3 = document.getElementById('subject3').value;
+            const level3 = document.getElementById('level3').value;
             const fees = document.getElementById('adminFees').value;
             const bio = document.getElementById('adminBio').value.trim();
             const reason = document.getElementById('adminReason').value.trim();
@@ -553,8 +646,29 @@
             const profilePicFile = document.getElementById('adminProfilePic').files[0];
             
             // Validation
-            if (!email || !phone || !firstName || !lastName || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
+            if (!email || !phone || !firstName || !lastName || !haveStudents || !subject1 || !level1 || !fees || !bio || !reason || !password || !profilePicFile) {
                 showSignupError('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate number of students if they have students
+            if (haveStudents === 'yes' && (!numStudents || numStudents < 1)) {
+                showSignupError('Please enter a valid number of students');
+                return;
+            }
+            
+            // Check if user selected primary or tertiary level without students
+            const levels = [];
+            if (level1) levels.push(level1);
+            if (subject2 && level2) levels.push(level2);
+            if (subject3 && level3) levels.push(level3);
+            
+            const hasPrimaryOrTertiary = levels.some(level => level === 'primary' || level === 'tertiary');
+            const hasNoStudents = haveStudents === 'no';
+            
+            if (hasPrimaryOrTertiary && hasNoStudents) {
+                // Show warning modal
+                document.getElementById('warningModal').classList.remove('hidden');
                 return;
             }
             
@@ -582,10 +696,17 @@
                 return;
             }
             
-            // Build subjects array
+            // Build subjects array and levels array
             const subjects = [subject1];
-            if (subject2) subjects.push(subject2);
-            if (subject3) subjects.push(subject3);
+            const levels = [level1];
+            if (subject2) {
+                subjects.push(subject2);
+                levels.push(level2);
+            }
+            if (subject3) {
+                subjects.push(subject3);
+                levels.push(level3);
+            }
             
             // Disable submit button
             const submitBtn = document.getElementById('createProfileBtn');
@@ -644,6 +765,9 @@
                     TEL: phone,
                     PASSWORD: password,
                     SUBJECTS: subjects.join(','),
+                    LEVELS: levels.join(','),
+                    HAVE_STUDENTS: haveStudents,
+                    NUM_OF_STD: haveStudents === 'yes' ? parseInt(numStudents) : 0,
                     FEES: parseFloat(fees),
                     BIO: bio,
                     REASON: reason,
