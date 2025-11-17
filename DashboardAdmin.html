@@ -80,6 +80,11 @@
                     <a class="btn btn-ghost text-xl" onclick="openSuperUserModal()">House Of Tutors</a>
                 </div>
                 <div class="navbar-end">
+                    <button class="btn btn-ghost btn-circle" onclick="openEditProfileModal()" title="Edit Profile">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </button>
                     <button class="btn btn-ghost btn-circle" onclick="openAdminDetailsModal()" title="View Dashboard Details">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -227,6 +232,97 @@
                     <div class="modal-action">
                         <button class="btn btn-primary" onclick="closeAdminDetailsModal()">Close</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Modal -->
+            <div id="editProfileModal" class="modal">
+                <div class="modal-box max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <h2 class="text-2xl font-bold mb-4 text-purple-800">Edit Profile</h2>
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeEditProfileModal()">✕</button>
+                    
+                    <form id="editProfileForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="editFullName" class="block text-sm font-medium text-gray-900 mb-1">Full Name *</label>
+                                <input type="text" id="editFullName" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            </div>
+                            <div>
+                                <label for="editEmail" class="block text-sm font-medium text-gray-900 mb-1">Email *</label>
+                                <input type="email" id="editEmail" required readonly
+                                    class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 cursor-not-allowed">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="editPhone" class="block text-sm font-medium text-gray-900 mb-1">Phone *</label>
+                                <input type="tel" id="editPhone" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            </div>
+                            <div>
+                                <label for="editFees" class="block text-sm font-medium text-gray-900 mb-1">Fees (per month) *</label>
+                                <input type="number" id="editFees" required min="0" step="0.01"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="editTeachingLevel" class="block text-sm font-medium text-gray-900 mb-2">Select Teaching Level *</label>
+                            <select id="editTeachingLevel" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                <option value="">Select Level</option>
+                                <option value="primary">Primary</option>
+                                <option value="secondary">Secondary</option>
+                                <option value="tertiary">Tertiary</option>
+                                <option value="others">Others</option>
+                            </select>
+                        </div>
+
+                        <div id="editSubjectsContainer">
+                            <label class="block text-sm font-medium text-gray-900 mb-2">Subjects to Teach (Select up to 3) *</label>
+                            <div class="space-y-2">
+                                <select id="editSubject1" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                    <option value="">First, select a teaching level above</option>
+                                </select>
+                                <select id="editSubject2"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                    <option value="">Select Subject 2 (Optional)</option>
+                                </select>
+                                <select id="editSubject3"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                    <option value="">Select Subject 3 (Optional)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="editBio" class="block text-sm font-medium text-gray-900 mb-1">Bio (min 50 characters) *</label>
+                            <textarea id="editBio" required minlength="50" rows="3"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Tell us about your teaching experience, qualifications, and what makes you a great tutor..."></textarea>
+                            <p class="text-xs text-gray-500 mt-1" id="editBioCharCount">0 characters (minimum 50)</p>
+                        </div>
+
+                        <div>
+                            <label for="editReason" class="block text-sm font-medium text-gray-900 mb-1">Reason to Join (min 15 characters) *</label>
+                            <textarea id="editReason" required minlength="15" rows="3"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Why did you join as a tutor..."></textarea>
+                            <p class="text-xs text-gray-500 mt-1" id="editReasonCharCount">0 characters (minimum 15)</p>
+                        </div>
+
+                        <div id="editProfileError" class="hidden p-3 rounded-lg bg-red-100 border border-red-400">
+                            <p class="text-sm text-red-800" id="editProfileErrorText"></p>
+                        </div>
+
+                        <div class="modal-action">
+                            <button type="button" class="btn" onclick="closeEditProfileModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -1098,6 +1194,262 @@
                 console.error('Error loading admin details:', error);
             }
         }
+
+        // Define available subjects for each level (same as Login.html)
+        const subjectsByLevel = {
+            primary: [
+                'Mathematics', 'English', 'Science', 'History', 'Geography',
+                'Art and Design', 'Music', 'Physical Education'
+            ],
+            secondary: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'French', 'History', 'Geography', 'Economics', 'Accounting',
+                'Business Studies', 'Computer Science', 'Art and Design',
+                'Arabic', 'Music'
+            ],
+            tertiary: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'Computer Science', 'Economics', 'Accounting', 'Business Studies',
+                'Engineering', 'Medicine', 'Law'
+            ],
+            others: [
+                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
+                'French', 'History', 'Geography', 'Economics', 'Accounting',
+                'Business Studies', 'Computer Science', 'Art and Design',
+                'Arabic', 'Music'
+            ]
+        };
+
+        // Edit Profile Modal Functions
+        window.openEditProfileModal = async function () {
+            document.getElementById('editProfileModal').classList.add('modal-open');
+            await loadEditProfileData();
+        };
+
+        window.closeEditProfileModal = function () {
+            document.getElementById('editProfileModal').classList.remove('modal-open');
+        };
+
+        // Load admin data into edit form
+        async function loadEditProfileData() {
+            if (!email) {
+                console.error('No email found in local storage');
+                return;
+            }
+
+            try {
+                const adminRef = ref(database, "ADMIN");
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    console.error('Admin data not found');
+                    return;
+                }
+
+                const admins = adminSnapshot.val();
+                let adminData = null;
+                let adminKey = null;
+
+                // Find the admin with matching email
+                for (const key in admins) {
+                    if (admins[key].EMAIL === email) {
+                        adminData = admins[key];
+                        adminKey = key;
+                        break;
+                    }
+                }
+
+                if (!adminData) {
+                    console.error('Admin not found');
+                    return;
+                }
+
+                // Store adminKey for later use
+                window.currentAdminKey = adminKey;
+
+                // Populate form fields
+                document.getElementById('editFullName').value = adminData.FULL_NAME || '';
+                document.getElementById('editEmail').value = adminData.EMAIL || '';
+                document.getElementById('editPhone').value = adminData.TEL || '';
+                document.getElementById('editFees').value = adminData.FEES || '';
+                document.getElementById('editBio').value = adminData.BIO || '';
+                document.getElementById('editReason').value = adminData.REASON || '';
+                
+                // Update character counts
+                updateCharCount('editBio', 'editBioCharCount');
+                updateCharCount('editReason', 'editReasonCharCount');
+
+                // Set teaching level
+                const teachingLevel = adminData.LEVELS || '';
+                document.getElementById('editTeachingLevel').value = teachingLevel;
+
+                // Trigger level change to populate subject dropdowns
+                if (teachingLevel) {
+                    populateEditSubjectDropdowns(teachingLevel);
+                    
+                    // Set selected subjects
+                    const subjects = adminData.SUBJECTS ? adminData.SUBJECTS.split(',') : [];
+                    if (subjects[0]) document.getElementById('editSubject1').value = subjects[0].trim();
+                    if (subjects[1]) document.getElementById('editSubject2').value = subjects[1].trim();
+                    if (subjects[2]) document.getElementById('editSubject3').value = subjects[2].trim();
+                }
+
+            } catch (error) {
+                console.error('Error loading edit profile data:', error);
+                showEditProfileError('Error loading profile data. Please try again.');
+            }
+        }
+
+        // Handle teaching level change in edit form
+        document.getElementById('editTeachingLevel').addEventListener('change', (e) => {
+            const level = e.target.value;
+            populateEditSubjectDropdowns(level);
+        });
+
+        // Populate subject dropdowns based on level
+        function populateEditSubjectDropdowns(level) {
+            const subject1 = document.getElementById('editSubject1');
+            const subject2 = document.getElementById('editSubject2');
+            const subject3 = document.getElementById('editSubject3');
+            
+            // Clear all subject dropdowns
+            [subject1, subject2, subject3].forEach(select => {
+                select.innerHTML = '';
+            });
+            
+            if (!level) {
+                subject1.innerHTML = '<option value="">First, select a teaching level above</option>';
+                subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+                subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+                return;
+            }
+            
+            // Get subjects for selected level
+            const subjects = subjectsByLevel[level] || [];
+            
+            // Populate subject1 (required)
+            subject1.innerHTML = '<option value="">Select Subject 1</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject1.appendChild(option);
+            });
+            
+            // Populate subject2 (optional)
+            subject2.innerHTML = '<option value="">Select Subject 2 (Optional)</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject2.appendChild(option);
+            });
+            
+            // Populate subject3 (optional)
+            subject3.innerHTML = '<option value="">Select Subject 3 (Optional)</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subject3.appendChild(option);
+            });
+        }
+
+        // Update character count
+        function updateCharCount(textareaId, countId) {
+            const textarea = document.getElementById(textareaId);
+            const count = document.getElementById(countId);
+            const minLength = textarea.getAttribute('minlength') || 0;
+            count.textContent = `${textarea.value.length} characters (minimum ${minLength})`;
+        }
+
+        // Add character count listeners
+        document.getElementById('editBio').addEventListener('input', () => {
+            updateCharCount('editBio', 'editBioCharCount');
+        });
+
+        document.getElementById('editReason').addEventListener('input', () => {
+            updateCharCount('editReason', 'editReasonCharCount');
+        });
+
+        // Show edit profile error
+        function showEditProfileError(message) {
+            document.getElementById('editProfileErrorText').textContent = message;
+            document.getElementById('editProfileError').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('editProfileError').classList.add('hidden');
+            }, 5000);
+        }
+
+        // Handle edit profile form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const fullName = document.getElementById('editFullName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const teachingLevel = document.getElementById('editTeachingLevel').value;
+            const subject1 = document.getElementById('editSubject1').value;
+            const subject2 = document.getElementById('editSubject2').value;
+            const subject3 = document.getElementById('editSubject3').value;
+            const fees = document.getElementById('editFees').value;
+            const bio = document.getElementById('editBio').value.trim();
+            const reason = document.getElementById('editReason').value.trim();
+            
+            // Validation
+            if (!fullName || !phone || !teachingLevel || !subject1 || !fees || !bio || !reason) {
+                showEditProfileError('Please fill in all required fields');
+                return;
+            }
+            
+            if (bio.length < 50) {
+                showEditProfileError('Bio must be at least 50 characters long');
+                return;
+            }
+            
+            if (reason.length < 15) {
+                showEditProfileError('Reason must be at least 15 characters long');
+                return;
+            }
+            
+            // Build subjects array
+            const subjects = [subject1];
+            if (subject2) subjects.push(subject2);
+            if (subject3) subjects.push(subject3);
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('saveProfileBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+            
+            try {
+                // Update admin data
+                const adminUpdateRef = ref(database, `ADMIN/${window.currentAdminKey}`);
+                await update(adminUpdateRef, {
+                    FULL_NAME: fullName,
+                    TEL: phone,
+                    LEVELS: teachingLevel,
+                    SUBJECTS: subjects.join(','),
+                    FEES: parseFloat(fees),
+                    BIO: bio,
+                    REASON: reason
+                });
+                
+                // Close modal and show success
+                closeEditProfileModal();
+                alert('Profile updated successfully!');
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Changes';
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showEditProfileError('An error occurred while updating your profile. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Changes';
+            }
+        });
     </script>
 
 </body>
