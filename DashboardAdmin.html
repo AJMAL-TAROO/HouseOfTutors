@@ -230,6 +230,167 @@
                 </div>
             </div>
 
+            <!-- Edit Profile Modal -->
+            <div id="editProfileModal" class="modal">
+                <div class="modal-box max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <h2 class="text-2xl font-bold mb-4 text-purple-800">Edit Profile</h2>
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="closeEditProfileModal()">✕</button>
+                    
+                    <form id="editProfileForm" class="space-y-4">
+                        <!-- Profile Picture -->
+                        <div class="flex flex-col items-center mb-4">
+                            <div class="avatar mb-2">
+                                <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img id="currentProfilePic" src="" alt="Profile Picture" />
+                                </div>
+                            </div>
+                            <label for="newProfilePic" class="btn btn-sm btn-primary">Change Profile Picture</label>
+                            <input type="file" id="newProfilePic" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" class="hidden">
+                            <p class="text-xs text-gray-500 mt-1">Max 5MB, JPEG/PNG/GIF/WebP</p>
+                        </div>
+
+                        <!-- Name Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">First Name *</span>
+                                </label>
+                                <input type="text" id="editFirstName" class="input input-bordered" required>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Last Name *</span>
+                                </label>
+                                <input type="text" id="editLastName" class="input input-bordered" required>
+                            </div>
+                        </div>
+
+                        <!-- Contact Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Email *</span>
+                                </label>
+                                <input type="email" id="editEmail" class="input input-bordered" required>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Phone Number *</span>
+                                </label>
+                                <input type="tel" id="editPhone" class="input input-bordered" required>
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Date of Birth *</span>
+                            </label>
+                            <input type="date" id="editDOB" class="input input-bordered" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Password *</span>
+                            </label>
+                            <input type="text" id="editPassword" class="input input-bordered" required>
+                        </div>
+
+                        <!-- Teaching Level -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Teaching Level *</span>
+                            </label>
+                            <select id="editTeachingLevel" class="select select-bordered" required>
+                                <option value="">Select Level</option>
+                                <option value="primary">Primary</option>
+                                <option value="secondary">Secondary</option>
+                                <option value="others">Others</option>
+                            </select>
+                        </div>
+
+                        <!-- Subjects -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Subjects (comma-separated) *</span>
+                            </label>
+                            <input type="text" id="editSubjects" class="input input-bordered" placeholder="e.g., Mathematics, Physics, Chemistry" required>
+                        </div>
+
+                        <!-- Have Students -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Do you have students? *</span>
+                            </label>
+                            <div class="flex gap-4">
+                                <label class="cursor-pointer label">
+                                    <input type="radio" name="editHaveStudents" value="yes" class="radio radio-primary" />
+                                    <span class="label-text ml-2">Yes</span>
+                                </label>
+                                <label class="cursor-pointer label">
+                                    <input type="radio" name="editHaveStudents" value="no" class="radio radio-primary" />
+                                    <span class="label-text ml-2">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Number of Students -->
+                        <div class="form-control" id="editNumStudentsContainer">
+                            <label class="label">
+                                <span class="label-text">Number of Students</span>
+                            </label>
+                            <input type="number" id="editNumStudents" class="input input-bordered" min="0">
+                        </div>
+
+                        <!-- Fees -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Fees (per month) *</span>
+                            </label>
+                            <input type="number" id="editFees" class="input input-bordered" min="0" step="0.01" required>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Bio (min 50 characters) *</span>
+                            </label>
+                            <textarea id="editBio" class="textarea textarea-bordered" rows="3" minlength="50" required></textarea>
+                            <label class="label">
+                                <span class="label-text-alt" id="editBioCharCount">0 characters</span>
+                            </label>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Reason to Join (min 15 characters) *</span>
+                            </label>
+                            <textarea id="editReason" class="textarea textarea-bordered" rows="3" minlength="15" required></textarea>
+                            <label class="label">
+                                <span class="label-text-alt" id="editReasonCharCount">0 characters</span>
+                            </label>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="editProfileError" class="alert alert-error hidden">
+                            <span id="editProfileErrorText"></span>
+                        </div>
+
+                        <!-- Success Message -->
+                        <div id="editProfileSuccess" class="alert alert-success hidden">
+                            <span>Profile updated successfully!</span>
+                        </div>
+
+                        <div class="modal-action">
+                            <button type="button" class="btn" onclick="closeEditProfileModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
         <div class="drawer-side">
             <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -295,6 +456,15 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Edit Profile Icon -->
+                <div class="absolute bottom-4 right-4">
+                    <button id="editProfileBtn" class="btn btn-circle btn-secondary shadow-lg" onclick="openEditProfileModal()" title="Edit Profile">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1144,6 +1314,286 @@
                 console.error('Error loading admin details:', error);
             }
         }
+
+        // Edit Profile Modal Functions
+        let currentAdminKey = null;
+        let currentAdminData = null;
+        let newProfilePicFile = null;
+
+        window.openEditProfileModal = async function () {
+            document.getElementById('editProfileModal').classList.add('modal-open');
+            await loadEditProfileData();
+        };
+
+        window.closeEditProfileModal = function () {
+            document.getElementById('editProfileModal').classList.remove('modal-open');
+            document.getElementById('editProfileError').classList.add('hidden');
+            document.getElementById('editProfileSuccess').classList.add('hidden');
+            newProfilePicFile = null;
+        };
+
+        async function loadEditProfileData() {
+            if (!email) {
+                console.error('No email found in local storage');
+                return;
+            }
+
+            try {
+                const adminRef = ref(database, "ADMIN");
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    showEditProfileError('Admin data not found');
+                    return;
+                }
+
+                const admins = adminSnapshot.val();
+                
+                for (const key in admins) {
+                    if (admins[key].EMAIL === email) {
+                        currentAdminKey = key;
+                        currentAdminData = admins[key];
+                        break;
+                    }
+                }
+
+                if (!currentAdminData) {
+                    showEditProfileError('Admin profile not found');
+                    return;
+                }
+
+                // Populate form fields
+                const fullName = currentAdminData.FULL_NAME || '';
+                const nameParts = fullName.split(' ');
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.slice(1).join(' ') || '';
+
+                document.getElementById('editFirstName').value = firstName;
+                document.getElementById('editLastName').value = lastName;
+                document.getElementById('editEmail').value = currentAdminData.EMAIL || '';
+                document.getElementById('editPhone').value = currentAdminData.TEL || '';
+                document.getElementById('editDOB').value = currentAdminData.DOB || '';
+                document.getElementById('editPassword').value = currentAdminData.PASSWORD || '';
+                document.getElementById('editTeachingLevel').value = currentAdminData.LEVELS || '';
+                document.getElementById('editSubjects').value = currentAdminData.SUBJECTS || '';
+                
+                // Set radio button for have students
+                const haveStudents = currentAdminData.HAVE_STUDENTS || 'no';
+                const haveStudentsRadios = document.getElementsByName('editHaveStudents');
+                haveStudentsRadios.forEach(radio => {
+                    if (radio.value === haveStudents) {
+                        radio.checked = true;
+                    }
+                });
+
+                document.getElementById('editNumStudents').value = currentAdminData.NUM_OF_STD || 0;
+                document.getElementById('editFees').value = currentAdminData.FEES || '';
+                document.getElementById('editBio').value = currentAdminData.BIO || '';
+                document.getElementById('editReason').value = currentAdminData.REASON || '';
+
+                // Update character counts
+                updateCharCount('editBio', 'editBioCharCount');
+                updateCharCount('editReason', 'editReasonCharCount');
+
+                // Set profile picture
+                if (currentAdminData.PROFILE_LINK) {
+                    document.getElementById('currentProfilePic').src = currentAdminData.PROFILE_LINK;
+                }
+
+            } catch (error) {
+                console.error('Error loading profile data:', error);
+                showEditProfileError('Error loading profile data');
+            }
+        }
+
+        // Handle profile picture file selection
+        document.getElementById('newProfilePic').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file
+                const maxFileSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                
+                if (file.size > maxFileSize) {
+                    showEditProfileError('Profile picture must be less than 5MB');
+                    e.target.value = '';
+                    return;
+                }
+                
+                if (!allowedTypes.includes(file.type)) {
+                    showEditProfileError('Profile picture must be a valid image file (JPEG, PNG, GIF, or WebP)');
+                    e.target.value = '';
+                    return;
+                }
+                
+                newProfilePicFile = file;
+                
+                // Preview the image
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('currentProfilePic').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const saveBtn = document.getElementById('saveProfileBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+            
+            document.getElementById('editProfileError').classList.add('hidden');
+            document.getElementById('editProfileSuccess').classList.add('hidden');
+            
+            try {
+                // Get form values
+                const firstName = document.getElementById('editFirstName').value.trim();
+                const lastName = document.getElementById('editLastName').value.trim();
+                const email = document.getElementById('editEmail').value.trim();
+                const phone = document.getElementById('editPhone').value.trim();
+                const dob = document.getElementById('editDOB').value;
+                const password = document.getElementById('editPassword').value;
+                const teachingLevel = document.getElementById('editTeachingLevel').value;
+                const subjects = document.getElementById('editSubjects').value.trim();
+                const haveStudents = document.querySelector('input[name="editHaveStudents"]:checked')?.value || 'no';
+                const numStudents = document.getElementById('editNumStudents').value;
+                const fees = document.getElementById('editFees').value;
+                const bio = document.getElementById('editBio').value.trim();
+                const reason = document.getElementById('editReason').value.trim();
+
+                // Validate
+                if (!firstName || !lastName || !email || !phone || !dob || !password || !teachingLevel || !subjects || !fees || !bio || !reason) {
+                    showEditProfileError('Please fill in all required fields');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Changes';
+                    return;
+                }
+
+                if (bio.length < 50) {
+                    showEditProfileError('Bio must be at least 50 characters long');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Changes';
+                    return;
+                }
+
+                if (reason.length < 15) {
+                    showEditProfileError('Reason must be at least 15 characters long');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Changes';
+                    return;
+                }
+
+                let profilePicUrl = currentAdminData.PROFILE_LINK;
+
+                // Upload new profile picture if selected
+                if (newProfilePicFile) {
+                    saveBtn.textContent = 'Uploading photo...';
+                    
+                    const { getStorage, ref: storageRef, uploadBytes, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/11.1.0/firebase-storage.js");
+                    const storage = getStorage();
+                    
+                    const fileExtension = newProfilePicFile.name.split('.').pop();
+                    const sanitizedFileName = `profile_picture_${Date.now()}.${fileExtension}`;
+                    const profilePicPath = `profile_pictures/${currentAdminKey}/${sanitizedFileName}`;
+                    const profilePicRef = storageRef(storage, profilePicPath);
+                    
+                    try {
+                        await uploadBytes(profilePicRef, newProfilePicFile);
+                        profilePicUrl = await getDownloadURL(profilePicRef);
+                    } catch (uploadError) {
+                        console.error('Error uploading profile picture:', uploadError);
+                        showEditProfileError('Failed to upload profile picture. Please try again.');
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = 'Save Changes';
+                        return;
+                    }
+                }
+
+                saveBtn.textContent = 'Saving profile...';
+
+                // Update admin data
+                const fullName = `${firstName} ${lastName}`;
+                const updatedData = {
+                    EMAIL: email,
+                    FULL_NAME: fullName,
+                    TEL: phone,
+                    DOB: dob,
+                    PASSWORD: password,
+                    SUBJECTS: subjects,
+                    LEVELS: teachingLevel,
+                    HAVE_STUDENTS: haveStudents,
+                    NUM_OF_STD: haveStudents === 'yes' ? parseInt(numStudents) : 0,
+                    FEES: parseFloat(fees),
+                    BIO: bio,
+                    REASON: reason,
+                    PROFILE_LINK: profilePicUrl,
+                    // Keep existing values that shouldn't be edited
+                    VIRTUAL_ROOMS: currentAdminData.VIRTUAL_ROOMS || "",
+                    VR_LINK: currentAdminData.VR_LINK || "",
+                    WHITEBOARD: currentAdminData.WHITEBOARD || "",
+                    WALLPAPER: currentAdminData.WALLPAPER || "img/wallpapers/wallpaper2.png",
+                    STUDENTS: currentAdminData.STUDENTS || "",
+                    APPROVAL: currentAdminData.APPROVAL || "approved"
+                };
+
+                // Save to Firebase
+                await update(ref(database, `ADMIN/${currentAdminKey}`), updatedData);
+
+                // Update local storage if email changed
+                if (email !== localStorage.getItem('userEmail')) {
+                    localStorage.setItem('userEmail', email);
+                }
+
+                document.getElementById('editProfileSuccess').classList.remove('hidden');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+                newProfilePicFile = null;
+
+                // Reload the page after 2 seconds to reflect changes
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showEditProfileError('Error saving profile. Please try again.');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+            }
+        });
+
+        function showEditProfileError(message) {
+            const errorDiv = document.getElementById('editProfileError');
+            const errorText = document.getElementById('editProfileErrorText');
+            errorText.textContent = message;
+            errorDiv.classList.remove('hidden');
+            
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        function updateCharCount(textareaId, counterId) {
+            const textarea = document.getElementById(textareaId);
+            const counter = document.getElementById(counterId);
+            
+            textarea.addEventListener('input', () => {
+                const count = textarea.value.length;
+                counter.textContent = `${count} characters`;
+            });
+            
+            // Initial count
+            const count = textarea.value.length;
+            counter.textContent = `${count} characters`;
+        }
+
+        // Initialize character counters
+        updateCharCount('editBio', 'editBioCharCount');
+        updateCharCount('editReason', 'editReasonCharCount');
     </script>
 
 </body>
