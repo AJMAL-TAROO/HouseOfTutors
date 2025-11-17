@@ -191,6 +191,14 @@
                         </div>
                     </div>
                     
+                    <!-- Date of Birth -->
+                    <div>
+                        <label for="adminDOB" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Date of Birth *</label>
+                        <input type="date" id="adminDOB" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">You must be at least 18 years old</p>
+                    </div>
+                    
                     <!-- Have Students Question -->
                     <div>
                         <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Do you already have students? *</label>
@@ -634,6 +642,7 @@
             const phone = document.getElementById('adminPhone').value.trim();
             const firstName = document.getElementById('adminFirstName').value.trim();
             const lastName = document.getElementById('adminLastName').value.trim();
+            const dob = document.getElementById('adminDOB').value;
             const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
             const numStudents = document.getElementById('numStudents').value;
             const teachingLevel = document.getElementById('teachingLevel').value;
@@ -647,8 +656,21 @@
             const profilePicFile = document.getElementById('adminProfilePic').files[0];
             
             // Validation
-            if (!email || !phone || !firstName || !lastName || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
+            if (!email || !phone || !firstName || !lastName || !dob || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
                 showSignupError('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate age (must be 18+ years old)
+            const dobDate = new Date(dob);
+            const today = new Date();
+            const age = today.getFullYear() - dobDate.getFullYear();
+            const monthDiff = today.getMonth() - dobDate.getMonth();
+            const dayDiff = today.getDate() - dobDate.getDate();
+            
+            // Check if user is at least 18 years old
+            if (age < 18 || (age === 18 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)))) {
+                showSignupError('You must be at least 18 years old to sign up');
                 return;
             }
             
@@ -759,6 +781,7 @@
                     EMAIL: email,
                     FULL_NAME: fullName,
                     TEL: phone,
+                    DOB: dob,
                     PASSWORD: password,
                     SUBJECTS: subjects.join(','),
                     LEVELS: teachingLevel, // Store single level
