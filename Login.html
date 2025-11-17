@@ -223,7 +223,6 @@
                             <option value="">Select Level</option>
                             <option value="primary">Primary</option>
                             <option value="secondary">Secondary</option>
-                            <option value="tertiary">Tertiary</option>
                             <option value="others">Others</option>
                         </select>
                     </div>
@@ -540,11 +539,6 @@
                 'Business Studies', 'Computer Science', 'Art and Design',
                 'Arabic', 'Music'
             ],
-            tertiary: [
-                'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
-                'Computer Science', 'Economics', 'Accounting', 'Business Studies',
-                'Engineering', 'Medicine', 'Law'
-            ],
             others: [
                 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
                 'French', 'History', 'Geography', 'Economics', 'Accounting',
@@ -673,7 +667,7 @@
                 subjects.push(subject3);
             }
             
-            // Check if user selected primary, tertiary, or others level without students
+            // Check if user selected primary or others level without students
             const hasNonSecondaryLevel = teachingLevel !== 'secondary';
             const hasNoStudents = haveStudents === 'no';
             const warningShown = localStorage.getItem('platformWarningShown') === 'true';
@@ -855,11 +849,6 @@
                     'French', 'History', 'Geography', 'Economics', 'Accounting',
                     'Business Studies', 'Computer Science', 'Art and Design',
                     'Arabic', 'Music'
-                ],
-                tertiary: [
-                    'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
-                    'Computer Science', 'Economics', 'Accounting', 'Business Studies',
-                    'Engineering', 'Medicine', 'Law'
                 ],
                 others: [
                     'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English',
