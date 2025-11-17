@@ -1457,6 +1457,11 @@
                 return;
             }
             
+            if (parseFloat(fees) <= 0 || isNaN(parseFloat(fees))) {
+                showEditProfileError('Please enter a valid fee amount');
+                return;
+            }
+            
             if (bio.length < 50) {
                 showEditProfileError('Bio must be at least 50 characters long');
                 return;
