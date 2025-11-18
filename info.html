@@ -29,16 +29,28 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
+        .editable-field {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            background: white;
+        }
+        .editable-field:focus {
+            outline: 2px solid #667eea;
+        }
+        .search-input {
+            max-width: 400px;
+        }
     </style>
 </head>
 
-<body onload="loadAdminDashboardInfo()">
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <a class="navbar-brand mx-auto" href="#">House Of Tutors - Admin Info</a>
+            <a class="navbar-brand mx-auto" href="#">House Of Tutors - Admin Dashboard</a>
         </div>
     </nav>
 
@@ -47,28 +59,49 @@
             <div class="col-12">
                 <div class="card shadow-lg">
                     <div class="card-body">
-                        <h2 class="text-center text-purple-800 font-bold text-3xl mb-5">Admin Dashboard Logs</h2>
+                        <h2 class="text-center text-purple-800 font-bold text-3xl mb-5">Admin Dashboard</h2>
                         
-                        <div class="row" id="statsContainer">
-                            <!-- Stats will be dynamically loaded here -->
-                        </div>
+                        <!-- Tabs -->
+                        <div role="tablist" class="tabs tabs-lifted tabs-lg">
+                            <input type="radio" name="my_tabs" role="tab" class="tab" aria-label="Tutors" checked />
+                            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <h3 class="text-2xl font-bold mb-4 text-purple-700">Tutors Management</h3>
+                                
+                                <!-- Search Bar -->
+                                <div class="mb-4">
+                                    <input type="text" id="tutorSearch" placeholder="Search tutor by name..." 
+                                           class="search-input form-control" onkeyup="filterTutors()">
+                                </div>
+                                
+                                <!-- Tutors List -->
+                                <div id="tutorsContainer" class="table-responsive">
+                                    <!-- Tutors will be loaded here -->
+                                </div>
+                            </div>
 
-                        <div class="mt-5">
-                            <h3 class="text-center text-purple-700 font-bold text-2xl mb-4">Recent Dashboard Loads</h3>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead class="bg-purple-800 text-white">
-                                        <tr>
-                                            <th>Timestamp</th>
-                                            <th>Admin Email</th>
-                                            <th>Classrooms</th>
-                                            <th>Students</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="logsTableBody">
-                                        <!-- Logs will be dynamically loaded here -->
-                                    </tbody>
-                                </table>
+                            <input type="radio" name="my_tabs" role="tab" class="tab" aria-label="Statistics" />
+                            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <h3 class="text-2xl font-bold mb-4 text-purple-700">General Statistics</h3>
+                                
+                                <div class="row" id="statsContainer">
+                                    <!-- Stats will be dynamically loaded here -->
+                                </div>
+                            </div>
+
+                            <input type="radio" name="my_tabs" role="tab" class="tab" aria-label="Students" />
+                            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <h3 class="text-2xl font-bold mb-4 text-purple-700">Students Management</h3>
+                                
+                                <!-- Search Bar -->
+                                <div class="mb-4">
+                                    <input type="text" id="studentSearch" placeholder="Search student by name..." 
+                                           class="search-input form-control" onkeyup="filterStudents()">
+                                </div>
+                                
+                                <!-- Students List -->
+                                <div id="studentsContainer" class="table-responsive">
+                                    <!-- Students will be loaded here -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -80,7 +113,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -98,6 +131,11 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        // Global data storage
+        let allTutors = [];
+        let allStudents = [];
+        let studentFee = 50; // Default fee
+
         // Check for super user authentication
         window.onload = function() {
             const superUserAuth = localStorage.getItem('superUserAuth');
@@ -106,12 +144,39 @@
                 window.location.href = 'DashboardAdmin.html';
                 return;
             }
-            loadAdminDashboardInfo();
+            loadAllData();
         };
 
-        window.loadAdminDashboardInfo = async function() {
+        async function loadAllData() {
             try {
-                // Get total classroom count
+                // Load student fee from Firebase
+                const feeRef = ref(database, 'NUMBERS/STUDENT_FEE/NUMBER');
+                const feeSnapshot = await get(feeRef);
+                if (feeSnapshot.exists()) {
+                    studentFee = feeSnapshot.val();
+                }
+
+                // Load tutors
+                const tutorsRef = ref(database, 'ADMIN');
+                const tutorsSnapshot = await get(tutorsRef);
+                if (tutorsSnapshot.exists()) {
+                    allTutors = Object.entries(tutorsSnapshot.val()).map(([key, value]) => ({
+                        key,
+                        ...value
+                    }));
+                }
+
+                // Load students
+                const studentsRef = ref(database, 'STUDENTS');
+                const studentsSnapshot = await get(studentsRef);
+                if (studentsSnapshot.exists()) {
+                    allStudents = Object.entries(studentsSnapshot.val()).map(([key, value]) => ({
+                        key,
+                        ...value
+                    }));
+                }
+
+                // Load classrooms count
                 const classroomsRef = ref(database, 'CLASSROOMS');
                 const classroomsSnapshot = await get(classroomsRef);
                 let totalClassrooms = 0;
@@ -119,53 +184,97 @@
                     totalClassrooms = Object.keys(classroomsSnapshot.val()).length;
                 }
 
-                // Get total student count
-                const studentsRef = ref(database, 'STUDENTS');
-                const studentsSnapshot = await get(studentsRef);
-                let totalStudents = 0;
-                if (studentsSnapshot.exists()) {
-                    totalStudents = Object.keys(studentsSnapshot.val()).length;
-                }
-
-                // Get the latest log entry
-                const logsRef = ref(database, 'LOGS');
-                const logsSnapshot = await get(logsRef);
-                
-                let lastLoadTime = 'N/A';
-                let recentLogs = [];
-                
-                if (logsSnapshot.exists()) {
-                    const logs = logsSnapshot.val();
-                    const logsArray = Object.entries(logs).map(([key, value]) => ({
-                        key,
-                        ...value
-                    }));
-                    
-                    // Sort by timestamp descending
-                    logsArray.sort((a, b) => b.TIMESTAMP - a.TIMESTAMP);
-                    
-                    // Get the most recent log
-                    if (logsArray.length > 0) {
-                        lastLoadTime = new Date(logsArray[0].TIMESTAMP).toLocaleString();
-                    }
-                    
-                    // Get last 10 logs
-                    recentLogs = logsArray.slice(0, 10);
-                }
-
-                // Display stats
-                displayStats(totalClassrooms, totalStudents, lastLoadTime);
-                
-                // Display logs table
-                displayLogsTable(recentLogs);
+                // Display all data
+                displayTutors();
+                displayStudents();
+                displayStats(totalClassrooms, allStudents.length, studentFee);
                 
             } catch (error) {
-                console.error('Error loading admin dashboard info:', error);
+                console.error('Error loading data:', error);
                 alert('Error loading dashboard information. Please try again.');
             }
-        };
+        }
 
-        function displayStats(classrooms, students, lastLoad) {
+        function displayTutors() {
+            const container = document.getElementById('tutorsContainer');
+            if (allTutors.length === 0) {
+                container.innerHTML = '<p class="text-center">No tutors found</p>';
+                return;
+            }
+
+            let html = '<table class="table table-striped table-hover">';
+            html += '<thead class="bg-purple-800 text-white"><tr>';
+            html += '<th>Tutor ID</th><th>Full Name</th><th>Email</th><th>Tel</th><th>Actions</th>';
+            html += '</tr></thead><tbody>';
+
+            allTutors.forEach(tutor => {
+                html += `<tr data-tutor="${tutor.key}">`;
+                html += `<td>${tutor.key}</td>`;
+                html += `<td><span class="view-mode">${tutor.FULL_NAME || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${tutor.FULL_NAME || ''}" data-field="FULL_NAME"></td>`;
+                html += `<td><span class="view-mode">${tutor.EMAIL || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${tutor.EMAIL || ''}" data-field="EMAIL"></td>`;
+                html += `<td><span class="view-mode">${tutor.TEL || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${tutor.TEL || ''}" data-field="TEL"></td>`;
+                html += `<td>
+                    <button class="btn btn-sm btn-primary edit-btn" onclick="editTutor('${tutor.key}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-success save-btn d-none" onclick="saveTutor('${tutor.key}')">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="btn btn-sm btn-secondary cancel-btn d-none" onclick="cancelEdit('${tutor.key}', 'tutor')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function displayStudents() {
+            const container = document.getElementById('studentsContainer');
+            if (allStudents.length === 0) {
+                container.innerHTML = '<p class="text-center">No students found</p>';
+                return;
+            }
+
+            let html = '<table class="table table-striped table-hover">';
+            html += '<thead class="bg-purple-800 text-white"><tr>';
+            html += '<th>Student ID</th><th>Full Name</th><th>Email</th><th>Tel</th><th>Actions</th>';
+            html += '</tr></thead><tbody>';
+
+            allStudents.forEach(student => {
+                html += `<tr data-student="${student.key}">`;
+                html += `<td>${student.key}</td>`;
+                html += `<td><span class="view-mode">${student.FULL_NAME || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${student.FULL_NAME || ''}" data-field="FULL_NAME"></td>`;
+                html += `<td><span class="view-mode">${student.EMAIL || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${student.EMAIL || ''}" data-field="EMAIL"></td>`;
+                html += `<td><span class="view-mode">${student.TEL || 'N/A'}</span>
+                         <input type="text" class="edit-mode editable-field d-none" value="${student.TEL || ''}" data-field="TEL"></td>`;
+                html += `<td>
+                    <button class="btn btn-sm btn-primary edit-btn" onclick="editStudent('${student.key}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-success save-btn d-none" onclick="saveStudent('${student.key}')">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="btn btn-sm btn-secondary cancel-btn d-none" onclick="cancelEdit('${student.key}', 'student')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function displayStats(classrooms, students, fee) {
+            const totalRevenue = students * fee;
             const statsContainer = document.getElementById('statsContainer');
             statsContainer.innerHTML = `
                 <div class="col-md-4 mb-4">
@@ -189,32 +298,156 @@
                 <div class="col-md-4 mb-4">
                     <div class="card stat-card bg-gradient-to-br from-purple-500 to-purple-700 text-white">
                         <div class="card-body text-center">
-                            <i class="fas fa-clock fa-3x mb-3"></i>
-                            <h5 class="text-lg font-bold mb-2">Last Dashboard Load</h5>
-                            <p class="text-sm">${lastLoad}</p>
+                            <i class="fas fa-rupee-sign fa-3x mb-3"></i>
+                            <h3 class="text-4xl font-bold">Rs ${totalRevenue}</h3>
+                            <p class="text-lg">Total Revenue</p>
+                            <div class="mt-3">
+                                <label class="text-sm">Student Fee (Rs):</label>
+                                <input type="number" id="studentFeeInput" value="${fee}" 
+                                       class="form-control mx-auto" style="max-width: 150px; display: inline-block;"
+                                       onchange="updateFee()">
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function displayLogsTable(logs) {
-            const tableBody = document.getElementById('logsTableBody');
-            
-            if (logs.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No logs available</td></tr>';
+        window.updateFee = async function() {
+            const newFee = parseInt(document.getElementById('studentFeeInput').value);
+            if (isNaN(newFee) || newFee < 0) {
+                alert('Please enter a valid positive number');
                 return;
             }
+
+            try {
+                const feeRef = ref(database, 'NUMBERS/STUDENT_FEE/NUMBER');
+                await set(feeRef, newFee);
+                studentFee = newFee;
+                
+                // Reload classrooms count for stats update
+                const classroomsRef = ref(database, 'CLASSROOMS');
+                const classroomsSnapshot = await get(classroomsRef);
+                let totalClassrooms = 0;
+                if (classroomsSnapshot.exists()) {
+                    totalClassrooms = Object.keys(classroomsSnapshot.val()).length;
+                }
+                
+                displayStats(totalClassrooms, allStudents.length, studentFee);
+                alert('Student fee updated successfully!');
+            } catch (error) {
+                console.error('Error updating fee:', error);
+                alert('Failed to update fee. Please try again.');
+            }
+        };
+
+        window.editTutor = function(tutorKey) {
+            const row = document.querySelector(`tr[data-tutor="${tutorKey}"]`);
+            row.querySelectorAll('.view-mode').forEach(el => el.classList.add('d-none'));
+            row.querySelectorAll('.edit-mode').forEach(el => el.classList.remove('d-none'));
+            row.querySelector('.edit-btn').classList.add('d-none');
+            row.querySelector('.save-btn').classList.remove('d-none');
+            row.querySelector('.cancel-btn').classList.remove('d-none');
+        };
+
+        window.editStudent = function(studentKey) {
+            const row = document.querySelector(`tr[data-student="${studentKey}"]`);
+            row.querySelectorAll('.view-mode').forEach(el => el.classList.add('d-none'));
+            row.querySelectorAll('.edit-mode').forEach(el => el.classList.remove('d-none'));
+            row.querySelector('.edit-btn').classList.add('d-none');
+            row.querySelector('.save-btn').classList.remove('d-none');
+            row.querySelector('.cancel-btn').classList.remove('d-none');
+        };
+
+        window.saveTutor = async function(tutorKey) {
+            const row = document.querySelector(`tr[data-tutor="${tutorKey}"]`);
+            const updates = {};
             
-            tableBody.innerHTML = logs.map(log => `
-                <tr>
-                    <td>${new Date(log.TIMESTAMP).toLocaleString()}</td>
-                    <td>${log.ADMIN_EMAIL || 'N/A'}</td>
-                    <td>${log.CLASSROOM_COUNT || 0}</td>
-                    <td>${log.STUDENT_COUNT || 0}</td>
-                </tr>
-            `).join('');
-        }
+            row.querySelectorAll('.edit-mode').forEach(input => {
+                updates[input.dataset.field] = input.value;
+            });
+
+            try {
+                for (const [field, value] of Object.entries(updates)) {
+                    await set(ref(database, `ADMIN/${tutorKey}/${field}`), value);
+                }
+                
+                // Update local data
+                const tutorIndex = allTutors.findIndex(t => t.key === tutorKey);
+                if (tutorIndex !== -1) {
+                    Object.assign(allTutors[tutorIndex], updates);
+                }
+                
+                displayTutors();
+                alert('Tutor updated successfully!');
+            } catch (error) {
+                console.error('Error updating tutor:', error);
+                alert('Failed to update tutor. Please try again.');
+            }
+        };
+
+        window.saveStudent = async function(studentKey) {
+            const row = document.querySelector(`tr[data-student="${studentKey}"]`);
+            const updates = {};
+            
+            row.querySelectorAll('.edit-mode').forEach(input => {
+                updates[input.dataset.field] = input.value;
+            });
+
+            try {
+                for (const [field, value] of Object.entries(updates)) {
+                    await set(ref(database, `STUDENTS/${studentKey}/${field}`), value);
+                }
+                
+                // Update local data
+                const studentIndex = allStudents.findIndex(s => s.key === studentKey);
+                if (studentIndex !== -1) {
+                    Object.assign(allStudents[studentIndex], updates);
+                }
+                
+                displayStudents();
+                alert('Student updated successfully!');
+            } catch (error) {
+                console.error('Error updating student:', error);
+                alert('Failed to update student. Please try again.');
+            }
+        };
+
+        window.cancelEdit = function(key, type) {
+            if (type === 'tutor') {
+                displayTutors();
+            } else {
+                displayStudents();
+            }
+        };
+
+        window.filterTutors = function() {
+            const searchText = document.getElementById('tutorSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#tutorsContainer tr[data-tutor]');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (name.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        };
+
+        window.filterStudents = function() {
+            const searchText = document.getElementById('studentSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#studentsContainer tr[data-student]');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (name.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        };
     </script>
 </body>
 
