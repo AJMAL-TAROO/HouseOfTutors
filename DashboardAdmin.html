@@ -190,25 +190,6 @@
                         </div>
                     </div>
 
-                    <!-- Classrooms Details Section -->
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-3 text-purple-700">My Classrooms</h3>
-                        <div class="overflow-x-auto">
-                            <table class="table table-zebra w-full">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Teacher</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="classroomsTableBody">
-                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                     <!-- Students Details Section -->
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold mb-3 text-purple-700">My Students</h3>
@@ -216,14 +197,13 @@
                             <table class="table table-zebra w-full">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Full Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
                                     </tr>
                                 </thead>
                                 <tbody id="studentsTableBody">
-                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1189,47 +1169,6 @@
                 document.getElementById('totalClassrooms').textContent = virtualRooms.length;
                 document.getElementById('totalStudents').textContent = studentIds.length;
 
-                // Fetch and display classroom details
-                const classroomsRef = ref(database, "CLASSROOMS");
-                const classroomsSnapshot = await get(classroomsRef);
-                const classroomsTableBody = document.getElementById('classroomsTableBody');
-                classroomsTableBody.innerHTML = '';
-
-                if (classroomsSnapshot.exists()) {
-                    const classrooms = classroomsSnapshot.val();
-                    let hasClassrooms = false;
-
-                    for (const classroomKey in classrooms) {
-                        const classroom = classrooms[classroomKey];
-                        if (virtualRooms.includes(classroom.CLASSROOM_ID)) {
-                            hasClassrooms = true;
-                            const row = document.createElement('tr');
-                            
-                            // Create cells and use textContent to prevent XSS
-                            const idCell = document.createElement('td');
-                            idCell.textContent = classroom.CLASSROOM_ID;
-                            
-                            const titleCell = document.createElement('td');
-                            titleCell.textContent = classroom.TITLE;
-                            
-                            const teacherCell = document.createElement('td');
-                            teacherCell.textContent = classroom.TEACHER_FULL_NAME;
-                            
-                            row.appendChild(idCell);
-                            row.appendChild(titleCell);
-                            row.appendChild(teacherCell);
-                            
-                            classroomsTableBody.appendChild(row);
-                        }
-                    }
-
-                    if (!hasClassrooms) {
-                        classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
-                    }
-                } else {
-                    classroomsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No classrooms found</td></tr>';
-                }
-
                 // Fetch and display student details
                 const studentsRef = ref(database, "STUDENTS");
                 const studentsSnapshot = await get(studentsRef);
@@ -1250,9 +1189,6 @@
                             const row = document.createElement('tr');
                             
                             // Create cells and use textContent to prevent XSS
-                            const idCell = document.createElement('td');
-                            idCell.textContent = studentKey;
-                            
                             const nameCell = document.createElement('td');
                             nameCell.textContent = student.FULL_NAME;
                             
@@ -1262,7 +1198,6 @@
                             const telCell = document.createElement('td');
                             telCell.textContent = student.TEL || NOT_AVAILABLE;
                             
-                            row.appendChild(idCell);
                             row.appendChild(nameCell);
                             row.appendChild(emailCell);
                             row.appendChild(telCell);
@@ -1272,10 +1207,10 @@
                     }
 
                     if (!hasStudents) {
-                        studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                        studentsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No students found</td></tr>';
                     }
                 } else {
-                    studentsTableBody.innerHTML = '<tr><td colspan="4" class="text-center">No students found</td></tr>';
+                    studentsTableBody.innerHTML = '<tr><td colspan="3" class="text-center">No students found</td></tr>';
                 }
 
             } catch (error) {
