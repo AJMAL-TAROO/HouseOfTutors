@@ -1168,10 +1168,21 @@
                 document.getElementById('editTeachingLevel').value = teachingLevel;
 
                 // Load profile picture if exists
+                const profilePictureElement = document.getElementById('editProfilePicturePreview');
                 if (adminData.PROFILE_PICTURE) {
-                    document.getElementById('editProfilePicturePreview').src = adminData.PROFILE_PICTURE;
+                    // Add cache-busting parameter and error handling
+                    const imageUrl = adminData.PROFILE_PICTURE;
+                    // Set up error handler first before changing src
+                    profilePictureElement.onerror = function() {
+                        console.error('Failed to load profile picture:', imageUrl);
+                        profilePictureElement.src = 'img/user-icon.png';
+                        profilePictureElement.onerror = null; // Prevent infinite loop
+                    };
+                    // Add cache-busting parameter to force reload
+                    const cacheBuster = imageUrl.includes('?') ? '&' : '?';
+                    profilePictureElement.src = imageUrl + cacheBuster + 't=' + Date.now();
                 } else {
-                    document.getElementById('editProfilePicturePreview').src = 'img/user-icon.png';
+                    profilePictureElement.src = 'img/user-icon.png';
                 }
 
                 // Trigger level change to populate subject dropdowns
