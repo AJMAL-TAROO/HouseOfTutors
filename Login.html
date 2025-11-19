@@ -157,10 +157,99 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-2xl w-full my-4 md:my-8 max-h-[calc(100vh-2rem)] overflow-y-auto">
             <h2 class="text-xl font-bold mb-4 dark:text-white">Sign Up</h2>
             <div id="studentSignupInfo">
-                <p class="dark:text-gray-300">You need to contact your teacher to get your login credentials.</p>
-                <button id="closeStudentModalBtn" class="mt-4 w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
-                    Close
-                </button>
+                <form id="studentSignupForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="studentFullName" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Full Name *</label>
+                            <input type="text" id="studentFullName" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label for="studentEmail" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Email *</label>
+                            <input type="email" id="studentEmail" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label for="studentTel" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Phone Number *</label>
+                            <input type="tel" id="studentTel" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="12345678">
+                        </div>
+                        <div>
+                            <label for="studentAge" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Age *</label>
+                            <input type="number" id="studentAge" required min="1" max="150"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="18">
+                        </div>
+                    </div>
+                    
+                    <!-- Responsible Party Fields (conditional based on age) -->
+                    <div id="responsiblePartyFields">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="studentRParty" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Responsible Party *</label>
+                                <input type="text" id="studentRParty"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                    placeholder="Parent/Guardian Name">
+                            </div>
+                            <div>
+                                <label for="studentRPartyTel" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Responsible Party Phone *</label>
+                                <input type="tel" id="studentRPartyTel"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                    placeholder="12345678">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="studentPassword" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Password *</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="studentPassword" readonly required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <button type="button" id="generateStudentPasswordBtn"
+                                class="gradient-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all whitespace-nowrap">
+                                Generate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="studentWallpaper" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Wallpaper *</label>
+                        <select id="studentWallpaper" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option value="">Select Wallpaper</option>
+                            <option value="img/wallpapers/wallpaper1.png">Wallpaper 1</option>
+                            <option value="img/wallpapers/wallpaper2.png">Wallpaper 2</option>
+                            <option value="img/wallpapers/wallpaper3.png">Wallpaper 3</option>
+                            <option value="img/wallpapers/wallpaper4.png">Wallpaper 4</option>
+                            <option value="img/wallpapers/wallpaper5.png">Wallpaper 5</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="studentFeedback" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Feedback/Comments (Optional)</label>
+                        <textarea id="studentFeedback" rows="3"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="Any comments or feedback..."></textarea>
+                    </div>
+                    
+                    <div id="studentSignupError" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
+                        <p class="text-sm text-red-800 dark:text-red-200" id="studentSignupErrorText"></p>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" id="closeStudentModalBtn"
+                            class="w-full bg-gray-500 text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                            Cancel
+                        </button>
+                        <button type="submit" id="createStudentProfileBtn"
+                            class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
             </div>
             <div id="adminSignupInfo" class="hidden">
                 <form id="adminSignupForm" class="space-y-4">
@@ -318,8 +407,8 @@
     <!-- Success Modal -->
     <div id="successModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
-            <h2 class="text-xl font-bold mb-4 text-green-600 dark:text-green-400">Profile Submitted!</h2>
-            <p class="dark:text-gray-300 mb-4">Thank you for your interest! Your profile has been submitted and is pending approval. You will be contacted once your profile is approved.</p>
+            <h2 class="text-xl font-bold mb-4 text-green-600 dark:text-green-400" id="successModalTitle">Success!</h2>
+            <p class="dark:text-gray-300 mb-4" id="successModalMessage">Your account has been created successfully!</p>
             <button id="closeSuccessModalBtn" class="w-full gradient-bg text-white py-2 rounded-lg hover:opacity-90 transition-all">
                 Close
             </button>
@@ -493,6 +582,150 @@
         document.getElementById('signUpModal').addEventListener('click', (e) => {
             if (e.target.id === 'signUpModal') {
                 document.getElementById('signUpModal').classList.add('hidden');
+            }
+        });
+
+        //------------------------------------------STUDENT SIGNUP FUNCTIONALITY-----------------------
+        // Handle age change to show/hide responsible party fields
+        document.getElementById('studentAge').addEventListener('input', (e) => {
+            const age = parseInt(e.target.value);
+            const responsiblePartyFields = document.getElementById('responsiblePartyFields');
+            const rPartyInput = document.getElementById('studentRParty');
+            const rPartyTelInput = document.getElementById('studentRPartyTel');
+            
+            if (age > 18) {
+                responsiblePartyFields.classList.add('hidden');
+                rPartyInput.required = false;
+                rPartyTelInput.required = false;
+                rPartyInput.value = '';
+                rPartyTelInput.value = '';
+            } else {
+                responsiblePartyFields.classList.remove('hidden');
+                rPartyInput.required = true;
+                rPartyTelInput.required = true;
+            }
+        });
+        
+        // Generate password for student
+        document.getElementById('generateStudentPasswordBtn').addEventListener('click', () => {
+            const password = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('studentPassword').value = password;
+        });
+        
+        // Show student signup error
+        function showStudentSignupError(message) {
+            document.getElementById('studentSignupErrorText').textContent = message;
+            document.getElementById('studentSignupError').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('studentSignupError').classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Student signup form submission
+        document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const fullName = document.getElementById('studentFullName').value.trim();
+            const email = document.getElementById('studentEmail').value.trim();
+            const tel = document.getElementById('studentTel').value.trim();
+            const age = document.getElementById('studentAge').value;
+            const rParty = document.getElementById('studentRParty').value.trim();
+            const rPartyTel = document.getElementById('studentRPartyTel').value.trim();
+            const password = document.getElementById('studentPassword').value;
+            const wallpaper = document.getElementById('studentWallpaper').value;
+            const feedback = document.getElementById('studentFeedback').value.trim();
+            
+            // Validation
+            if (!fullName || !email || !tel || !age || !password || !wallpaper) {
+                showStudentSignupError('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate age
+            const ageNum = parseInt(age);
+            if (isNaN(ageNum) || ageNum < 1 || ageNum > 150) {
+                showStudentSignupError('Please enter a valid age');
+                return;
+            }
+            
+            // Check if responsible party fields are required and filled
+            if (ageNum <= 18) {
+                if (!rParty || !rPartyTel) {
+                    showStudentSignupError('Responsible party information is required for students aged 18 or younger');
+                    return;
+                }
+            }
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('createStudentProfileBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Account...';
+            
+            try {
+                // Check if email already exists
+                const studentsRef = ref(database, "STUDENTS");
+                const studentsSnapshot = await get(studentsRef);
+                if (studentsSnapshot.exists()) {
+                    const students = studentsSnapshot.val();
+                    for (const key in students) {
+                        if (students[key].EMAIL === email) {
+                            showStudentSignupError('An account with this email already exists');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Create Account';
+                            return;
+                        }
+                    }
+                }
+                
+                // Get next student ID
+                const studentIdRef = ref(database, "NUMBERS/ID_STUDENT/NUMBER");
+                const studentIdSnapshot = await get(studentIdRef);
+                let studentId = studentIdSnapshot.exists() ? studentIdSnapshot.val() : 1;
+                
+                // Create student data object
+                const studentData = {
+                    EMAIL: email,
+                    FULL_NAME: fullName,
+                    TEL: tel,
+                    AGE: ageNum,
+                    PASSWORD: password,
+                    WALLPAPER: wallpaper,
+                    VIRTUAL_ROOMS: "",
+                    FEEDBACK: feedback || ""
+                };
+                
+                // Add responsible party info if student is 18 or younger
+                if (ageNum <= 18) {
+                    studentData.R_PARTY = rParty;
+                    studentData.R_PARTY_TEL = rPartyTel;
+                } else {
+                    studentData.R_PARTY = "";
+                    studentData.R_PARTY_TEL = "";
+                }
+                
+                // Save student data to Firebase
+                await set(ref(database, `STUDENTS/STUDENTS_${studentId}`), studentData);
+                
+                // Increment student ID
+                await set(studentIdRef, studentId + 1);
+                
+                // Close signup modal and show success modal with student-specific message
+                document.getElementById('signUpModal').classList.add('hidden');
+                document.getElementById('successModalTitle').textContent = 'Account Created!';
+                document.getElementById('successModalMessage').textContent = 'Your student account has been created successfully. You can now log in with your email and password.';
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Reset form
+                document.getElementById('studentSignupForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+                
+            } catch (error) {
+                console.error('Error creating student account:', error);
+                showStudentSignupError('An error occurred while creating your account. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
             }
         });
 
@@ -805,8 +1038,10 @@
                 // Increment admin ID
                 await set(adminIdRef, adminId + 1);
                 
-                // Close signup modal and show success modal
+                // Close signup modal and show success modal with admin-specific message
                 document.getElementById('signUpModal').classList.add('hidden');
+                document.getElementById('successModalTitle').textContent = 'Profile Submitted!';
+                document.getElementById('successModalMessage').textContent = 'Thank you for your interest! Your profile has been submitted and is pending approval. You will be contacted once your profile is approved.';
                 document.getElementById('successModal').classList.remove('hidden');
                 
                 // Reset form
