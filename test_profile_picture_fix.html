@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Picture Fix - Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold mb-6 text-purple-800">Profile Picture Loading Fix - Test Page</h1>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Problem Statement</h2>
+            <p class="text-gray-700 mb-2">
+                When editing profile from modal in dashboard admin, the profile picture was not showing up.
+            </p>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Solution Implemented</h2>
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><strong>Error Handling:</strong> Added onerror handler to fallback to default image if loading fails</li>
+                    <li><strong>Success Logging:</strong> Added onload handler to confirm successful image loading</li>
+                    <li><strong>Cache Busting:</strong> Added timestamp query parameter to force image reload</li>
+                    <li><strong>Proper Cleanup:</strong> Clear event handlers after error to prevent infinite loops</li>
+                    <li><strong>Debug Logging:</strong> Added console logging for troubleshooting</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Scenarios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Test 1: Valid Image URL -->
+                <div class="border border-gray-300 rounded-lg p-4">
+                    <h3 class="font-bold mb-3">Test 1: Valid Image (Cached)</h3>
+                    <div class="flex flex-col items-center">
+                        <img id="testImage1" 
+                             src="img/user-icon.png" 
+                             alt="Test 1" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-lg mb-2">
+                        <button onclick="loadValidImage()" class="btn btn-primary btn-sm">Load Valid Image</button>
+                        <p id="status1" class="text-sm text-gray-600 mt-2"></p>
+                    </div>
+                </div>
+
+                <!-- Test 2: Invalid Image URL -->
+                <div class="border border-gray-300 rounded-lg p-4">
+                    <h3 class="font-bold mb-3">Test 2: Invalid URL (Should Fallback)</h3>
+                    <div class="flex flex-col items-center">
+                        <img id="testImage2" 
+                             src="img/user-icon.png" 
+                             alt="Test 2" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-lg mb-2">
+                        <button onclick="loadInvalidImage()" class="btn btn-primary btn-sm">Load Invalid Image</button>
+                        <p id="status2" class="text-sm text-gray-600 mt-2"></p>
+                    </div>
+                </div>
+
+                <!-- Test 3: Cache Busting -->
+                <div class="border border-gray-300 rounded-lg p-4">
+                    <h3 class="font-bold mb-3">Test 3: Cache Busting</h3>
+                    <div class="flex flex-col items-center">
+                        <img id="testImage3" 
+                             src="img/user-icon.png" 
+                             alt="Test 3" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-lg mb-2">
+                        <button onclick="testCacheBusting()" class="btn btn-primary btn-sm">Test Cache Bust</button>
+                        <p id="status3" class="text-sm text-gray-600 mt-2"></p>
+                    </div>
+                </div>
+
+                <!-- Test 4: Default Image -->
+                <div class="border border-gray-300 rounded-lg p-4">
+                    <h3 class="font-bold mb-3">Test 4: No Profile Picture</h3>
+                    <div class="flex flex-col items-center">
+                        <img id="testImage4" 
+                             src="img/user-icon.png" 
+                             alt="Test 4" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-lg mb-2">
+                        <button onclick="testDefaultImage()" class="btn btn-primary btn-sm">Show Default</button>
+                        <p id="status4" class="text-sm text-gray-600 mt-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Console Output</h2>
+            <div id="consoleOutput" class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm h-48 overflow-y-auto">
+                <div class="text-gray-500">// Console output will appear here...</div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Code Changes</h2>
+            <div class="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto">
+                <pre class="text-sm"><code>// Before (Original Code):
+if (adminData.PROFILE_PICTURE) {
+    document.getElementById('editProfilePicturePreview').src = adminData.PROFILE_PICTURE;
+} else {
+    document.getElementById('editProfilePicturePreview').src = 'img/user-icon.png';
+}
+
+// After (Fixed Code):
+const profilePictureElement = document.getElementById('editProfilePicturePreview');
+if (adminData.PROFILE_PICTURE) {
+    const imageUrl = adminData.PROFILE_PICTURE;
+    
+    // Set up handlers before changing src
+    profilePictureElement.onload = function() {
+        console.log('Profile picture loaded successfully');
+    };
+    
+    profilePictureElement.onerror = function() {
+        console.error('Failed to load profile picture:', imageUrl);
+        profilePictureElement.onload = null;
+        profilePictureElement.onerror = null;
+        profilePictureElement.src = 'img/user-icon.png';
+    };
+    
+    // Add cache-busting parameter to force reload
+    const cacheBuster = imageUrl.includes('?') ? '&' : '?';
+    profilePictureElement.src = imageUrl + cacheBuster + 't=' + Date.now();
+} else {
+    profilePictureElement.src = 'img/user-icon.png';
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4">Benefits of This Fix</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800 mb-2">✓ Handles Loading Errors</h3>
+                    <p class="text-gray-700 text-sm">Automatically falls back to default image if Firebase URL fails</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800 mb-2">✓ Bypasses Cache Issues</h3>
+                    <p class="text-gray-700 text-sm">Forces reload with timestamp to show updated pictures</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800 mb-2">✓ Better Debugging</h3>
+                    <p class="text-gray-700 text-sm">Console logs help identify loading issues</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800 mb-2">✓ Prevents Infinite Loops</h3>
+                    <p class="text-gray-700 text-sm">Clears handlers after error to prevent recursion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intercept console.log and console.error to display in the page
+        const consoleOutput = document.getElementById('consoleOutput');
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        function addToConsole(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'text-red-400' : 'text-green-400';
+            consoleOutput.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            
+            // Call original console method
+            if (type === 'error') {
+                originalError(message);
+            } else {
+                originalLog(message);
+            }
+        }
+        
+        console.log = function(msg) { addToConsole(msg, 'log'); };
+        console.error = function(msg) { addToConsole(msg, 'error'); };
+
+        // Test Functions
+        function loadValidImage() {
+            const img = document.getElementById('testImage1');
+            const status = document.getElementById('status1');
+            
+            status.textContent = 'Loading...';
+            
+            img.onload = function() {
+                console.log('Test 1: Valid image loaded successfully');
+                status.textContent = '✓ Image loaded successfully';
+                status.className = 'text-sm text-green-600 mt-2';
+            };
+            
+            img.onerror = function() {
+                console.error('Test 1: Failed to load image');
+                status.textContent = '✗ Failed to load (fallback to default)';
+                status.className = 'text-sm text-red-600 mt-2';
+                img.src = 'img/user-icon.png';
+            };
+            
+            // Use black user icon as valid test image
+            const cacheBuster = 't=' + Date.now();
+            img.src = 'img/black-user-icon.png?' + cacheBuster;
+        }
+
+        function loadInvalidImage() {
+            const img = document.getElementById('testImage2');
+            const status = document.getElementById('status2');
+            
+            status.textContent = 'Loading invalid URL...';
+            
+            img.onload = function() {
+                console.log('Test 2: Image loaded (unexpected)');
+                status.textContent = '? Image loaded';
+                status.className = 'text-sm text-yellow-600 mt-2';
+            };
+            
+            img.onerror = function() {
+                console.error('Test 2: Failed to load invalid image (expected)');
+                status.textContent = '✓ Correctly fell back to default';
+                status.className = 'text-sm text-green-600 mt-2';
+                img.onload = null;
+                img.onerror = null;
+                img.src = 'img/user-icon.png';
+            };
+            
+            // Try to load non-existent image
+            img.src = 'https://invalid-url-that-does-not-exist.com/image.jpg?t=' + Date.now();
+        }
+
+        function testCacheBusting() {
+            const img = document.getElementById('testImage3');
+            const status = document.getElementById('status3');
+            
+            status.textContent = 'Testing cache busting...';
+            
+            img.onload = function() {
+                const currentSrc = img.src;
+                const hasTimestamp = currentSrc.includes('t=');
+                console.log('Test 3: Image loaded with cache buster: ' + hasTimestamp);
+                status.textContent = `✓ Loaded with timestamp: ${hasTimestamp ? 'Yes' : 'No'}`;
+                status.className = 'text-sm text-green-600 mt-2';
+            };
+            
+            img.onerror = function() {
+                console.error('Test 3: Failed to load');
+                status.textContent = '✗ Failed to load';
+                status.className = 'text-sm text-red-600 mt-2';
+            };
+            
+            // Load with cache busting parameter
+            const baseUrl = 'img/user-icon.png';
+            const cacheBuster = 't=' + Date.now();
+            img.src = baseUrl + '?' + cacheBuster;
+            console.log('Test 3: Loading with URL: ' + img.src);
+        }
+
+        function testDefaultImage() {
+            const img = document.getElementById('testImage4');
+            const status = document.getElementById('status4');
+            
+            console.log('Test 4: Loading default image (no profile picture)');
+            status.textContent = 'Loading default...';
+            
+            img.onload = function() {
+                console.log('Test 4: Default image loaded successfully');
+                status.textContent = '✓ Default image shown';
+                status.className = 'text-sm text-green-600 mt-2';
+            };
+            
+            img.src = 'img/user-icon.png';
+        }
+
+        // Initial message
+        console.log('Profile Picture Fix Test Page Loaded');
+        console.log('Click the buttons to test different scenarios');
+    </script>
+</body>
+</html>
