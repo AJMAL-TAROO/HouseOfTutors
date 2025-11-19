@@ -1172,12 +1172,21 @@
                 if (adminData.PROFILE_PICTURE) {
                     // Add cache-busting parameter and error handling
                     const imageUrl = adminData.PROFILE_PICTURE;
-                    // Set up error handler first before changing src
+                    
+                    // Set up handlers before changing src
+                    profilePictureElement.onload = function() {
+                        console.log('Profile picture loaded successfully');
+                    };
+                    
                     profilePictureElement.onerror = function() {
                         console.error('Failed to load profile picture:', imageUrl);
+                        // Clear handlers to prevent infinite loop
+                        profilePictureElement.onload = null;
+                        profilePictureElement.onerror = null;
+                        // Fallback to default image
                         profilePictureElement.src = 'img/user-icon.png';
-                        profilePictureElement.onerror = null; // Prevent infinite loop
                     };
+                    
                     // Add cache-busting parameter to force reload
                     const cacheBuster = imageUrl.includes('?') ? '&' : '?';
                     profilePictureElement.src = imageUrl + cacheBuster + 't=' + Date.now();
