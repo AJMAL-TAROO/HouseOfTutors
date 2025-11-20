@@ -1122,6 +1122,20 @@
             }
 
             try {
+                // Reset form to initial state before loading data
+                // This ensures previous values don't persist
+                document.getElementById('editProfileForm').reset();
+                
+                // Reset profile picture to default
+                const profilePictureElement = document.getElementById('editProfilePicturePreview');
+                profilePictureElement.src = 'img/user-icon.png';
+                
+                // Reset teaching level dropdown to default
+                document.getElementById('editTeachingLevel').value = '';
+                
+                // Reset subject dropdowns to initial state
+                populateEditSubjectDropdowns('');
+                
                 const adminRef = ref(database, "ADMIN");
                 const adminSnapshot = await get(adminRef);
                 
@@ -1168,7 +1182,6 @@
                 document.getElementById('editTeachingLevel').value = teachingLevel;
 
                 // Load profile picture if exists
-                const profilePictureElement = document.getElementById('editProfilePicturePreview');
                 if (adminData.PROFILE_PICTURE) {
                     // Add cache-busting parameter and error handling
                     const imageUrl = adminData.PROFILE_PICTURE;
@@ -1191,15 +1204,17 @@
                     const cacheBuster = imageUrl.includes('?') ? '&' : '?';
                     profilePictureElement.src = imageUrl + cacheBuster + 't=' + Date.now();
                 } else {
+                    // Explicitly set to default image (already set above, but be explicit for clarity)
                     profilePictureElement.src = 'img/user-icon.png';
                 }
 
-                // Trigger level change to populate subject dropdowns
-                if (teachingLevel) {
-                    populateEditSubjectDropdowns(teachingLevel);
-                    
-                    // Set selected subjects
-                    const subjects = adminData.SUBJECTS ? adminData.SUBJECTS.split(',') : [];
+                // Always populate subject dropdowns based on teaching level
+                // This ensures dropdowns are properly initialized even if empty
+                populateEditSubjectDropdowns(teachingLevel);
+                
+                // Set selected subjects if they exist
+                if (teachingLevel && adminData.SUBJECTS) {
+                    const subjects = adminData.SUBJECTS.split(',');
                     if (subjects[0]) document.getElementById('editSubject1').value = subjects[0].trim();
                     if (subjects[1]) document.getElementById('editSubject2').value = subjects[1].trim();
                     if (subjects[2]) document.getElementById('editSubject3').value = subjects[2].trim();
