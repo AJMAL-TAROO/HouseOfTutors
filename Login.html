@@ -215,25 +215,7 @@
                         </div>
                     </div>
                     
-                    <div>
-                        <label for="studentWallpaper" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Wallpaper *</label>
-                        <select id="studentWallpaper" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                            <option value="">Select Wallpaper</option>
-                            <option value="img/wallpapers/wallpaper1.png">Wallpaper 1</option>
-                            <option value="img/wallpapers/wallpaper2.png">Wallpaper 2</option>
-                            <option value="img/wallpapers/wallpaper3.png">Wallpaper 3</option>
-                            <option value="img/wallpapers/wallpaper4.png">Wallpaper 4</option>
-                            <option value="img/wallpapers/wallpaper5.png">Wallpaper 5</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label for="studentFeedback" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Feedback/Comments (Optional)</label>
-                        <textarea id="studentFeedback" rows="3"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            placeholder="Any comments or feedback..."></textarea>
-                    </div>
+
                     
                     <div id="studentSignupError" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
                         <p class="text-sm text-red-800 dark:text-red-200" id="studentSignupErrorText"></p>
@@ -633,11 +615,9 @@
             const rParty = document.getElementById('studentRParty').value.trim();
             const rPartyTel = document.getElementById('studentRPartyTel').value.trim();
             const password = document.getElementById('studentPassword').value;
-            const wallpaper = document.getElementById('studentWallpaper').value;
-            const feedback = document.getElementById('studentFeedback').value.trim();
             
             // Validation
-            if (!fullName || !email || !tel || !age || !password || !wallpaper) {
+            if (!fullName || !email || !tel || !age || !password) {
                 showStudentSignupError('Please fill in all required fields');
                 return;
             }
@@ -690,9 +670,9 @@
                     TEL: tel,
                     AGE: ageNum,
                     PASSWORD: password,
-                    WALLPAPER: wallpaper,
+                    WALLPAPER: "img/wallpapers/wallpaper3.png",
                     VIRTUAL_ROOMS: "",
-                    FEEDBACK: feedback || ""
+                    FEEDBACK: ""
                 };
                 
                 // Add responsible party info if student is 18 or younger
