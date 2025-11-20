@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin Signup - LEVELS Field</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Test Admin Signup - LEVELS Field Capture</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Instructions</h2>
+            <ol class="list-decimal list-inside space-y-2">
+                <li>This test verifies that the teaching level selected during admin signup is properly captured and saved to Firebase</li>
+                <li>Open the browser console to see debug logs</li>
+                <li>Click "Simulate Signup" to test with sample data</li>
+                <li>Check the console output for:
+                    <ul class="list-disc list-inside ml-6 mt-2">
+                        <li>Teaching Level captured value</li>
+                        <li>adminData object structure</li>
+                        <li>LEVELS field value in the data</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Controls</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Teaching Level:</label>
+                    <select id="testTeachingLevel" class="border border-gray-300 rounded-lg p-2 w-full">
+                        <option value="">Select Level</option>
+                        <option value="primary">Primary</option>
+                        <option value="secondary">Secondary</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+                <button id="simulateBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    Simulate Signup
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+            <div id="results" class="space-y-2 font-mono text-sm">
+                <p class="text-gray-500">Click "Simulate Signup" to see results...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.firebasestorage.app",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(message, type = 'info') {
+            const colors = {
+                'info': 'text-blue-600',
+                'success': 'text-green-600',
+                'error': 'text-red-600',
+                'warning': 'text-yellow-600'
+            };
+            const p = document.createElement('p');
+            p.className = colors[type];
+            p.textContent = message;
+            resultsDiv.appendChild(p);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        document.getElementById('simulateBtn').addEventListener('click', async () => {
+            clearResults();
+            addResult('Starting test...', 'info');
+
+            // Get teaching level value
+            const teachingLevel = document.getElementById('testTeachingLevel').value;
+            
+            addResult(`Step 1: Captured teaching level from dropdown: "${teachingLevel}"`, 'info');
+            console.log('Test - Teaching Level captured:', teachingLevel);
+
+            if (!teachingLevel) {
+                addResult('ERROR: Teaching level is empty! Please select a level first.', 'error');
+                return;
+            }
+
+            addResult(`Step 2: Teaching level is "${teachingLevel}" (${teachingLevel ? 'NOT empty' : 'EMPTY'})`, 'success');
+
+            // Simulate creating admin data object (same structure as Login.html)
+            const adminData = {
+                EMAIL: 'test@example.com',
+                FULL_NAME: 'Test User',
+                TEL: '12345678',
+                DOB: '1990-01-01',
+                PASSWORD: '123456',
+                SUBJECTS: 'Mathematics,Physics',
+                LEVELS: teachingLevel, // This is the critical field
+                HAVE_STUDENTS: 'yes',
+                NUM_OF_STD: 5,
+                FEES: 500,
+                BIO: 'This is a test bio with more than 50 characters to meet the minimum requirement',
+                REASON: 'Testing the signup process',
+                PROFILE_LINK: 'https://example.com/profile.jpg',
+                VIRTUAL_ROOMS: '',
+                VR_LINK: '',
+                WHITEBOARD: '',
+                WALLPAPER: 'img/wallpapers/wallpaper2.png',
+                STUDENTS: '',
+                APPROVAL: 'pending'
+            };
+
+            addResult('Step 3: Created adminData object', 'info');
+            addResult(`Step 4: LEVELS field in adminData = "${adminData.LEVELS}"`, adminData.LEVELS ? 'success' : 'error');
+            
+            console.log('Test - Admin data object:', adminData);
+            console.log('Test - LEVELS value in adminData:', adminData.LEVELS);
+
+            // Verify LEVELS field
+            if (adminData.LEVELS && adminData.LEVELS === teachingLevel) {
+                addResult(`✓ SUCCESS: LEVELS field is properly set to "${adminData.LEVELS}"`, 'success');
+            } else {
+                addResult(`✗ FAILURE: LEVELS field mismatch! Expected "${teachingLevel}", got "${adminData.LEVELS}"`, 'error');
+            }
+
+            // Test if we can read it back
+            addResult('Step 5: Verifying LEVELS field can be read...', 'info');
+            const readLevels = adminData.LEVELS;
+            if (readLevels === teachingLevel) {
+                addResult(`✓ SUCCESS: LEVELS field reads correctly as "${readLevels}"`, 'success');
+            } else {
+                addResult(`✗ FAILURE: LEVELS field read incorrectly. Expected "${teachingLevel}", got "${readLevels}"`, 'error');
+            }
+
+            addResult('', 'info');
+            addResult('Test complete! Check console for detailed logs.', 'info');
+            addResult(`Summary: The LEVELS field ${adminData.LEVELS ? 'IS' : 'IS NOT'} being properly captured.`, adminData.LEVELS ? 'success' : 'error');
+        });
+
+        // Pre-select secondary level for easy testing
+        document.getElementById('testTeachingLevel').value = 'secondary';
+    </script>
+</body>
+</html>

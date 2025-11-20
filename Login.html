@@ -868,6 +868,9 @@
             const password = document.getElementById('adminPassword').value;
             const profilePicFile = document.getElementById('adminProfilePic').files[0];
             
+            // Debug logging for teachingLevel
+            console.log('Admin Signup - Teaching Level captured:', teachingLevel);
+            
             // Validation
             if (!email || !phone || !firstName || !lastName || !dob || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
                 showSignupError('Please fill in all required fields');
@@ -1012,8 +1015,23 @@
                     APPROVAL: "pending"
                 };
                 
+                // Debug logging before saving to Firebase
+                console.log('Admin Signup - Data being saved to Firebase:', adminData);
+                console.log('Admin Signup - LEVELS value in adminData:', adminData.LEVELS);
+                
+                // Additional validation to ensure LEVELS is not empty before saving
+                if (!adminData.LEVELS) {
+                    console.error('CRITICAL ERROR: LEVELS field is empty! teachingLevel was:', teachingLevel);
+                    showSignupError('An error occurred: Teaching level was not captured properly. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Profile';
+                    return;
+                }
+                
                 // Save admin data to Firebase
                 await set(ref(database, `ADMIN/ADMIN_${adminId}`), adminData);
+                
+                console.log(`Admin Signup - Successfully saved to ADMIN/ADMIN_${adminId} with LEVELS="${adminData.LEVELS}"`);
                 
                 // Increment admin ID
                 await set(adminIdRef, adminId + 1);
