@@ -972,7 +972,7 @@
                 // Sanitize filename: remove spaces and special characters, keep extension
                 const fileExtension = profilePicFile.name.split('.').pop();
                 const sanitizedFileName = `profile_picture_${Date.now()}.${fileExtension}`;
-                const profilePicPath = `profile_pictures/ADMIN_${adminId}/${sanitizedFileName}`;
+                const profilePicPath = `ADMIN_PROFILE_PICTURES/${sanitizedFileName}`;
                 const profilePicRef = storageRef(storage, profilePicPath);
                 
                 var profilePicUrlToSave;
@@ -1006,7 +1006,7 @@
                     FEES: parseFloat(fees),
                     BIO: bio,
                     REASON: reason,
-                    PROFILE_LINK: profilePicUrlToSave,
+                    PROFILE_PICTURE: profilePicUrlToSave,
                     VIRTUAL_ROOMS: "",
                     VR_LINK: "",
                     WHITEBOARD: "",
