@@ -149,7 +149,8 @@
                 R_PARTY_TEL: rPartyTel,
                 VIRTUAL_ROOMS: "",
                 EMAIL: email,
-                PASSWORD: password
+                PASSWORD: password,
+                DATE_REGISTRATION: new Date().toISOString().split('T')[0]
             };
 
             const newStudentRef = ref(database, `STUDENTS/STUDENTS_${studentId}`);

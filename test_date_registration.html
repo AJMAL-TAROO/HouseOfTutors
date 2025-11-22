@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DATE_REGISTRATION Field</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .test-result {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+        }
+        .test-pass {
+            background-color: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        .test-fail {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Test: DATE_REGISTRATION Field Implementation</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Description</h2>
+            <p class="mb-2">This test verifies that the DATE_REGISTRATION field is properly added to both student and admin nodes during signup.</p>
+            <p class="text-sm text-gray-600">Expected: DATE_REGISTRATION field should be in ISO 8601 format (YYYY-MM-DD)</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Controls</h2>
+            <button id="runTests" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Run Tests
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwol-nlbl1YbdAiU88nYFv67pJg2XOo9U",
+            authDomain: "houseoftutors-f398e.firebaseapp.com",
+            databaseURL: "https://houseoftutors-f398e-default-rtdb.firebaseio.com/",
+            projectId: "houseoftutors-f398e",
+            storageBucket: "houseoftutors-f398e.firebasestorage.app",
+            messagingSenderId: "1006665226128",
+            appId: "1:1006665226128:web:bcf481758d361da3ef8515",
+            measurementId: "G-PEM636J9ZD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const testResults = document.getElementById('testResults');
+
+        function addTestResult(testName, passed, message) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${passed ? 'test-pass' : 'test-fail'}`;
+            resultDiv.innerHTML = `
+                <strong>${passed ? '✓' : '✗'} ${testName}</strong>
+                <p class="text-sm mt-1">${message}</p>
+            `;
+            testResults.appendChild(resultDiv);
+        }
+
+        // Test 1: Check if DATE_REGISTRATION field exists in student nodes
+        async function testStudentDateRegistration() {
+            const studentsRef = ref(database, 'STUDENTS');
+            const snapshot = await get(studentsRef);
+            
+            if (snapshot.exists()) {
+                const students = snapshot.val();
+                let hasDateRegistration = false;
+                let exampleStudentId = null;
+                let exampleDate = null;
+                
+                for (const key in students) {
+                    if (students[key].DATE_REGISTRATION) {
+                        hasDateRegistration = true;
+                        exampleStudentId = key;
+                        exampleDate = students[key].DATE_REGISTRATION;
+                        break;
+                    }
+                }
+                
+                if (hasDateRegistration) {
+                    // Validate date format (YYYY-MM-DD)
+                    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                    if (dateRegex.test(exampleDate)) {
+                        addTestResult(
+                            'Student DATE_REGISTRATION Field',
+                            true,
+                            `Found DATE_REGISTRATION field in ${exampleStudentId}: ${exampleDate} (Valid format)`
+                        );
+                        return true;
+                    } else {
+                        addTestResult(
+                            'Student DATE_REGISTRATION Field',
+                            false,
+                            `Found DATE_REGISTRATION field but format is invalid: ${exampleDate}`
+                        );
+                        return false;
+                    }
+                } else {
+                    addTestResult(
+                        'Student DATE_REGISTRATION Field',
+                        false,
+                        'No student with DATE_REGISTRATION field found. Create a new student to test.'
+                    );
+                    return false;
+                }
+            } else {
+                addTestResult(
+                    'Student DATE_REGISTRATION Field',
+                    false,
+                    'No students found in database'
+                );
+                return false;
+            }
+        }
+
+        // Test 2: Check if DATE_REGISTRATION field exists in admin nodes
+        async function testAdminDateRegistration() {
+            const adminsRef = ref(database, 'ADMIN');
+            const snapshot = await get(adminsRef);
+            
+            if (snapshot.exists()) {
+                const admins = snapshot.val();
+                let hasDateRegistration = false;
+                let exampleAdminId = null;
+                let exampleDate = null;
+                
+                for (const key in admins) {
+                    if (admins[key].DATE_REGISTRATION) {
+                        hasDateRegistration = true;
+                        exampleAdminId = key;
+                        exampleDate = admins[key].DATE_REGISTRATION;
+                        break;
+                    }
+                }
+                
+                if (hasDateRegistration) {
+                    // Validate date format (YYYY-MM-DD)
+                    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                    if (dateRegex.test(exampleDate)) {
+                        addTestResult(
+                            'Admin DATE_REGISTRATION Field',
+                            true,
+                            `Found DATE_REGISTRATION field in ${exampleAdminId}: ${exampleDate} (Valid format)`
+                        );
+                        return true;
+                    } else {
+                        addTestResult(
+                            'Admin DATE_REGISTRATION Field',
+                            false,
+                            `Found DATE_REGISTRATION field but format is invalid: ${exampleDate}`
+                        );
+                        return false;
+                    }
+                } else {
+                    addTestResult(
+                        'Admin DATE_REGISTRATION Field',
+                        false,
+                        'No admin with DATE_REGISTRATION field found. Create a new admin to test.'
+                    );
+                    return false;
+                }
+            } else {
+                addTestResult(
+                    'Admin DATE_REGISTRATION Field',
+                    false,
+                    'No admins found in database'
+                );
+                return false;
+            }
+        }
+
+        // Test 3: Verify date format is ISO 8601 (YYYY-MM-DD)
+        function testDateFormat() {
+            const testDate = new Date().toISOString().split('T')[0];
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            
+            if (dateRegex.test(testDate)) {
+                addTestResult(
+                    'Date Format Generation',
+                    true,
+                    `Generated date format is correct: ${testDate}`
+                );
+                return true;
+            } else {
+                addTestResult(
+                    'Date Format Generation',
+                    false,
+                    `Generated date format is incorrect: ${testDate}`
+                );
+                return false;
+            }
+        }
+
+        // Run all tests
+        document.getElementById('runTests').addEventListener('click', async () => {
+            testResults.innerHTML = '<p class="text-gray-600 mb-4">Running tests...</p>';
+            
+            try {
+                await testDateFormat();
+                await testStudentDateRegistration();
+                await testAdminDateRegistration();
+                
+                const summaryDiv = document.createElement('div');
+                summaryDiv.className = 'mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg';
+                summaryDiv.innerHTML = `
+                    <strong>Test Summary</strong>
+                    <p class="text-sm mt-2">If tests show "No student/admin with DATE_REGISTRATION field found", 
+                    create a new student or admin account through the signup process to validate the implementation.</p>
+                `;
+                testResults.appendChild(summaryDiv);
+                
+            } catch (error) {
+                addTestResult(
+                    'Test Execution Error',
+                    false,
+                    `Error running tests: ${error.message}`
+                );
+            }
+        });
+    </script>
+</body>
+
+</html>
