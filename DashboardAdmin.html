@@ -1181,10 +1181,10 @@
                 const teachingLevel = adminData.LEVELS || '';
                 document.getElementById('editTeachingLevel').value = teachingLevel;
 
-                // Load profile picture if exists
-                if (adminData.PROFILE_PICTURE) {
+                // Load profile picture if exists (check both PROFILE_LINK and PROFILE_PICTURE for backward compatibility)
+                if (adminData.PROFILE_LINK || adminData.PROFILE_PICTURE) {
                     // Add cache-busting parameter and error handling
-                    const imageUrl = adminData.PROFILE_PICTURE;
+                    const imageUrl = adminData.PROFILE_LINK || adminData.PROFILE_PICTURE;
                     
                     // Set up handlers before changing src
                     profilePictureElement.onload = function() {
@@ -1278,8 +1278,9 @@
             return new Promise((resolve, reject) => {
                 try {
                     // Create a unique filename using admin key and timestamp
-                    const fileName = `profile_${window.currentAdminKey}_${Date.now()}.${selectedProfilePictureFile.name.split('.').pop()}`;
-                    const fileRef = storageRef(storage, `ADMIN_PROFILE_PICTURES/${fileName}`);
+                    const fileExtension = selectedProfilePictureFile.name.split('.').pop();
+                    const fileName = `profile_picture_${Date.now()}.${fileExtension}`;
+                    const fileRef = storageRef(storage, `profile_pictures/${window.currentAdminKey}/${fileName}`);
                     
                     // Show progress bar
                     document.getElementById('uploadProgress').classList.remove('hidden');
@@ -1475,7 +1476,7 @@
                 
                 // Add profile picture URL if uploaded
                 if (profilePictureUrl) {
-                    updateData.PROFILE_PICTURE = profilePictureUrl;
+                    updateData.PROFILE_LINK = profilePictureUrl;
                 }
                 
                 // Update admin data
