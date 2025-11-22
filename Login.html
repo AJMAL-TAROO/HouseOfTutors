@@ -672,7 +672,8 @@
                     PASSWORD: password,
                     WALLPAPER: "img/wallpapers/wallpaper3.png",
                     VIRTUAL_ROOMS: "",
-                    FEEDBACK: ""
+                    FEEDBACK: "",
+                    DATE_REGISTRATION: new Date().toISOString().split('T')[0]
                 };
                 
                 // Add responsible party info if student is 18 or younger
@@ -1012,7 +1013,8 @@
                     WHITEBOARD: "",
                     WALLPAPER: "img/wallpapers/wallpaper2.png",
                     STUDENTS: "",
-                    APPROVAL: "pending"
+                    APPROVAL: "pending",
+                    DATE_REGISTRATION: new Date().toISOString().split('T')[0]
                 };
                 
                 // Debug logging before saving to Firebase
