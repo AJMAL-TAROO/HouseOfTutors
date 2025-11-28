@@ -593,6 +593,11 @@
         // Helper function to add the "Add Classroom" card to the container
         function addAddClassroomCard() {
             const classroomContainer = document.getElementById("classroomContainer");
+            // Check if container exists
+            if (!classroomContainer) {
+                console.error("Classroom container not found");
+                return;
+            }
             // Check if the add classroom card already exists to avoid duplicates
             if (classroomContainer.querySelector('.add-classroom-card')) {
                 return;
