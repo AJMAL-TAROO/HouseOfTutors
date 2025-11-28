@@ -91,6 +91,21 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        // Utility function to safely convert VIRTUAL_ROOMS to an array
+        // Handles cases where it could be a string, array, or undefined/null
+        function parseVirtualRooms(virtualRooms) {
+            if (!virtualRooms) {
+                return [];
+            }
+            if (Array.isArray(virtualRooms)) {
+                return virtualRooms.map(String).filter(room => room.trim());
+            }
+            if (typeof virtualRooms === 'string') {
+                return virtualRooms.split(',').filter(room => room.trim());
+            }
+            return [];
+        }
+
         // Retrieve the admin email from local storage
         const adminEmail = localStorage.getItem('userEmail');
 
@@ -141,7 +156,7 @@
                     let virtualRooms = [];
                     for (const key in admins) {
                         if (admins[key].EMAIL === adminEmail) {
-                            virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            virtualRooms = parseVirtualRooms(admins[key].VIRTUAL_ROOMS);
                             break;
                         }
                     }
@@ -175,7 +190,7 @@
                 const snapshot = await get(studentRef);
                 if (snapshot.exists()) {
                     const studentData = snapshot.val();
-                    const virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',') : [];
+                    const virtualRooms = parseVirtualRooms(studentData.VIRTUAL_ROOMS);
                     if (!virtualRooms.includes(classroomId)) {
                         virtualRooms.push(classroomId);
                         await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });
