@@ -98,10 +98,10 @@
                 return [];
             }
             if (Array.isArray(virtualRooms)) {
-                return virtualRooms.map(String).filter(room => room.trim());
+                return virtualRooms.map(String).filter(room => room.trim() !== '');
             }
             if (typeof virtualRooms === 'string') {
-                return virtualRooms.split(',').filter(room => room.trim());
+                return virtualRooms.split(',').filter(room => room.trim() !== '');
             }
             return [];
         }
