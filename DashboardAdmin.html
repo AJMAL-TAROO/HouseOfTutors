@@ -590,6 +590,29 @@
             });
         }
 
+        // Helper function to add the "Add Classroom" card to the container
+        function addAddClassroomCard() {
+            const classroomContainer = document.getElementById("classroomContainer");
+            // Check if the add classroom card already exists to avoid duplicates
+            if (classroomContainer.querySelector('.add-classroom-card')) {
+                return;
+            }
+            const addClassroomCard = document.createElement("div");
+            addClassroomCard.className = "add-classroom-card card bg-purple-800 text-white w-full sm:w-96 h-auto sm:h-64 shadow-lg cursor-pointer hover:bg-purple-900 transition-colors";
+            addClassroomCard.innerHTML = `
+                <div class="card-body flex flex-col justify-center items-center h-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 sm:h-20 sm:w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="text-lg mt-2">Add Classroom</span>
+                </div>
+            `;
+            addClassroomCard.addEventListener('click', () => {
+                openCreateClassroomModal();
+            });
+            classroomContainer.appendChild(addClassroomCard);
+        }
+
         if (email) {
             // Find the admin with the matching email and retrieve VIRTUAL_ROOMS
             const adminRef = ref(database, "ADMIN");
@@ -719,29 +742,22 @@
                         }
 
                         // Add the "Create New Classroom" card at the end
-                        const addClassroomCard = document.createElement("div");
-                        addClassroomCard.className = "card bg-purple-800 text-white w-full sm:w-96 h-auto sm:h-64 shadow-lg cursor-pointer hover:bg-purple-900 transition-colors";
-                        addClassroomCard.innerHTML = `
-                            <div class="card-body flex flex-col justify-center items-center h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 sm:h-20 sm:w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                                <span class="text-lg mt-2">Add Classroom</span>
-                            </div>
-                        `;
-                        addClassroomCard.addEventListener('click', () => {
-                            openCreateClassroomModal();
-                        });
-                        classroomContainer.appendChild(addClassroomCard);
+                        addAddClassroomCard();
                     });
                 } else {
                     console.error("No admin data available");
+                    // Still show the Add Classroom card even if admin data is not available
+                    addAddClassroomCard();
                 }
             }).catch((error) => {
                 console.error("Error retrieving admin data:", error);
+                // Still show the Add Classroom card even if there's an error
+                addAddClassroomCard();
             });
         } else {
             console.error("No email found in local storage");
+            // Still show the Add Classroom card even if no email is found
+            addAddClassroomCard();
         }
 
         // Define the function in the global scope
