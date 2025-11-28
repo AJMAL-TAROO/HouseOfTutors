@@ -91,6 +91,21 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        // Utility function to safely convert VIRTUAL_ROOMS to an array
+        // Handles cases where it could be a string, array, or undefined/null
+        function parseVirtualRooms(virtualRooms) {
+            if (!virtualRooms) {
+                return [];
+            }
+            if (Array.isArray(virtualRooms)) {
+                return virtualRooms.map(String).filter(room => room.trim() !== '');
+            }
+            if (typeof virtualRooms === 'string') {
+                return virtualRooms.split(',').filter(room => room.trim() !== '');
+            }
+            return [];
+        }
+
         // Retrieve the admin email from local storage
         const adminEmail = localStorage.getItem('userEmail');
 
@@ -138,7 +153,7 @@
             const studentSnapshot = await get(studentRef);
             if (studentSnapshot.exists()) {
                 const student = studentSnapshot.val();
-                const virtualRooms = student.VIRTUAL_ROOMS ? student.VIRTUAL_ROOMS.split(',').map(s => s.trim()).filter(s => s) : [];
+                const virtualRooms = parseVirtualRooms(student.VIRTUAL_ROOMS);
                 for (const roomId of virtualRooms) {
                     const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
                     const classroomSnapshot = await get(classroomRef);
@@ -175,7 +190,7 @@
                 const snapshot = await get(studentRef);
                 if (snapshot.exists()) {
                     const studentData = snapshot.val();
-                    let virtualRooms = studentData.VIRTUAL_ROOMS ? studentData.VIRTUAL_ROOMS.split(',').map(s => s.trim()) : [];
+                    let virtualRooms = parseVirtualRooms(studentData.VIRTUAL_ROOMS);
                     if (virtualRooms.includes(classroomId)) {
                         virtualRooms = virtualRooms.filter(room => room !== classroomId);
                         await update(studentRef, { VIRTUAL_ROOMS: virtualRooms.join(',') });

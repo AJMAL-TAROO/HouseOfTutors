@@ -466,6 +466,21 @@
         const database = getDatabase(app);
         const storage = getStorage(app);
 
+        // Utility function to safely convert VIRTUAL_ROOMS to an array
+        // Handles cases where it could be a string, array, or undefined/null
+        function parseVirtualRooms(virtualRooms) {
+            if (!virtualRooms) {
+                return [];
+            }
+            if (Array.isArray(virtualRooms)) {
+                return virtualRooms.map(String).filter(room => room.trim() !== '');
+            }
+            if (typeof virtualRooms === 'string') {
+                return virtualRooms.split(',').filter(room => room.trim() !== '');
+            }
+            return [];
+        }
+
         let selectedClassroomId = null;
 
         // Retrieve the email from local storage
@@ -628,7 +643,7 @@
                     let adminVrLink = '';
                     for (const key in admins) {
                         if (admins[key].EMAIL === email) {
-                            virtualRooms = admins[key].VIRTUAL_ROOMS ? admins[key].VIRTUAL_ROOMS.split(',') : [];
+                            virtualRooms = parseVirtualRooms(admins[key].VIRTUAL_ROOMS);
                             adminVrLink = admins[key].VR_LINK || '';
                             break;
                         }
@@ -882,8 +897,7 @@
                     if (adminSnapshot.exists()) {
                         const admins = adminSnapshot.val();
                         for (const key in admins) {
-                            const virtualRoomsStr = admins[key].VIRTUAL_ROOMS || '';
-                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
+                            const virtualRooms = parseVirtualRooms(admins[key].VIRTUAL_ROOMS);
                             if (virtualRooms.includes(selectedClassroomId.toString())) {
                                 const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
                                 await update(ref(database, `ADMIN/${key}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
@@ -897,8 +911,7 @@
                     if (studentsSnapshot.exists()) {
                         const students = studentsSnapshot.val();
                         for (const studentKey in students) {
-                            const virtualRoomsStr = students[studentKey].VIRTUAL_ROOMS || '';
-                            const virtualRooms = virtualRoomsStr ? virtualRoomsStr.split(',') : [];
+                            const virtualRooms = parseVirtualRooms(students[studentKey].VIRTUAL_ROOMS);
                             if (virtualRooms.includes(selectedClassroomId.toString())) {
                                 const updatedRooms = virtualRooms.filter(roomId => roomId !== selectedClassroomId.toString());
                                 await update(ref(database, `STUDENTS/${studentKey}`), { VIRTUAL_ROOMS: updatedRooms.join(',') });
@@ -995,7 +1008,7 @@
                 await set(ref(database, `NUMBERS/ID_CLASSROOM_${classroomId}_NOTES/NUMBER`), 1);
                 
                 // Add classroom to admin's VIRTUAL_ROOMS list
-                const virtualRooms = adminData.VIRTUAL_ROOMS ? adminData.VIRTUAL_ROOMS.split(',') : [];
+                const virtualRooms = parseVirtualRooms(adminData.VIRTUAL_ROOMS);
                 virtualRooms.push(classroomId.toString());
                 await update(ref(database, `ADMIN/${adminKey}`), { VIRTUAL_ROOMS: virtualRooms.join(',') });
                 
@@ -1174,11 +1187,7 @@
                 }
 
                 // Get classroom and student IDs
-                const virtualRoomsStr = adminData.VIRTUAL_ROOMS || '';
-                const virtualRooms = virtualRoomsStr
-                    .split(',')
-                    .filter(room => room.trim())
-                    .map(Number);
+                const virtualRooms = parseVirtualRooms(adminData.VIRTUAL_ROOMS).map(Number);
                 
                 const studentsStr = adminData.STUDENTS || '';
                 const studentIds = studentsStr
