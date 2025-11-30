@@ -43,6 +43,30 @@
                 max-width: 320px !important;
             }
         }
+
+        /* Desktop/laptop: max 3 classrooms per row using CSS Grid */
+        @media (min-width: 769px) {
+            #classroomContainer {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(384px, 1fr));
+                max-width: calc(3 * 384px + 2 * 1rem); /* 3 cards + 2 gaps */
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        /* Ensure body covers full viewport and background stays fixed */
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+            background-attachment: fixed !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
     </style>
 </head>
 
