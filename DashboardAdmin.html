@@ -44,14 +44,14 @@
             }
         }
 
-        /* Desktop/laptop: max 3 classrooms per row using CSS Grid */
+        /* Desktop/laptop: max 3 classrooms per row using CSS Grid, left-aligned */
         @media (min-width: 769px) {
             #classroomContainer {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(384px, 1fr));
                 max-width: calc(3 * 384px + 2 * 1rem); /* 3 cards + 2 gaps */
-                margin-left: auto;
-                margin-right: auto;
+                margin-left: 0;
+                margin-right: 0;
             }
         }
 
