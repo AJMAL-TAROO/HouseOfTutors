@@ -26,28 +26,60 @@
                 display: none !important;
             }
         }
+
+        /* Fixed background with scrollable content */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            background-attachment: fixed !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .main-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
     </style>
 </head>
 
-<body style="padding: 10px;">
-    <div class="navbar bg-neutral text-neutral-content">
-        <div class="navbar-start">
-            <button class="btn btn-ghost btn-circle" onclick="window.location.href='StudentProfile.html'">
-                <img src="img/user-icon.png" alt="user" class="h-7 w-7">
-            </button>
+<body>
+    <div class="main-container">
+        <div class="navbar bg-neutral text-neutral-content">
+            <div class="navbar-start">
+                <button class="btn btn-ghost btn-circle" onclick="window.location.href='StudentProfile.html'">
+                    <img src="img/user-icon.png" alt="user" class="h-7 w-7">
+                </button>
+            </div>
+            <div class="navbar-center">
+                <a class="btn btn-ghost text-xl">House Of Tutors</a>
+            </div>
+            <div class="navbar-end">
+                <button class="btn btn-ghost btn-circle" onclick="openLogoutModal()">
+                    <img src="img/logout.png" alt="logout" class="h-5 w-5">
+                </button>
+            </div>
         </div>
-        <div class="navbar-center">
-            <a class="btn btn-ghost text-xl">House Of Tutors</a>
-        </div>
-        <div class="navbar-end">
-            <button class="btn btn-ghost btn-circle" onclick="openLogoutModal()">
-                <img src="img/logout.png" alt="logout" class="h-5 w-5">
-            </button>
+
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+            <!-- Dynamic Cards Container -->
+            <div id="classroomContainer" class="flex flex-wrap gap-4 mt-5"></div>
         </div>
     </div>
-
-    <!-- Dynamic Cards Container -->
-    <div id="classroomContainer" class="flex flex-wrap gap-4 mt-5"></div>
 
     <!-- VR Modal -->
     <div id="vrModal" class="modal modal-close">
