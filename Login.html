@@ -498,6 +498,24 @@
         const database = getDatabase(app);
         const storage = getStorage(app);
 
+        //------------------------------------------CONSTANTS-----------------------
+        // Marketing package prices (in Rs)
+        const MARKETING_PRICES = {
+            '30': 4000,
+            '14': 2500,
+            '7': 1500
+        };
+        
+        // Marketing package display labels
+        const MARKETING_PRICE_LABELS = {
+            '30': 'Rs4,000',
+            '14': 'Rs2,500',
+            '7': 'Rs1,500'
+        };
+        
+        // Entry fee (fixed)
+        const ENTRY_FEE = 500;
+
         //------------------------------------------ROLE TOGGLE HANDLING-----------------------
         const studentRoleRadio = document.getElementById('studentRole');
         const adminRoleRadio = document.getElementById('adminRole');
@@ -913,14 +931,9 @@
         document.getElementById('marketingDuration').addEventListener('change', (e) => {
             const duration = e.target.value;
             const priceLabel = document.getElementById('marketingPriceLabel');
-            const marketingPrices = {
-                '30': 'Rs4,000',
-                '14': 'Rs2,500',
-                '7': 'Rs1,500'
-            };
             
-            if (duration && marketingPrices[duration]) {
-                priceLabel.textContent = `Price: ${marketingPrices[duration]}`;
+            if (duration && MARKETING_PRICE_LABELS[duration]) {
+                priceLabel.textContent = `Price: ${MARKETING_PRICE_LABELS[duration]}`;
             } else {
                 priceLabel.textContent = '';
             }
@@ -954,7 +967,6 @@
         
         // Function to update registration fees summary
         function updateRegistrationFees() {
-            const entryFee = 500;
             let marketingFee = 0;
             
             const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
@@ -965,12 +977,7 @@
             const totalAmountDue = document.getElementById('totalAmountDue');
             
             if (haveStudents === 'no' && marketingDuration) {
-                const marketingPrices = {
-                    '30': 4000,
-                    '14': 2500,
-                    '7': 1500
-                };
-                marketingFee = marketingPrices[marketingDuration] || 0;
+                marketingFee = MARKETING_PRICES[marketingDuration] || 0;
                 marketingFeeRow.classList.remove('hidden');
                 marketingFeeRow.classList.add('flex');
                 marketingFeeAmount.textContent = `Rs${marketingFee.toLocaleString()}`;
@@ -979,7 +986,7 @@
                 marketingFeeRow.classList.remove('flex');
             }
             
-            const totalAmount = entryFee + marketingFee;
+            const totalAmount = ENTRY_FEE + marketingFee;
             totalAmountDue.textContent = `Rs${totalAmount.toLocaleString()}`;
         }
 
@@ -1114,20 +1121,14 @@
             }
             
             // Calculate fees
-            const entryFee = 500;
             let marketingFee = 0;
-            let feePerStudent = unlockFeatures ? 100 : 50;
+            const feePerStudent = unlockFeatures ? 100 : 50;
             
             if (haveStudents === 'no' && marketingDuration) {
-                const marketingPrices = {
-                    '30': 4000,
-                    '14': 2500,
-                    '7': 1500
-                };
-                marketingFee = marketingPrices[marketingDuration] || 0;
+                marketingFee = MARKETING_PRICES[marketingDuration] || 0;
             }
             
-            const totalRegistrationFee = entryFee + marketingFee;
+            const totalRegistrationFee = ENTRY_FEE + marketingFee;
             
             // Disable submit button
             const submitBtn = document.getElementById('createProfileBtn');
@@ -1164,7 +1165,7 @@
                 const profilePicPath = `profile_pictures/ADMIN_${adminId}/${sanitizedFileName}`;
                 const profilePicRef = storageRef(storage, profilePicPath);
                 
-                var profilePicUrlToSave;
+                let profilePicUrlToSave;
                 try {
                     await uploadBytes(profilePicRef, profilePicFile);
                     const profilePicUrl = await getDownloadURL(profilePicRef);
@@ -1185,7 +1186,7 @@
                 const paymentPath = `registration_fees/ADMIN_${adminId}/${paymentFileName}`;
                 const paymentRef = storageRef(storage, paymentPath);
                 
-                var paymentScreenshotUrlToSave;
+                let paymentScreenshotUrlToSave;
                 try {
                     await uploadBytes(paymentRef, paymentScreenshotFile);
                     const paymentUrl = await getDownloadURL(paymentRef);
@@ -1253,7 +1254,7 @@
                 
                 // Save registration fees data under REGISTRATION_FEES sub-node
                 const registrationFeesData = {
-                    ENTRY_FEE: entryFee,
+                    ENTRY_FEE: ENTRY_FEE,
                     MARKETING_FEE: marketingFee,
                     TOTAL_AMOUNT: totalRegistrationFee,
                     PAYMENT_SCREENSHOT: paymentScreenshotUrlToSave,
