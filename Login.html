@@ -295,6 +295,44 @@
                             placeholder="Enter number of students">
                     </div>
                     
+                    <!-- Marketing Package for Tutors with No Students -->
+                    <div id="marketingPackageContainer" class="hidden">
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-700">
+                            <h4 class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-2">Marketing Package for New Tutors</h4>
+                            <p class="text-xs text-blue-700 dark:text-blue-400 mb-3">We provide marketing services to help tutors with no students get their first students!</p>
+                            <label for="marketingDuration" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Select Marketing Duration *</label>
+                            <select id="marketingDuration" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                <option value="">Select a package</option>
+                                <option value="30">Full Month (30 days)</option>
+                                <option value="14">Two Weeks (14 days)</option>
+                                <option value="7">One Week (7 days)</option>
+                            </select>
+                            <p id="marketingPriceLabel" class="mt-2 text-lg font-bold text-blue-800 dark:text-blue-300"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Student Fee Info for Tutors with Students -->
+                    <div id="studentFeeInfoContainer" class="hidden">
+                        <div class="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                            <h4 class="text-sm font-semibold text-green-800 dark:text-green-300 mb-2">Monthly Student Fees</h4>
+                            <p class="text-xs text-green-700 dark:text-green-400 mb-2">We charge a fee per student per month. This fee is payable at the end of each month.</p>
+                            <p id="studentFeeCalculation" class="text-sm text-green-800 dark:text-green-300 font-medium"></p>
+                            
+                            <!-- Unlock Additional Features Checkbox -->
+                            <div class="mt-3 pt-3 border-t border-green-200 dark:border-green-600">
+                                <label class="inline-flex items-start cursor-pointer">
+                                    <input type="checkbox" id="unlockFeatures" 
+                                        class="w-4 h-4 mt-1 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="ml-2">
+                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Unlock Additional Features</span>
+                                        <span class="block text-xs text-gray-500 dark:text-gray-400">Includes access to Whiteboard and Timetable features. Fee increases to Rs100 per student per month.</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div>
                         <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Select Teaching Level *</label>
                         <select id="teachingLevel" required
@@ -365,6 +403,34 @@
                         <input type="file" id="adminProfilePic" required accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 p-2.5">
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload a professional profile picture (max 5MB, JPEG/PNG/GIF/WebP)</p>
+                    </div>
+                    
+                    <!-- Registration Fees Summary -->
+                    <div id="registrationFeesSummary" class="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-700">
+                        <h4 class="text-sm font-semibold text-purple-800 dark:text-purple-300 mb-3">Registration Fees Summary</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-700 dark:text-gray-300">Entry Fee (fixed):</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Rs500</span>
+                            </div>
+                            <div id="marketingFeeRow" class="hidden flex justify-between">
+                                <span class="text-gray-700 dark:text-gray-300">Marketing Fee:</span>
+                                <span id="marketingFeeAmount" class="font-medium text-gray-900 dark:text-white">Rs0</span>
+                            </div>
+                            <div class="border-t border-purple-200 dark:border-purple-600 pt-2 mt-2 flex justify-between">
+                                <span class="font-semibold text-purple-800 dark:text-purple-300">Total Amount Due:</span>
+                                <span id="totalAmountDue" class="font-bold text-purple-800 dark:text-purple-300">Rs500</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-purple-700 dark:text-purple-400 mt-3">Please make the payment via Juice/MCB and upload the screenshot below.</p>
+                    </div>
+                    
+                    <!-- Payment Screenshot Upload -->
+                    <div>
+                        <label for="paymentScreenshot" class="block text-sm font-medium text-gray-900 dark:text-white mb-1">Payment Screenshot (Juice/MCB) *</label>
+                        <input type="file" id="paymentScreenshot" required accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 p-2.5">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload proof of payment for the total amount shown above (max 5MB, JPEG/PNG/GIF/WebP)</p>
                     </div>
                     
                     <div id="signupError" class="hidden p-3 rounded-lg bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700">
@@ -823,13 +889,99 @@
         document.getElementById('haveStudentsYes').addEventListener('change', () => {
             document.getElementById('numStudentsContainer').classList.remove('hidden');
             document.getElementById('numStudents').required = true;
+            // Hide marketing package, show student fee info
+            document.getElementById('marketingPackageContainer').classList.add('hidden');
+            document.getElementById('marketingDuration').required = false;
+            document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
+            // Update fees summary
+            updateRegistrationFees();
         });
         
         document.getElementById('haveStudentsNo').addEventListener('change', () => {
             document.getElementById('numStudentsContainer').classList.add('hidden');
             document.getElementById('numStudents').required = false;
             document.getElementById('numStudents').value = '';
+            // Show marketing package, hide student fee info
+            document.getElementById('marketingPackageContainer').classList.remove('hidden');
+            document.getElementById('marketingDuration').required = true;
+            document.getElementById('studentFeeInfoContainer').classList.add('hidden');
+            // Update fees summary
+            updateRegistrationFees();
         });
+        
+        // Marketing duration change handler
+        document.getElementById('marketingDuration').addEventListener('change', (e) => {
+            const duration = e.target.value;
+            const priceLabel = document.getElementById('marketingPriceLabel');
+            const marketingPrices = {
+                '30': 'Rs4,000',
+                '14': 'Rs2,500',
+                '7': 'Rs1,500'
+            };
+            
+            if (duration && marketingPrices[duration]) {
+                priceLabel.textContent = `Price: ${marketingPrices[duration]}`;
+            } else {
+                priceLabel.textContent = '';
+            }
+            updateRegistrationFees();
+        });
+        
+        // Number of students change handler
+        document.getElementById('numStudents').addEventListener('input', () => {
+            updateStudentFeeCalculation();
+        });
+        
+        // Unlock features checkbox handler
+        document.getElementById('unlockFeatures').addEventListener('change', () => {
+            updateStudentFeeCalculation();
+        });
+        
+        // Function to update student fee calculation
+        function updateStudentFeeCalculation() {
+            const numStudents = parseInt(document.getElementById('numStudents').value) || 0;
+            const unlockFeatures = document.getElementById('unlockFeatures').checked;
+            const feePerStudent = unlockFeatures ? 100 : 50;
+            const totalMonthlyFee = numStudents * feePerStudent;
+            
+            const calculationDiv = document.getElementById('studentFeeCalculation');
+            if (numStudents > 0) {
+                calculationDiv.innerHTML = `<span class="font-medium">Rs${feePerStudent} × ${numStudents} student${numStudents > 1 ? 's' : ''} = <span class="font-bold">Rs${totalMonthlyFee.toLocaleString()}</span> monthly</span><br><span class="text-xs">(Payable at the end of each month)</span>`;
+            } else {
+                calculationDiv.textContent = 'Enter the number of students above to see your monthly fee.';
+            }
+        }
+        
+        // Function to update registration fees summary
+        function updateRegistrationFees() {
+            const entryFee = 500;
+            let marketingFee = 0;
+            
+            const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
+            const marketingDuration = document.getElementById('marketingDuration').value;
+            
+            const marketingFeeRow = document.getElementById('marketingFeeRow');
+            const marketingFeeAmount = document.getElementById('marketingFeeAmount');
+            const totalAmountDue = document.getElementById('totalAmountDue');
+            
+            if (haveStudents === 'no' && marketingDuration) {
+                const marketingPrices = {
+                    '30': 4000,
+                    '14': 2500,
+                    '7': 1500
+                };
+                marketingFee = marketingPrices[marketingDuration] || 0;
+                marketingFeeRow.classList.remove('hidden');
+                marketingFeeRow.classList.add('flex');
+                marketingFeeAmount.textContent = `Rs${marketingFee.toLocaleString()}`;
+            } else {
+                marketingFeeRow.classList.add('hidden');
+                marketingFeeRow.classList.remove('flex');
+            }
+            
+            const totalAmount = entryFee + marketingFee;
+            totalAmountDue.textContent = `Rs${totalAmount.toLocaleString()}`;
+        }
 
         // Warning modal close button
         document.getElementById('closeWarningModalBtn').addEventListener('click', () => {
@@ -859,6 +1011,8 @@
             const dob = document.getElementById('adminDOB').value;
             const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
             const numStudents = document.getElementById('numStudents').value;
+            const marketingDuration = document.getElementById('marketingDuration').value;
+            const unlockFeatures = document.getElementById('unlockFeatures').checked;
             const teachingLevel = document.getElementById('teachingLevel').value;
             const subject1 = document.getElementById('subject1').value;
             const subject2 = document.getElementById('subject2').value;
@@ -868,13 +1022,20 @@
             const reason = document.getElementById('adminReason').value.trim();
             const password = document.getElementById('adminPassword').value;
             const profilePicFile = document.getElementById('adminProfilePic').files[0];
+            const paymentScreenshotFile = document.getElementById('paymentScreenshot').files[0];
             
             // Debug logging for teachingLevel
             console.log('Admin Signup - Teaching Level captured:', teachingLevel);
             
             // Validation
-            if (!email || !phone || !firstName || !lastName || !dob || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile) {
+            if (!email || !phone || !firstName || !lastName || !dob || !haveStudents || !teachingLevel || !subject1 || !fees || !bio || !reason || !password || !profilePicFile || !paymentScreenshotFile) {
                 showSignupError('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate marketing duration for tutors with no students
+            if (haveStudents === 'no' && !marketingDuration) {
+                showSignupError('Please select a marketing duration');
                 return;
             }
             
@@ -941,6 +1102,33 @@
                 return;
             }
             
+            // Validate payment screenshot file
+            if (paymentScreenshotFile.size > maxFileSize) {
+                showSignupError('Payment screenshot must be less than 5MB');
+                return;
+            }
+            
+            if (!allowedTypes.includes(paymentScreenshotFile.type)) {
+                showSignupError('Payment screenshot must be a valid image file (JPEG, PNG, GIF, or WebP)');
+                return;
+            }
+            
+            // Calculate fees
+            const entryFee = 500;
+            let marketingFee = 0;
+            let feePerStudent = unlockFeatures ? 100 : 50;
+            
+            if (haveStudents === 'no' && marketingDuration) {
+                const marketingPrices = {
+                    '30': 4000,
+                    '14': 2500,
+                    '7': 1500
+                };
+                marketingFee = marketingPrices[marketingDuration] || 0;
+            }
+            
+            const totalRegistrationFee = entryFee + marketingFee;
+            
             // Disable submit button
             const submitBtn = document.getElementById('createProfileBtn');
             submitBtn.disabled = true;
@@ -968,7 +1156,7 @@
                 let adminId = adminIdSnapshot.exists() ? adminIdSnapshot.val() : 1;
                 
                 // Upload profile picture to Firebase Storage
-                submitBtn.textContent = 'Uploading photo...';
+                submitBtn.textContent = 'Uploading profile photo...';
                 
                 // Sanitize filename: remove spaces and special characters, keep extension
                 const fileExtension = profilePicFile.name.split('.').pop();
@@ -984,6 +1172,27 @@
                 } catch (uploadError) {
                     console.error('Error uploading profile picture:', uploadError);
                     showSignupError('Failed to upload profile picture. Please try again with a different image or check your internet connection.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Profile';
+                    return;
+                }
+                
+                // Upload payment screenshot to Firebase Storage
+                submitBtn.textContent = 'Uploading payment proof...';
+                
+                const paymentExtension = paymentScreenshotFile.name.split('.').pop();
+                const paymentFileName = `payment_screenshot_${Date.now()}.${paymentExtension}`;
+                const paymentPath = `registration_fees/ADMIN_${adminId}/${paymentFileName}`;
+                const paymentRef = storageRef(storage, paymentPath);
+                
+                var paymentScreenshotUrlToSave;
+                try {
+                    await uploadBytes(paymentRef, paymentScreenshotFile);
+                    const paymentUrl = await getDownloadURL(paymentRef);
+                    paymentScreenshotUrlToSave = paymentUrl;
+                } catch (uploadError) {
+                    console.error('Error uploading payment screenshot:', uploadError);
+                    showSignupError('Failed to upload payment screenshot. Please try again with a different image or check your internet connection.');
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Create Profile';
                     return;
@@ -1014,8 +1223,15 @@
                     WALLPAPER: "img/wallpapers/wallpaper2.png",
                     STUDENTS: "",
                     APPROVAL: "pending",
-                    DATE_REGISTRATION: new Date().toISOString().split('T')[0]
+                    DATE_REGISTRATION: new Date().toISOString().split('T')[0],
+                    UNLOCK_FEATURES: unlockFeatures
                 };
+                
+                // Add marketing package info if applicable
+                if (haveStudents === 'no' && marketingDuration) {
+                    adminData.MARKETING_DURATION = parseInt(marketingDuration);
+                    adminData.MARKETING_FEE = marketingFee;
+                }
                 
                 // Debug logging before saving to Firebase
                 console.log('Admin Signup - Data being saved to Firebase:', adminData);
@@ -1035,6 +1251,20 @@
                 
                 console.log(`Admin Signup - Successfully saved to ADMIN/ADMIN_${adminId} with LEVELS="${adminData.LEVELS}"`);
                 
+                // Save registration fees data under REGISTRATION_FEES sub-node
+                const registrationFeesData = {
+                    ENTRY_FEE: entryFee,
+                    MARKETING_FEE: marketingFee,
+                    TOTAL_AMOUNT: totalRegistrationFee,
+                    PAYMENT_SCREENSHOT: paymentScreenshotUrlToSave,
+                    PAYMENT_DATE: new Date().toISOString(),
+                    MARKETING_DURATION: haveStudents === 'no' ? parseInt(marketingDuration) : 0
+                };
+                await set(ref(database, `ADMIN/ADMIN_${adminId}/REGISTRATION_FEES`), registrationFeesData);
+                
+                // Save fees per student under FEES_PER_STUDENT sub-node
+                await set(ref(database, `ADMIN/ADMIN_${adminId}/FEES_PER_STUDENT`), feePerStudent);
+                
                 // Increment admin ID
                 await set(adminIdRef, adminId + 1);
                 
@@ -1046,6 +1276,14 @@
                 
                 // Reset form
                 document.getElementById('adminSignupForm').reset();
+                // Reset UI state
+                document.getElementById('numStudentsContainer').classList.add('hidden');
+                document.getElementById('marketingPackageContainer').classList.add('hidden');
+                document.getElementById('studentFeeInfoContainer').classList.add('hidden');
+                document.getElementById('marketingPriceLabel').textContent = '';
+                document.getElementById('studentFeeCalculation').textContent = '';
+                document.getElementById('marketingFeeRow').classList.add('hidden');
+                document.getElementById('totalAmountDue').textContent = 'Rs500';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Create Profile';
                 
