@@ -413,7 +413,7 @@
                                 <span class="text-gray-700 dark:text-gray-300">Entry Fee (fixed):</span>
                                 <span class="font-medium text-gray-900 dark:text-white">Rs500</span>
                             </div>
-                            <div id="marketingFeeRow" class="hidden flex justify-between">
+                            <div id="marketingFeeRow" class="hidden justify-between">
                                 <span class="text-gray-700 dark:text-gray-300">Marketing Fee:</span>
                                 <span id="marketingFeeAmount" class="font-medium text-gray-900 dark:text-white">Rs0</span>
                             </div>
@@ -1259,7 +1259,7 @@
                     TOTAL_AMOUNT: totalRegistrationFee,
                     PAYMENT_SCREENSHOT: paymentScreenshotUrlToSave,
                     PAYMENT_DATE: new Date().toISOString(),
-                    MARKETING_DURATION: haveStudents === 'no' ? parseInt(marketingDuration) : 0
+                    MARKETING_DURATION: haveStudents === 'no' && marketingDuration ? parseInt(marketingDuration) : 0
                 };
                 await set(ref(database, `ADMIN/ADMIN_${adminId}/REGISTRATION_FEES`), registrationFeesData);
                 
