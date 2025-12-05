@@ -1228,12 +1228,6 @@
                     UNLOCK_FEATURES: unlockFeatures
                 };
                 
-                // Add marketing package info if applicable
-                if (haveStudents === 'no' && marketingDuration) {
-                    adminData.MARKETING_DURATION = parseInt(marketingDuration);
-                    adminData.MARKETING_FEE = marketingFee;
-                }
-                
                 // Debug logging before saving to Firebase
                 console.log('Admin Signup - Data being saved to Firebase:', adminData);
                 console.log('Admin Signup - LEVELS value in adminData:', adminData.LEVELS);
