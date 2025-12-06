@@ -310,6 +310,57 @@
                 </div>
             </div>
 
+            <!-- Upgrade to Premium Confirmation Modal -->
+            <div id="upgradePremiumModal" class="modal">
+                <div class="modal-box">
+                    <h2 class="text-xl font-bold mb-4 text-purple-800">Upgrade to Premium</h2>
+                    <div class="alert alert-warning mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <div>
+                            <h3 class="font-bold">Important Notice</h3>
+                            <div class="text-sm">You will be billed Rs100 per student per month. This upgrade is LOCKED for 30 days minimum.</div>
+                        </div>
+                    </div>
+                    <p class="mb-4">Premium features include:</p>
+                    <ul class="list-disc list-inside mb-4 space-y-2">
+                        <li>Access to Whiteboard</li>
+                        <li>Access to Timetable</li>
+                        <li>Enhanced teaching tools</li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mb-4">Once upgraded, you cannot downgrade for 30 days. Do you want to proceed?</p>
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="confirmUpgradePremium()">Yes, Upgrade</button>
+                        <button class="btn" onclick="closeUpgradePremiumModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Downgrade Modal -->
+            <div id="requestDowngradeModal" class="modal">
+                <div class="modal-box">
+                    <h2 class="text-xl font-bold mb-4 text-purple-800">Request Downgrade</h2>
+                    <div id="downgradeModalContent">
+                        <p class="mb-4">Loading...</p>
+                    </div>
+                    <div class="modal-action">
+                        <button id="confirmDowngradeBtn" class="btn btn-primary hidden" onclick="confirmRequestDowngrade()">Confirm</button>
+                        <button class="btn" onclick="closeRequestDowngradeModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancel Downgrade Confirmation Modal -->
+            <div id="cancelDowngradeModal" class="modal">
+                <div class="modal-box">
+                    <h2 class="text-xl font-bold mb-4 text-purple-800">Cancel Downgrade Request</h2>
+                    <p class="mb-4">Are you sure you want to cancel your pending downgrade request? You will remain on the premium plan.</p>
+                    <div class="modal-action">
+                        <button class="btn btn-primary" onclick="confirmCancelDowngrade()">Yes, Cancel Request</button>
+                        <button class="btn" onclick="closeCancelDowngradeModal()">No, Keep Request</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Admin Details Modal -->
             <div id="adminDetailsModal" class="modal">
                 <div class="modal-box max-w-4xl">
@@ -325,6 +376,14 @@
                         <div class="stat bg-purple-100 rounded-lg shadow">
                             <div class="stat-title">Total Students</div>
                             <div class="stat-value text-purple-800" id="totalStudents">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Premium Plan Section -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">Premium Plan</h3>
+                        <div id="premiumPlanContent" class="bg-purple-50 rounded-lg p-4">
+                            <p class="text-gray-600">Loading plan information...</p>
                         </div>
                     </div>
 
@@ -650,6 +709,55 @@
             return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
 
+        // DateTime helper functions for premium features
+        // Converts JavaScript Date to DDMMYYHHmm string
+        function dateToCustomFormat(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return day + month + year + hours + minutes;
+        }
+
+        // Converts DDMMYYHHmm string back to JavaScript Date
+        function customFormatToDate(str) {
+            if (!str || str.length !== 10) return null;
+            const day = parseInt(str.substring(0, 2), 10);
+            const month = parseInt(str.substring(2, 4), 10) - 1;
+            const year = 2000 + parseInt(str.substring(4, 6), 10);
+            const hours = parseInt(str.substring(6, 8), 10);
+            const minutes = parseInt(str.substring(8, 10), 10);
+            return new Date(year, month, day, hours, minutes);
+        }
+
+        // Adds 30 days to a date
+        function add30Days(date) {
+            const newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + 30);
+            return newDate;
+        }
+
+        // Checks if current datetime is past the locked until datetime
+        function isLockExpired(lockedUntilStr) {
+            if (!lockedUntilStr) return true;
+            const lockedUntilDate = customFormatToDate(lockedUntilStr);
+            if (!lockedUntilDate) return true;
+            return new Date() >= lockedUntilDate;
+        }
+
+        // Formats date string for display (e.g., "06/12/25 at 20:03")
+        function formatDateForDisplay(dateStr) {
+            const date = customFormatToDate(dateStr);
+            if (!date) return 'N/A';
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} at ${hours}:${minutes}`;
+        }
+
         // Function to apply mobile background
         function applyMobileBackground() {
             if (isMobileDevice()) {
@@ -760,10 +868,34 @@
                     const admins = snapshot.val();
                     let virtualRooms = [];
                     let adminVrLink = '';
+                    let adminKey = null;
                     for (const key in admins) {
                         if (admins[key].EMAIL === email) {
                             virtualRooms = parseVirtualRooms(admins[key].VIRTUAL_ROOMS);
                             adminVrLink = admins[key].VR_LINK || '';
+                            adminKey = key;
+                            
+                            // Auto-downgrade check on dashboard load
+                            const adminData = admins[key];
+                            if (adminData.UNLOCK_FEATURES === true && adminData.PENDING_DOWNGRADE === true) {
+                                const lockedUntil = adminData.UNLOCK_FEATURES_LOCKED_UNTIL;
+                                if (isLockExpired(lockedUntil)) {
+                                    // Perform auto-downgrade
+                                    const adminUpdateRef = ref(database, `ADMIN/${key}`);
+                                    update(adminUpdateRef, {
+                                        UNLOCK_FEATURES: false,
+                                        FEES_PER_STUDENT: 50,
+                                        PENDING_DOWNGRADE: false
+                                    }).then(() => {
+                                        console.log('Auto-downgrade performed successfully');
+                                        // Refresh the page to apply locked features
+                                        window.location.reload();
+                                    }).catch((error) => {
+                                        console.error('Error during auto-downgrade:', error);
+                                    });
+                                }
+                            }
+                            
                             break;
                         }
                     }
@@ -1318,6 +1450,9 @@
                 document.getElementById('totalClassrooms').textContent = virtualRooms.length;
                 document.getElementById('totalStudents').textContent = studentIds.length;
 
+                // Display Premium Plan Information
+                displayPremiumPlanInfo(adminData, adminKey);
+
                 // Fetch and display student details
                 const studentsRef = ref(database, "STUDENTS");
                 const studentsSnapshot = await get(studentsRef);
@@ -1366,6 +1501,300 @@
                 console.error('Error loading admin details:', error);
             }
         }
+
+        // Store admin key globally for premium features
+        let currentAdminKey = null;
+
+        // Display Premium Plan Information
+        function displayPremiumPlanInfo(adminData, adminKey) {
+            currentAdminKey = adminKey;
+            const premiumContent = document.getElementById('premiumPlanContent');
+            
+            // Get premium status with defaults
+            const unlockFeatures = adminData.UNLOCK_FEATURES === true;
+            const feesPerStudent = adminData.FEES_PER_STUDENT || 50;
+            const pendingDowngrade = adminData.PENDING_DOWNGRADE === true;
+            const activatedOn = adminData.UNLOCK_FEATURES_ACTIVATED_ON;
+            const lockedUntil = adminData.UNLOCK_FEATURES_LOCKED_UNTIL;
+            
+            if (unlockFeatures) {
+                // Premium Plan
+                const lockExpired = isLockExpired(lockedUntil);
+                let html = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-lg font-semibold text-purple-800">Current Plan: Premium</p>
+                                <p class="text-sm text-gray-600">Billing Rate: Rs${feesPerStudent} per student per month</p>
+                            </div>
+                            <span class="badge badge-success badge-lg">Active</span>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="bg-white p-3 rounded-lg border border-purple-200">
+                                <p class="text-xs text-gray-500">Activated On</p>
+                                <p class="text-sm font-medium">${activatedOn ? formatDateForDisplay(activatedOn) : 'N/A'}</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-purple-200">
+                                <p class="text-xs text-gray-500">Lock Expires On</p>
+                                <p class="text-sm font-medium">${lockedUntil ? formatDateForDisplay(lockedUntil) : 'N/A'}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-100 p-3 rounded-lg">
+                            <p class="text-xs text-purple-700 font-semibold mb-1">Premium Features:</p>
+                            <ul class="text-sm text-purple-900 space-y-1">
+                                <li>✓ Whiteboard Access</li>
+                                <li>✓ Timetable Access</li>
+                                <li>✓ Enhanced Teaching Tools</li>
+                            </ul>
+                        </div>
+                `;
+                
+                if (pendingDowngrade) {
+                    html += `
+                        <div class="alert alert-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span class="text-sm">You have a pending downgrade request. Downgrade will occur on ${lockedUntil ? formatDateForDisplay(lockedUntil) : 'N/A'}.</span>
+                        </div>
+                        <button class="btn btn-warning w-full" onclick="openCancelDowngradeModal()">Cancel Downgrade Request</button>
+                    `;
+                } else {
+                    if (lockExpired) {
+                        html += `
+                            <div class="alert alert-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span class="text-sm">Lock period has expired. You can now downgrade to basic plan.</span>
+                            </div>
+                            <button class="btn btn-error w-full" onclick="openRequestDowngradeModal()">Request Downgrade to Basic</button>
+                        `;
+                    } else {
+                        html += `
+                            <div class="alert alert-warning">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                <span class="text-sm">Your premium plan is locked until ${lockedUntil ? formatDateForDisplay(lockedUntil) : 'N/A'}.</span>
+                            </div>
+                            <button class="btn btn-error w-full" onclick="openRequestDowngradeModal()">Request Downgrade to Basic</button>
+                        `;
+                    }
+                }
+                
+                html += `</div>`;
+                premiumContent.innerHTML = html;
+            } else {
+                // Basic Plan
+                const html = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-lg font-semibold text-purple-800">Current Plan: Basic</p>
+                                <p class="text-sm text-gray-600">Billing Rate: Rs${feesPerStudent} per student per month</p>
+                            </div>
+                            <span class="badge badge-primary badge-lg">Active</span>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="text-xs text-gray-700 font-semibold mb-1">Basic Features:</p>
+                            <ul class="text-sm text-gray-900 space-y-1">
+                                <li>✓ Classroom Management</li>
+                                <li>✓ Student Management</li>
+                                <li>✓ Basic Teaching Tools</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            <p class="text-sm font-semibold text-purple-800 mb-2">Upgrade to Premium to unlock:</p>
+                            <ul class="text-sm text-purple-900 space-y-1 mb-3">
+                                <li>✓ Whiteboard Access</li>
+                                <li>✓ Timetable Access</li>
+                                <li>✓ Enhanced Teaching Tools</li>
+                            </ul>
+                            <p class="text-xs text-gray-600">Premium: Rs100 per student per month (30-day minimum commitment)</p>
+                        </div>
+                        
+                        <button class="btn btn-primary w-full" onclick="openUpgradePremiumModal()">Upgrade to Premium</button>
+                    </div>
+                `;
+                premiumContent.innerHTML = html;
+            }
+        }
+
+        // Premium Feature Modal Functions
+        window.openUpgradePremiumModal = function() {
+            document.getElementById('upgradePremiumModal').classList.add('modal-open');
+        };
+
+        window.closeUpgradePremiumModal = function() {
+            document.getElementById('upgradePremiumModal').classList.remove('modal-open');
+        };
+
+        window.confirmUpgradePremium = async function() {
+            if (!currentAdminKey) {
+                alert('Error: Admin key not found. Please try again.');
+                return;
+            }
+
+            try {
+                const now = new Date();
+                const activatedOn = dateToCustomFormat(now);
+                const lockedUntil = dateToCustomFormat(add30Days(now));
+
+                const adminUpdateRef = ref(database, `ADMIN/${currentAdminKey}`);
+                await update(adminUpdateRef, {
+                    UNLOCK_FEATURES: true,
+                    FEES_PER_STUDENT: 100,
+                    UNLOCK_FEATURES_ACTIVATED_ON: activatedOn,
+                    UNLOCK_FEATURES_LOCKED_UNTIL: lockedUntil,
+                    PENDING_DOWNGRADE: false
+                });
+
+                alert('Successfully upgraded to Premium plan!');
+                closeUpgradePremiumModal();
+                // Reload admin details to refresh UI
+                await loadAdminDetails();
+            } catch (error) {
+                console.error('Error upgrading to premium:', error);
+                alert('Error upgrading to premium. Please try again.');
+            }
+        };
+
+        window.openRequestDowngradeModal = async function() {
+            if (!currentAdminKey) {
+                alert('Error: Admin key not found. Please try again.');
+                return;
+            }
+
+            try {
+                // Get current admin data
+                const adminRef = ref(database, `ADMIN/${currentAdminKey}`);
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    alert('Error: Admin data not found.');
+                    return;
+                }
+
+                const adminData = adminSnapshot.val();
+                const lockedUntil = adminData.UNLOCK_FEATURES_LOCKED_UNTIL;
+                const lockExpired = isLockExpired(lockedUntil);
+
+                const modal = document.getElementById('requestDowngradeModal');
+                const content = document.getElementById('downgradeModalContent');
+                const confirmBtn = document.getElementById('confirmDowngradeBtn');
+
+                if (lockExpired) {
+                    // Immediate downgrade
+                    content.innerHTML = `
+                        <p class="mb-4">Your lock period has expired. You can downgrade to the basic plan immediately.</p>
+                        <p class="text-sm text-gray-600">After downgrade, you will be billed Rs50 per student per month and lose access to premium features (Whiteboard and Timetable).</p>
+                    `;
+                    confirmBtn.classList.remove('hidden');
+                    confirmBtn.textContent = 'Downgrade Now';
+                } else {
+                    // Schedule downgrade
+                    content.innerHTML = `
+                        <div class="alert alert-warning mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                            <span>Your premium plan is still locked until <strong>${formatDateForDisplay(lockedUntil)}</strong>.</span>
+                        </div>
+                        <p class="mb-4">You can schedule a downgrade to take effect after the lock period expires.</p>
+                        <p class="text-sm text-gray-600">Would you like to schedule the downgrade?</p>
+                    `;
+                    confirmBtn.classList.remove('hidden');
+                    confirmBtn.textContent = 'Schedule Downgrade';
+                }
+
+                modal.classList.add('modal-open');
+            } catch (error) {
+                console.error('Error opening request downgrade modal:', error);
+                alert('Error loading downgrade information. Please try again.');
+            }
+        };
+
+        window.closeRequestDowngradeModal = function() {
+            document.getElementById('requestDowngradeModal').classList.remove('modal-open');
+        };
+
+        window.confirmRequestDowngrade = async function() {
+            if (!currentAdminKey) {
+                alert('Error: Admin key not found. Please try again.');
+                return;
+            }
+
+            try {
+                // Get current admin data
+                const adminRef = ref(database, `ADMIN/${currentAdminKey}`);
+                const adminSnapshot = await get(adminRef);
+                
+                if (!adminSnapshot.exists()) {
+                    alert('Error: Admin data not found.');
+                    return;
+                }
+
+                const adminData = adminSnapshot.val();
+                const lockedUntil = adminData.UNLOCK_FEATURES_LOCKED_UNTIL;
+                const lockExpired = isLockExpired(lockedUntil);
+
+                const adminUpdateRef = ref(database, `ADMIN/${currentAdminKey}`);
+
+                if (lockExpired) {
+                    // Immediate downgrade
+                    await update(adminUpdateRef, {
+                        UNLOCK_FEATURES: false,
+                        FEES_PER_STUDENT: 50,
+                        PENDING_DOWNGRADE: false
+                    });
+                    alert('Successfully downgraded to Basic plan!');
+                } else {
+                    // Schedule downgrade
+                    await update(adminUpdateRef, {
+                        PENDING_DOWNGRADE: true
+                    });
+                    alert('Downgrade scheduled successfully! Your plan will downgrade to Basic after the lock period expires.');
+                }
+
+                closeRequestDowngradeModal();
+                // Reload admin details to refresh UI
+                await loadAdminDetails();
+            } catch (error) {
+                console.error('Error requesting downgrade:', error);
+                alert('Error requesting downgrade. Please try again.');
+            }
+        };
+
+        window.openCancelDowngradeModal = function() {
+            document.getElementById('cancelDowngradeModal').classList.add('modal-open');
+        };
+
+        window.closeCancelDowngradeModal = function() {
+            document.getElementById('cancelDowngradeModal').classList.remove('modal-open');
+        };
+
+        window.confirmCancelDowngrade = async function() {
+            if (!currentAdminKey) {
+                alert('Error: Admin key not found. Please try again.');
+                return;
+            }
+
+            try {
+                const adminUpdateRef = ref(database, `ADMIN/${currentAdminKey}`);
+                await update(adminUpdateRef, {
+                    PENDING_DOWNGRADE: false
+                });
+
+                alert('Downgrade request cancelled successfully!');
+                closeCancelDowngradeModal();
+                // Reload admin details to refresh UI
+                await loadAdminDetails();
+            } catch (error) {
+                console.error('Error cancelling downgrade:', error);
+                alert('Error cancelling downgrade. Please try again.');
+            }
+        };
 
         // Define available subjects for each level (same as Login.html)
         const subjectsByLevel = {
