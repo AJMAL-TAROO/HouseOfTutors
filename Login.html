@@ -904,32 +904,7 @@
         });
 
         // Handle "Have Students" radio button change
-        document.getElementById('haveStudentsYes').addEventListener('change', () => {
-            document.getElementById('numStudentsContainer').classList.remove('hidden');
-            document.getElementById('numStudents').required = true;
-            // Hide marketing package, show student fee info
-            document.getElementById('marketingPackageContainer').classList.add('hidden');
-            document.getElementById('marketingDuration').required = false;
-            document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
-            // Update the description for tutors with students
-            updateStudentFeeDescription(true);
-            // Update fees summary
-            updateRegistrationFees();
-        });
-        
-        document.getElementById('haveStudentsNo').addEventListener('change', () => {
-            document.getElementById('numStudentsContainer').classList.add('hidden');
-            document.getElementById('numStudents').required = false;
-            document.getElementById('numStudents').value = '';
-            // Show both marketing package AND student fee info
-            document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
-            document.getElementById('marketingPackageContainer').classList.remove('hidden');
-            document.getElementById('marketingDuration').required = true;
-            // Update the description for tutors without students
-            updateStudentFeeDescription(false);
-            // Update fees summary
-            updateRegistrationFees();
-        });
+        // NOTE: Event handlers are now in the non-Firebase section below to ensure they work even if CDN is blocked
         
         // Marketing duration change handler
         document.getElementById('marketingDuration').addEventListener('change', (e) => {
@@ -943,60 +918,6 @@
             }
             updateRegistrationFees();
         });
-        
-        // Number of students change handler
-        document.getElementById('numStudents').addEventListener('input', () => {
-            updateStudentFeeCalculation();
-        });
-        
-        // Unlock features checkbox handler
-        document.getElementById('unlockFeatures').addEventListener('change', () => {
-            const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
-            if (haveStudents === 'yes') {
-                updateStudentFeeCalculation();
-            } else {
-                updateStudentFeeDescription(false);
-            }
-        });
-        
-        // Function to update student fee description based on whether tutor has students
-        function updateStudentFeeDescription(hasStudents) {
-            const descriptionElement = document.getElementById('studentFeeDescription');
-            const calculationDiv = document.getElementById('studentFeeCalculation');
-            
-            if (hasStudents) {
-                // For tutors who already have students
-                descriptionElement.textContent = 'We charge a fee per student per month. This fee is payable at the end of each month.';
-                updateStudentFeeCalculation();
-            } else {
-                // For tutors who don't have students yet
-                descriptionElement.textContent = 'Once you start getting students, you will need to pay a monthly fee per student.';
-                const unlockFeatures = document.getElementById('unlockFeatures').checked;
-                const baseFee = 50;
-                const unlockFee = 100;
-                
-                if (unlockFeatures) {
-                    calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">With Unlock Additional Features: <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
-                } else {
-                    calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">You can unlock additional features for <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
-                }
-            }
-        }
-        
-        // Function to update student fee calculation
-        function updateStudentFeeCalculation() {
-            const numStudents = parseInt(document.getElementById('numStudents').value) || 0;
-            const unlockFeatures = document.getElementById('unlockFeatures').checked;
-            const feePerStudent = unlockFeatures ? 100 : 50;
-            const totalMonthlyFee = numStudents * feePerStudent;
-            
-            const calculationDiv = document.getElementById('studentFeeCalculation');
-            if (numStudents > 0) {
-                calculationDiv.innerHTML = `<span class="font-medium">Rs${feePerStudent} × ${numStudents} student${numStudents > 1 ? 's' : ''} = <span class="font-bold">Rs${totalMonthlyFee.toLocaleString()}</span> monthly</span><br><span class="text-xs">(Payable at the end of each month)</span>`;
-            } else {
-                calculationDiv.textContent = 'Enter the number of students above to see your monthly fee.';
-            }
-        }
         
         // Function to update registration fees summary
         function updateRegistrationFees() {
@@ -1362,6 +1283,10 @@
     (() => {
         // This runs even if Firebase fails to load
         try {
+            // Fee constants
+            const FEE_BASE = 50;
+            const FEE_WITH_UNLOCK = 100;
+            
             // Handle "Have Students" radio button change
             const haveStudentsYes = document.getElementById('haveStudentsYes');
             const haveStudentsNo = document.getElementById('haveStudentsNo');
@@ -1421,13 +1346,11 @@
                     // For tutors who don't have students yet
                     descriptionElement.textContent = 'Once you start getting students, you will need to pay a monthly fee per student.';
                     const unlockFeatures = document.getElementById('unlockFeatures')?.checked || false;
-                    const baseFee = 50;
-                    const unlockFee = 100;
                     
                     if (unlockFeatures) {
-                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">With Unlock Additional Features: <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${FEE_BASE}</span> per student per month</span><br><span class="text-xs">With Unlock Additional Features: <span class="font-bold">Rs${FEE_WITH_UNLOCK}</span> per student per month</span>`;
                     } else {
-                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">You can unlock additional features for <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${FEE_BASE}</span> per student per month</span><br><span class="text-xs">You can unlock additional features for <span class="font-bold">Rs${FEE_WITH_UNLOCK}</span> per student per month</span>`;
                     }
                 }
             }
@@ -1436,7 +1359,7 @@
             function updateStudentFeeCalculation() {
                 const numStudents = parseInt(document.getElementById('numStudents')?.value) || 0;
                 const unlockFeatures = document.getElementById('unlockFeatures')?.checked || false;
-                const feePerStudent = unlockFeatures ? 100 : 50;
+                const feePerStudent = unlockFeatures ? FEE_WITH_UNLOCK : FEE_BASE;
                 const totalMonthlyFee = numStudents * feePerStudent;
                 
                 const calculationDiv = document.getElementById('studentFeeCalculation');
