@@ -295,6 +295,27 @@
                             placeholder="Enter number of students">
                     </div>
                     
+                    <!-- Student Fee Info - Shown for Both Yes and No -->
+                    <div id="studentFeeInfoContainer" class="hidden">
+                        <div class="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                            <h4 class="text-sm font-semibold text-green-800 dark:text-green-300 mb-2">Monthly Student Fees</h4>
+                            <p id="studentFeeDescription" class="text-xs text-green-700 dark:text-green-400 mb-2">We charge a fee per student per month. This fee is payable at the end of each month.</p>
+                            <p id="studentFeeCalculation" class="text-sm text-green-800 dark:text-green-300 font-medium"></p>
+                            
+                            <!-- Unlock Additional Features Checkbox -->
+                            <div class="mt-3 pt-3 border-t border-green-200 dark:border-green-600">
+                                <label class="inline-flex items-start cursor-pointer">
+                                    <input type="checkbox" id="unlockFeatures" 
+                                        class="w-4 h-4 mt-1 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="ml-2">
+                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Unlock Additional Features</span>
+                                        <span class="block text-xs text-gray-500 dark:text-gray-400">Includes access to Whiteboard and Timetable features. Fee increases to Rs100 per student per month.</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Marketing Package for Tutors with No Students -->
                     <div id="marketingPackageContainer" class="hidden">
                         <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-700">
@@ -309,27 +330,6 @@
                                 <option value="7">One Week (7 days)</option>
                             </select>
                             <p id="marketingPriceLabel" class="mt-2 text-lg font-bold text-blue-800 dark:text-blue-300"></p>
-                        </div>
-                    </div>
-                    
-                    <!-- Student Fee Info for Tutors with Students -->
-                    <div id="studentFeeInfoContainer" class="hidden">
-                        <div class="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                            <h4 class="text-sm font-semibold text-green-800 dark:text-green-300 mb-2">Monthly Student Fees</h4>
-                            <p class="text-xs text-green-700 dark:text-green-400 mb-2">We charge a fee per student per month. This fee is payable at the end of each month.</p>
-                            <p id="studentFeeCalculation" class="text-sm text-green-800 dark:text-green-300 font-medium"></p>
-                            
-                            <!-- Unlock Additional Features Checkbox -->
-                            <div class="mt-3 pt-3 border-t border-green-200 dark:border-green-600">
-                                <label class="inline-flex items-start cursor-pointer">
-                                    <input type="checkbox" id="unlockFeatures" 
-                                        class="w-4 h-4 mt-1 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="ml-2">
-                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Unlock Additional Features</span>
-                                        <span class="block text-xs text-gray-500 dark:text-gray-400">Includes access to Whiteboard and Timetable features. Fee increases to Rs100 per student per month.</span>
-                                    </span>
-                                </label>
-                            </div>
                         </div>
                     </div>
                     
@@ -911,6 +911,8 @@
             document.getElementById('marketingPackageContainer').classList.add('hidden');
             document.getElementById('marketingDuration').required = false;
             document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
+            // Update the description for tutors with students
+            updateStudentFeeDescription(true);
             // Update fees summary
             updateRegistrationFees();
         });
@@ -919,10 +921,12 @@
             document.getElementById('numStudentsContainer').classList.add('hidden');
             document.getElementById('numStudents').required = false;
             document.getElementById('numStudents').value = '';
-            // Show marketing package, hide student fee info
+            // Show both marketing package AND student fee info
+            document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
             document.getElementById('marketingPackageContainer').classList.remove('hidden');
             document.getElementById('marketingDuration').required = true;
-            document.getElementById('studentFeeInfoContainer').classList.add('hidden');
+            // Update the description for tutors without students
+            updateStudentFeeDescription(false);
             // Update fees summary
             updateRegistrationFees();
         });
@@ -947,8 +951,37 @@
         
         // Unlock features checkbox handler
         document.getElementById('unlockFeatures').addEventListener('change', () => {
-            updateStudentFeeCalculation();
+            const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
+            if (haveStudents === 'yes') {
+                updateStudentFeeCalculation();
+            } else {
+                updateStudentFeeDescription(false);
+            }
         });
+        
+        // Function to update student fee description based on whether tutor has students
+        function updateStudentFeeDescription(hasStudents) {
+            const descriptionElement = document.getElementById('studentFeeDescription');
+            const calculationDiv = document.getElementById('studentFeeCalculation');
+            
+            if (hasStudents) {
+                // For tutors who already have students
+                descriptionElement.textContent = 'We charge a fee per student per month. This fee is payable at the end of each month.';
+                updateStudentFeeCalculation();
+            } else {
+                // For tutors who don't have students yet
+                descriptionElement.textContent = 'Once you start getting students, you will need to pay a monthly fee per student.';
+                const unlockFeatures = document.getElementById('unlockFeatures').checked;
+                const baseFee = 50;
+                const unlockFee = 100;
+                
+                if (unlockFeatures) {
+                    calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">With Unlock Additional Features: <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                } else {
+                    calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">You can unlock additional features for <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                }
+            }
+        }
         
         // Function to update student fee calculation
         function updateStudentFeeCalculation() {
@@ -1329,6 +1362,101 @@
     (() => {
         // This runs even if Firebase fails to load
         try {
+            // Handle "Have Students" radio button change
+            const haveStudentsYes = document.getElementById('haveStudentsYes');
+            const haveStudentsNo = document.getElementById('haveStudentsNo');
+            
+            if (haveStudentsYes) {
+                haveStudentsYes.addEventListener('change', () => {
+                    document.getElementById('numStudentsContainer').classList.remove('hidden');
+                    document.getElementById('numStudents').required = true;
+                    // Hide marketing package, show student fee info
+                    document.getElementById('marketingPackageContainer').classList.add('hidden');
+                    document.getElementById('marketingDuration').required = false;
+                    document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
+                    // Update the description for tutors with students
+                    updateStudentFeeDescription(true);
+                });
+            }
+            
+            if (haveStudentsNo) {
+                haveStudentsNo.addEventListener('change', () => {
+                    document.getElementById('numStudentsContainer').classList.add('hidden');
+                    document.getElementById('numStudents').required = false;
+                    document.getElementById('numStudents').value = '';
+                    // Show both marketing package AND student fee info
+                    document.getElementById('studentFeeInfoContainer').classList.remove('hidden');
+                    document.getElementById('marketingPackageContainer').classList.remove('hidden');
+                    document.getElementById('marketingDuration').required = true;
+                    // Update the description for tutors without students
+                    updateStudentFeeDescription(false);
+                });
+            }
+            
+            // Unlock features checkbox handler
+            const unlockFeaturesCheckbox = document.getElementById('unlockFeatures');
+            if (unlockFeaturesCheckbox) {
+                unlockFeaturesCheckbox.addEventListener('change', () => {
+                    const haveStudents = document.querySelector('input[name="haveStudents"]:checked')?.value;
+                    if (haveStudents === 'yes') {
+                        updateStudentFeeCalculation();
+                    } else {
+                        updateStudentFeeDescription(false);
+                    }
+                });
+            }
+            
+            // Function to update student fee description based on whether tutor has students
+            function updateStudentFeeDescription(hasStudents) {
+                const descriptionElement = document.getElementById('studentFeeDescription');
+                const calculationDiv = document.getElementById('studentFeeCalculation');
+                
+                if (!descriptionElement || !calculationDiv) return;
+                
+                if (hasStudents) {
+                    // For tutors who already have students
+                    descriptionElement.textContent = 'We charge a fee per student per month. This fee is payable at the end of each month.';
+                    updateStudentFeeCalculation();
+                } else {
+                    // For tutors who don't have students yet
+                    descriptionElement.textContent = 'Once you start getting students, you will need to pay a monthly fee per student.';
+                    const unlockFeatures = document.getElementById('unlockFeatures')?.checked || false;
+                    const baseFee = 50;
+                    const unlockFee = 100;
+                    
+                    if (unlockFeatures) {
+                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">With Unlock Additional Features: <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                    } else {
+                        calculationDiv.innerHTML = `<span class="font-medium">Base fee: <span class="font-bold">Rs${baseFee}</span> per student per month</span><br><span class="text-xs">You can unlock additional features for <span class="font-bold">Rs${unlockFee}</span> per student per month</span>`;
+                    }
+                }
+            }
+            
+            // Function to update student fee calculation
+            function updateStudentFeeCalculation() {
+                const numStudents = parseInt(document.getElementById('numStudents')?.value) || 0;
+                const unlockFeatures = document.getElementById('unlockFeatures')?.checked || false;
+                const feePerStudent = unlockFeatures ? 100 : 50;
+                const totalMonthlyFee = numStudents * feePerStudent;
+                
+                const calculationDiv = document.getElementById('studentFeeCalculation');
+                if (!calculationDiv) return;
+                
+                if (numStudents > 0) {
+                    calculationDiv.innerHTML = `<span class="font-medium">Rs${feePerStudent} × ${numStudents} student${numStudents > 1 ? 's' : ''} = <span class="font-bold">Rs${totalMonthlyFee.toLocaleString()}</span> monthly</span><br><span class="text-xs">(Payable at the end of each month)</span>`;
+                } else {
+                    calculationDiv.textContent = 'Enter the number of students above to see your monthly fee.';
+                }
+            }
+            
+            // Number of students change handler
+            const numStudentsInput = document.getElementById('numStudents');
+            if (numStudentsInput) {
+                numStudentsInput.addEventListener('input', () => {
+                    updateStudentFeeCalculation();
+                });
+            }
+            
             // Define available subjects for each level
             const subjectsByLevel = {
                 primary: [
