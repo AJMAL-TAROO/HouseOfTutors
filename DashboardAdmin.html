@@ -559,9 +559,19 @@
                 </ul>
                 <hr class="mt-10 mb-10 border-black" />
                 <ul class="space-y-2 divide-y divide-gray-300">
-                    <li><a href="MyTimeTable.html" class="block py-2 px-4">My TimeTable</a></li>
+                    <li>
+                        <a href="MyTimeTable.html" class="block py-2 px-4 flex items-center justify-between">
+                            <span>My TimeTable</span>
+                            <span class="badge badge-sm badge-warning">Premium</span>
+                        </a>
+                    </li>
                     <li><a href="StudentAttendance.html" class="block py-2 px-4">Attendance</a></li>
-                    <li><a href="Whiteboard.html" class="block py-2 px-4">Whiteboard</a></li>
+                    <li>
+                        <a href="Whiteboard.html" class="block py-2 px-4 flex items-center justify-between">
+                            <span>Whiteboard</span>
+                            <span class="badge badge-sm badge-warning">Premium</span>
+                        </a>
+                    </li>
                 </ul>
                 
                 <!-- Customer Support Icon -->
@@ -832,6 +842,47 @@
             });
         }
 
+        // Function to apply feature locking based on UNLOCK_FEATURES flag
+        function applyFeatureLocking(unlockFeatures) {
+            // Get the timetable and whiteboard links
+            const timetableLink = document.querySelector('a[href="MyTimeTable.html"]');
+            const whiteboardLink = document.querySelector('a[href="Whiteboard.html"]');
+            
+            if (unlockFeatures) {
+                // Premium plan - unlock features
+                if (timetableLink) {
+                    timetableLink.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    timetableLink.style.pointerEvents = 'auto';
+                    timetableLink.style.opacity = '1';
+                    timetableLink.title = '';
+                }
+                if (whiteboardLink) {
+                    whiteboardLink.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    whiteboardLink.style.pointerEvents = 'auto';
+                    whiteboardLink.style.opacity = '1';
+                    whiteboardLink.title = '';
+                }
+            } else {
+                // Basic plan - lock features
+                if (timetableLink) {
+                    timetableLink.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    timetableLink.style.pointerEvents = 'none';
+                    timetableLink.style.opacity = '0.5';
+                    timetableLink.title = 'Upgrade to Premium to access Timetable';
+                }
+                if (whiteboardLink) {
+                    whiteboardLink.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                    whiteboardLink.style.pointerEvents = 'none';
+                    whiteboardLink.style.opacity = '0.5';
+                    whiteboardLink.title = 'Upgrade to Premium to access Whiteboard';
+                }
+            }
+        }
+
+        // Apply default locking on page load (features locked by default until admin data confirms premium status)
+        // This prevents a brief flash where features appear unlocked before data is loaded
+        applyFeatureLocking(false);
+
         // Helper function to add the "Add Classroom" card to the container
         function addAddClassroomCard() {
             const classroomContainer = document.getElementById("classroomContainer");
@@ -895,6 +946,9 @@
                                     });
                                 }
                             }
+                            
+                            // Apply feature locking based on UNLOCK_FEATURES
+                            applyFeatureLocking(adminData.UNLOCK_FEATURES === true);
                             
                             break;
                         }
