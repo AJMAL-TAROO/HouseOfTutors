@@ -851,29 +851,29 @@
             if (unlockFeatures) {
                 // Premium plan - unlock features
                 if (timetableLink) {
-                    timetableLink.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
                     timetableLink.style.pointerEvents = 'auto';
                     timetableLink.style.opacity = '1';
+                    timetableLink.style.cursor = 'pointer';
                     timetableLink.title = '';
                 }
                 if (whiteboardLink) {
-                    whiteboardLink.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
                     whiteboardLink.style.pointerEvents = 'auto';
                     whiteboardLink.style.opacity = '1';
+                    whiteboardLink.style.cursor = 'pointer';
                     whiteboardLink.title = '';
                 }
             } else {
                 // Basic plan - lock features
                 if (timetableLink) {
-                    timetableLink.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
                     timetableLink.style.pointerEvents = 'none';
                     timetableLink.style.opacity = '0.5';
+                    timetableLink.style.cursor = 'not-allowed';
                     timetableLink.title = 'Upgrade to Premium to access Timetable';
                 }
                 if (whiteboardLink) {
-                    whiteboardLink.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
                     whiteboardLink.style.pointerEvents = 'none';
                     whiteboardLink.style.opacity = '0.5';
+                    whiteboardLink.style.cursor = 'not-allowed';
                     whiteboardLink.title = 'Upgrade to Premium to access Whiteboard';
                 }
             }
