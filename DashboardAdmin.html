@@ -1679,6 +1679,7 @@
 
         // Premium Feature Modal Functions
         window.openUpgradePremiumModal = function() {
+            closeAdminDetailsModal();
             document.getElementById('upgradePremiumModal').classList.add('modal-open');
         };
 
@@ -1762,6 +1763,7 @@
                     confirmBtn.textContent = 'Schedule Downgrade';
                 }
 
+                closeAdminDetailsModal();
                 modal.classList.add('modal-open');
             } catch (error) {
                 console.error('Error opening request downgrade modal:', error);
@@ -1821,6 +1823,7 @@
         };
 
         window.openCancelDowngradeModal = function() {
+            closeAdminDetailsModal();
             document.getElementById('cancelDowngradeModal').classList.add('modal-open');
         };
 
