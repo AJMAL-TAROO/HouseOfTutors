@@ -1708,8 +1708,8 @@
 
                 alert('Successfully upgraded to Premium plan!');
                 closeUpgradePremiumModal();
-                // Reload admin details to refresh UI
-                await loadAdminDetails();
+                // Reload the page to unlock premium features
+                window.location.reload();
             } catch (error) {
                 console.error('Error upgrading to premium:', error);
                 alert('Error upgrading to premium. Please try again.');
@@ -1812,8 +1812,8 @@
                 }
 
                 closeRequestDowngradeModal();
-                // Reload admin details to refresh UI
-                await loadAdminDetails();
+                // Reload the page to apply plan changes
+                window.location.reload();
             } catch (error) {
                 console.error('Error requesting downgrade:', error);
                 alert('Error requesting downgrade. Please try again.');
@@ -1842,8 +1842,8 @@
 
                 alert('Downgrade request cancelled successfully!');
                 closeCancelDowngradeModal();
-                // Reload admin details to refresh UI
-                await loadAdminDetails();
+                // Reload the page to refresh UI
+                window.location.reload();
             } catch (error) {
                 console.error('Error cancelling downgrade:', error);
                 alert('Error cancelling downgrade. Please try again.');
