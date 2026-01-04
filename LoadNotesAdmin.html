@@ -113,6 +113,29 @@
                 font-size: 1.2em; /* Smaller size for mobile */
             }
         }
+        .tag-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+        .tag-homework {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .tag-note {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .uploader-email {
+            color: #666;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body onload="readData()">
@@ -297,6 +320,22 @@
                     var formattedDate = day + '/' + month + '/' + year + ', ' + hours + ':' + minutes + ':' + seconds;
                     dateSpan.innerText = "Uploaded on: " + formattedDate;
                     detailsDiv.appendChild(dateSpan);
+
+                    // Add tag badge
+                    if (item.Tag) {
+                        var tagBadge = document.createElement("span");
+                        tagBadge.className = "tag-badge tag-" + item.Tag;
+                        tagBadge.innerText = item.Tag.toUpperCase();
+                        detailsDiv.appendChild(tagBadge);
+                    }
+
+                    // Add uploader email if available
+                    if (item.UploaderEmail) {
+                        var emailSpan = document.createElement("span");
+                        emailSpan.className = "uploader-email";
+                        emailSpan.innerText = "Uploaded by: " + item.UploaderEmail;
+                        detailsDiv.appendChild(emailSpan);
+                    }
 
                     alertDiv.appendChild(detailsDiv);
 
