@@ -64,7 +64,7 @@
         var reader;
         var classroomId = localStorage.getItem('CLASSROOM_ID'); // Retrieve CLASSROOM_ID from local storage
         var isHomeworkUpload = localStorage.getItem('isHomeworkUpload') === 'true'; // Check if uploading homework
-        var uploaderEmail = localStorage.getItem('uploaderEmail') || localStorage.getItem('userEmail') || 'Unknown';
+        var uploaderEmail = localStorage.getItem('uploaderEmail') || localStorage.getItem('student_email') || localStorage.getItem('userEmail') || 'Unknown';
         var uploaderType = localStorage.getItem('uploaderType') || 'admin'; // student or admin
 
         //------------------------------------------BACK BUTTON HANDLER-----------------------
