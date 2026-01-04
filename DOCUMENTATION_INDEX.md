@@ -1,23 +1,26 @@
-# Admin Dashboard Logging Feature - Documentation Index
+# House of Tutors - Documentation Index
 
 Welcome! This index helps you find the right documentation for your needs.
 
 ## 🚀 Quick Start
 
-**New to this feature?** Start here:
-1. Read [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md) for overview
-2. Follow [TEST_INFO_ENDPOINT.md](TEST_INFO_ENDPOINT.md) to test it
+**New Tutor?** Start here:
+1. Read [TUTOR_USER_MANUAL.md](TUTOR_USER_MANUAL.md) for complete usage guide
+2. Follow [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md) for logging overview
 3. Check [FINAL_SUMMARY.md](FINAL_SUMMARY.md) for complete status
 
 ## 📚 Documentation Files
 
-### For Users & Testers
+### For Tutors & End Users
 
 | File | What You'll Find | When to Use |
 |------|------------------|-------------|
-| [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md) | Complete guide, quick start, feature overview | First time learning about the feature |
+| **[TUTOR_USER_MANUAL.md](TUTOR_USER_MANUAL.md)** | **Complete tutor guide for daily usage, all features explained** | **Learning to use the platform** |
+| [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md) | Complete guide, quick start, feature overview | First time learning about the logging feature |
 | [TEST_INFO_ENDPOINT.md](TEST_INFO_ENDPOINT.md) | Step-by-step testing instructions | Testing the feature |
 | [FINAL_SUMMARY.md](FINAL_SUMMARY.md) | Complete implementation summary | Checking project status |
+| [HOMEWORK_FEATURE_DOCUMENTATION.md](HOMEWORK_FEATURE_DOCUMENTATION.md) | Homework submission feature details | Understanding homework workflow |
+| [HOMEWORK_FEATURE_UI_GUIDE.md](HOMEWORK_FEATURE_UI_GUIDE.md) | Visual guide for homework UI | Learning homework interface |
 
 ### For Developers
 
@@ -36,7 +39,10 @@ Welcome! This index helps you find the right documentation for your needs.
 
 ## 🎯 Common Scenarios
 
-### "I want to test the feature"
+### "I'm a tutor learning to use the platform"
+→ Go to [TUTOR_USER_MANUAL.md](TUTOR_USER_MANUAL.md)
+
+### "I want to test a specific feature"
 → Go to [TEST_INFO_ENDPOINT.md](TEST_INFO_ENDPOINT.md)
 
 ### "I need to understand the code"
@@ -48,6 +54,9 @@ Welcome! This index helps you find the right documentation for your needs.
 ### "I'm checking the project status"
 → Go to [FINAL_SUMMARY.md](FINAL_SUMMARY.md)
 
+### "I need help with homework feature"
+→ Go to [HOMEWORK_FEATURE_DOCUMENTATION.md](HOMEWORK_FEATURE_DOCUMENTATION.md)
+
 ### "I need to modify the UI"
 → Go to [UI_DISPLAY_DESCRIPTION.md](UI_DISPLAY_DESCRIPTION.md)
 
@@ -56,12 +65,21 @@ Welcome! This index helps you find the right documentation for your needs.
 
 ## 📊 Documentation Statistics
 
-- **Total Files:** 7 documentation files
-- **Total Size:** ~30KB
-- **Coverage:** Testing, implementation, UI, examples, summaries
+- **Total Files:** 15+ documentation files
+- **Total Size:** ~350KB
+- **Coverage:** User manual, testing, implementation, UI, examples, summaries
 - **Status:** Complete and up-to-date
 
 ## 🔍 What Each File Contains
+
+### 0. TUTOR_USER_MANUAL.md (NEW - 29KB)
+- **Complete guide for tutors**
+- Getting started guide
+- All features explained
+- Daily usage instructions
+- Troubleshooting & FAQs
+- Quick reference cards
+- Best practices
 
 ### 1. README_LOGGING_FEATURE.md (6.5KB)
 - Project overview
@@ -123,6 +141,11 @@ Welcome! This index helps you find the right documentation for your needs.
 - Support resources
 
 ## 🎓 Learning Path
+
+### New Tutor Path
+1. Start with TUTOR_USER_MANUAL.md (comprehensive guide)
+2. Practice with test classrooms
+3. Review specific features as needed
 
 ### Beginner Path
 1. Start with README_LOGGING_FEATURE.md
@@ -191,6 +214,12 @@ Each feature is documented across multiple files:
 
 ## 🆘 Getting Help
 
+### For Tutor Usage Questions
+1. Check TUTOR_USER_MANUAL.md for comprehensive guide
+2. Review specific feature sections
+3. Check troubleshooting section
+4. Contact support via WhatsApp: +23057882383
+
 ### For Testing Issues
 1. Check TEST_INFO_ENDPOINT.md troubleshooting section
 2. Review example_logs_structure.json for expected data
@@ -208,14 +237,15 @@ Each feature is documented across multiple files:
 
 ## 📅 Last Updated
 
-- Documentation: October 10, 2025
+- Documentation: January 4, 2026
 - Status: Complete and Current
-- Version: 1.0.0
+- Version: 2.0.0 (Added Tutor User Manual)
 
 ## ✅ Verification Checklist
 
 When using this documentation:
-- [ ] Read README_LOGGING_FEATURE.md first
+- [ ] Read TUTOR_USER_MANUAL.md first if you're a new tutor
+- [ ] Read README_LOGGING_FEATURE.md for logging features
 - [ ] Understand the requirements (FINAL_SUMMARY.md)
 - [ ] Follow testing guide (TEST_INFO_ENDPOINT.md)
 - [ ] Review code structure (IMPLEMENTATION_NOTES.md)
@@ -225,6 +255,7 @@ When using this documentation:
 ## 🎯 Documentation Goals
 
 This documentation aims to:
+- ✅ Provide comprehensive tutor user manual
 - ✅ Provide clear quick start guide
 - ✅ Explain technical implementation
 - ✅ Guide testing procedures
@@ -236,4 +267,6 @@ All goals achieved! ✨
 
 ---
 
-**Need help navigating?** Start with [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md)!
+**Need help navigating?** 
+- **Tutors:** Start with [TUTOR_USER_MANUAL.md](TUTOR_USER_MANUAL.md)!
+- **Developers:** Start with [README_LOGGING_FEATURE.md](README_LOGGING_FEATURE.md)!
