@@ -37,7 +37,7 @@
 <body onload="readData()" class="bg-gray-100">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="btn btn-dark" onclick="window.location.href='DashboardAdmin.html'">
+            <button class="btn btn-dark" id="backButton">
                 <i class="fas fa-arrow-left"></i>
             </button>
             <a class="navbar-brand mx-auto" href="#">House Of Tutors</a>
@@ -63,6 +63,23 @@
         var files = [];
         var reader;
         var classroomId = localStorage.getItem('CLASSROOM_ID'); // Retrieve CLASSROOM_ID from local storage
+        var isHomeworkUpload = localStorage.getItem('isHomeworkUpload') === 'true'; // Check if uploading homework
+        var uploaderEmail = localStorage.getItem('uploaderEmail') || localStorage.getItem('userEmail') || 'Unknown';
+        var uploaderType = localStorage.getItem('uploaderType') || 'admin'; // student or admin
+
+        //------------------------------------------BACK BUTTON HANDLER-----------------------
+        document.addEventListener('DOMContentLoaded', function() {
+            const backButton = document.getElementById('backButton');
+            if (uploaderType === 'student') {
+                backButton.onclick = function() {
+                    window.location.href = 'ClassroomCommentForStudent.html';
+                };
+            } else {
+                backButton.onclick = function() {
+                    window.location.href = 'DashboardAdmin.html';
+                };
+            }
+        });
 
         //------------------------------------------CONFIGURATIONS-----------------------
         var firebaseConfig = {
@@ -124,11 +141,16 @@
                     uploadTask.snapshot.ref.getDownloadURL().then(function(url) {
                         ImgUrl = url;
 
+                        // Determine tag based on upload type
+                        var tag = isHomeworkUpload ? "homework" : "note";
+
                         firebase.database().ref(classroomId + '_NOTES/' + id_classroom_notes).set({
                             Name: ImgName,
                             ID: id_classroom_notes,
                             Link: ImgUrl,
-                            Time: Date.now()
+                            Time: Date.now(),
+                            Tag: tag,
+                            UploaderEmail: uploaderEmail
                         });
 
                         firebase.database().ref("NUMBERS/ID_CLASSROOM_" + classroomId + '_NOTES/').set({
@@ -137,7 +159,7 @@
 
                         // Log the successful upload for the admin
                         const adminEmail = localStorage.getItem('userEmail');
-                        if (adminEmail) {
+                        if (adminEmail && uploaderType === 'admin') {
                             firebase.database().ref('ADMIN').once('value', function(adminSnapshot) {
                                 if (adminSnapshot.exists()) {
                                     const admins = adminSnapshot.val();
@@ -157,7 +179,7 @@
                         }
 
                         nativeToast({
-                            message: 'Note was uploaded successfully!',
+                            message: isHomeworkUpload ? 'Homework was uploaded successfully!' : 'Note was uploaded successfully!',
                             position: 'center',
                             rounded: true,
                             timeout: 10000,
@@ -167,8 +189,17 @@
                             closeOnClick: false
                         });
 
+                        // Clear homework upload flags
+                        localStorage.removeItem('isHomeworkUpload');
+                        localStorage.removeItem('uploaderEmail');
+                        localStorage.removeItem('uploaderType');
+
                         setTimeout(function() {
-                            location.reload();
+                            if (uploaderType === 'student') {
+                                window.location.href = 'ClassroomCommentForStudent.html';
+                            } else {
+                                location.reload();
+                            }
                         }, 2000);
 
                         document.getElementById('myimg').src = '//:0'

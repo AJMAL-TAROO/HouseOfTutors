@@ -97,6 +97,22 @@
             border-top: 1px solid #ddd;
             margin: 10px 0;
         }
+        .tag-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .tag-homework {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .tag-note {
+            background-color: #28a745;
+            color: #fff;
+        }
     </style>
 </head>
 <body onload="readData()">
@@ -181,6 +197,8 @@
         //------------------------------------------LOAD DATA FROM FIREBASE REALTIME DATABASE-----------------------
         function readData() {
             var storageFolder = localStorage.getItem('storage_folder');
+            var studentEmail = localStorage.getItem('student_email');
+            
             if (!storageFolder) {
                 console.error('No storage folder found in localStorage');
                 return;
@@ -192,7 +210,15 @@
             itemsRef.once('value', function(snapshot) {
                 var items = [];
                 snapshot.forEach(function(item_snapshot) {
-                    items.push(item_snapshot.val());
+                    var item = item_snapshot.val();
+                    
+                    // Filter logic: students can only see their own homework
+                    if (item.Tag === 'homework' && item.UploaderEmail !== studentEmail) {
+                        // Skip this homework note as it belongs to another student
+                        return;
+                    }
+                    
+                    items.push(item);
                 });
 
                 // Sort items by ID in descending order
@@ -264,6 +290,14 @@
                     var formattedDate = day + '/' + month + '/' + year + ', ' + hours + ':' + minutes + ':' + seconds;
                     dateSpan.innerText = "Uploaded on: " + formattedDate;
                     detailsDiv.appendChild(dateSpan);
+
+                    // Add tag badge
+                    if (item.Tag) {
+                        var tagBadge = document.createElement("span");
+                        tagBadge.className = "tag-badge tag-" + item.Tag;
+                        tagBadge.innerText = item.Tag.toUpperCase();
+                        detailsDiv.appendChild(tagBadge);
+                    }
 
                     alertDiv.appendChild(detailsDiv);
                     notesContainer.appendChild(alertDiv);
