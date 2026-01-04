@@ -189,13 +189,16 @@
                             closeOnClick: false
                         });
 
+                        // Store uploaderType before clearing localStorage
+                        var currentUploaderType = uploaderType;
+
                         // Clear homework upload flags
                         localStorage.removeItem('isHomeworkUpload');
                         localStorage.removeItem('uploaderEmail');
                         localStorage.removeItem('uploaderType');
 
                         setTimeout(function() {
-                            if (uploaderType === 'student') {
+                            if (currentUploaderType === 'student') {
                                 window.location.href = 'ClassroomCommentForStudent.html';
                             } else {
                                 location.reload();
