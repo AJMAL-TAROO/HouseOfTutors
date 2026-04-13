@@ -49,19 +49,27 @@
                 </div>
                 <div class="modal-body">
                     <form id="attendanceForm">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Student Name</th>
-                                    <th>Present</th>
-                                    <th>Absent</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attendanceTableBody">
-                                <!-- Rows will be populated dynamically -->
-                            </tbody>
-                        </table>
-                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                        <div class="mb-3">
+                            <label for="classroomSelect" class="font-weight-bold">Select Classroom</label>
+                            <select id="classroomSelect" class="form-control mt-1">
+                                <option value="">-- Select a classroom --</option>
+                            </select>
+                        </div>
+                        <div id="attendanceTableWrapper" style="display:none;">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Present</th>
+                                        <th>Absent</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceTableBody">
+                                    <!-- Rows will be populated dynamically -->
+                                </tbody>
+                            </table>
+                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -70,7 +78,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -101,17 +109,31 @@
         });
         calendar.render();
 
-        // Populate student table ONLY from admin's STUDENTS sub node
         const attendanceTableBody = document.getElementById('attendanceTableBody');
+        const attendanceTableWrapper = document.getElementById('attendanceTableWrapper');
+        const classroomSelect = document.getElementById('classroomSelect');
         let students = {};
+        let cachedAdminKey = null;
+
+        // Parse a comma-separated ID string into a trimmed, non-empty array
+        function parseIds(str) {
+            return str ? str.split(',').map(s => s.trim()).filter(s => s) : [];
+        }
+
+        // Build a display label for a classroom option
+        function classroomLabel(classroom, roomId) {
+            return (classroom && classroom.TITLE) ? `${classroom.TITLE} (${roomId})` : `Classroom ${roomId}`;
+        }
 
         async function getAdminKey() {
+            if (cachedAdminKey) return cachedAdminKey;
             const adminRef = ref(database, "ADMIN");
             const adminSnapshot = await get(adminRef);
             if (adminSnapshot.exists()) {
                 const admins = adminSnapshot.val();
                 for (const key in admins) {
                     if (admins[key].EMAIL === adminEmail) {
+                        cachedAdminKey = key;
                         return key;
                     }
                 }
@@ -119,78 +141,131 @@
             return null;
         }
 
-        async function loadAdminStudents() {
-            attendanceTableBody.innerHTML = '';
+        // Populate classroom dropdown from admin's VIRTUAL_ROOMS
+        async function populateClassroomDropdown() {
+            classroomSelect.innerHTML = '<option value="">-- Select a classroom --</option>';
             if (!adminEmail) return;
 
             const adminKey = await getAdminKey();
-            if (adminKey) {
-                const adminRef = ref(database, `ADMIN/${adminKey}`);
-                const adminSnapshot = await get(adminRef);
-                if (adminSnapshot.exists()) {
-                    const adminData = adminSnapshot.val();
-                    const studentsStr = adminData.STUDENTS || "";
-                    const studentIds = studentsStr.split(',').map(s => s.trim()).filter(s => s);
-                    students = {};
-                    for (const studentId of studentIds) {
-                        const studentRef = ref(database, `STUDENTS/${studentId}`);
-                        const studentSnapshot = await get(studentRef);
-                        if (studentSnapshot.exists()) {
-                            const student = studentSnapshot.val();
-                            students[studentId] = student;
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${student.FULL_NAME}</td>
-                                <td>
-                                    <input type="radio" name="attendance_${studentId}" value="present" />
-                                </td>
-                                <td>
-                                    <input type="radio" name="attendance_${studentId}" value="absent" />
-                                </td>
-                            `;
-                            row.setAttribute('data-student-id', studentId);
-                            attendanceTableBody.appendChild(row);
-                        }
-                    }
-                }
+            if (!adminKey) return;
+
+            const adminRef = ref(database, `ADMIN/${adminKey}`);
+            const adminSnapshot = await get(adminRef);
+            if (!adminSnapshot.exists()) return;
+
+            const adminData = adminSnapshot.val();
+            const virtualRooms = parseIds(adminData.VIRTUAL_ROOMS);
+
+            for (const roomId of virtualRooms) {
+                const classroomRef = ref(database, `CLASSROOMS/CLASSROOM_${roomId}`);
+                const classroomSnapshot = await get(classroomRef);
+                const option = document.createElement('option');
+                option.value = roomId;
+                option.text = classroomLabel(classroomSnapshot.exists() ? classroomSnapshot.val() : null, roomId);
+                classroomSelect.appendChild(option);
             }
         }
 
-        // Open attendance modal
-        async function openAttendanceModal(date) {
+        // Load students enrolled in the selected classroom
+        async function loadStudentsForClassroom(classroomId) {
+            attendanceTableBody.innerHTML = '';
+            students = {};
+
+            if (!classroomId) {
+                attendanceTableWrapper.style.display = 'none';
+                return;
+            }
+
+            const studentsRef = ref(database, 'STUDENTS');
+            const studentsSnapshot = await get(studentsRef);
+            if (!studentsSnapshot.exists()) {
+                attendanceTableWrapper.style.display = 'none';
+                return;
+            }
+
+            const allStudents = studentsSnapshot.val();
+            for (const studentId in allStudents) {
+                const student = allStudents[studentId];
+                const rooms = parseIds(student.VIRTUAL_ROOMS);
+                if (rooms.includes(classroomId)) {
+                    students[studentId] = student;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.FULL_NAME}</td>
+                        <td>
+                            <input type="radio" name="attendance_${studentId}" value="present" />
+                        </td>
+                        <td>
+                            <input type="radio" name="attendance_${studentId}" value="absent" />
+                        </td>
+                    `;
+                    row.setAttribute('data-student-id', studentId);
+                    attendanceTableBody.appendChild(row);
+                }
+            }
+
+            attendanceTableWrapper.style.display = 'block';
+        }
+
+        // Pre-fill attendance from Firebase for the selected date and classroom
+        async function loadAttendanceForDate(date, classroomId) {
+            if (!date || !classroomId) return;
+            const [year, month, day] = date.split('-');
+            const adminKey = await getAdminKey();
+            if (!adminKey) return;
+
+            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}/CLASSROOM_${classroomId}`);
+            const snapshot = await get(attendanceRef);
+            const attendanceData = snapshot.val();
+
+            Array.from(attendanceTableBody.children).forEach((row) => {
+                const studentId = row.getAttribute('data-student-id');
+                const presentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="present"]`);
+                const absentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="absent"]`);
+
+                if (attendanceData && attendanceData[studentId]) {
+                    const status = attendanceData[studentId].attendance;
+                    presentRadio.checked = status === 'present';
+                    absentRadio.checked = status === 'absent';
+                } else {
+                    presentRadio.checked = false;
+                    absentRadio.checked = false;
+                }
+            });
+        }
+
+        // Open attendance modal for a given date
+        function openAttendanceModal(date) {
             const modal = document.getElementById('attendanceModal');
             modal.setAttribute('data-date', date);
 
-            const [year, month, day] = date.split('-');
-            const adminKey = await getAdminKey();
-
-            // Fetch attendance data for the selected date for this admin only
-            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}`);
-            onValue(attendanceRef, (snapshot) => {
-                const attendanceData = snapshot.val();
-
-                Array.from(attendanceTableBody.children).forEach((row) => {
-                    const studentId = row.getAttribute('data-student-id');
-                    const presentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="present"]`);
-                    const absentRadio = row.querySelector(`input[name="attendance_${studentId}"][value="absent"]`);
-
-                    if (attendanceData && attendanceData[studentId]) {
-                        const status = attendanceData[studentId].attendance;
-                        presentRadio.checked = status === 'present';
-                        absentRadio.checked = status === 'absent';
-                    } else {
-                        presentRadio.checked = false;
-                        absentRadio.checked = false;
-                    }
-                });
-            });
+            // Reset classroom selection and hide table
+            classroomSelect.value = '';
+            attendanceTableBody.innerHTML = '';
+            attendanceTableWrapper.style.display = 'none';
 
             $(modal).modal('show');
         }
 
+        // When classroom is changed inside the modal, reload students and attendance
+        classroomSelect.addEventListener('change', async function() {
+            const classroomId = this.value;
+            await loadStudentsForClassroom(classroomId);
+            if (classroomId) {
+                const date = document.getElementById('attendanceModal').getAttribute('data-date');
+                await loadAttendanceForDate(date, classroomId);
+            }
+        });
+
         // Handle attendance form submission
         document.getElementById('attendanceForm').addEventListener('submit', async(event) => {
             event.preventDefault();
+
+            const classroomId = classroomSelect.value;
+            if (!classroomId) {
+                alert('Please select a classroom first.');
+                return;
+            }
 
             const date = document.getElementById('attendanceModal').getAttribute('data-date');
             const [year, month, day] = date.split('-');
@@ -216,8 +291,8 @@
                 }
             });
 
-            // Save attendance under adminKey
-            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}`);
+            // Save attendance under adminKey/CLASSROOM_<classroomId>
+            const attendanceRef = ref(database, `ATTENDANCE/${year}/${month}/${day}/${adminKey}/CLASSROOM_${classroomId}`);
             await set(attendanceRef, attendanceData)
                 .then(() => {
                     alert('Attendance recorded successfully!');
@@ -229,9 +304,9 @@
                 });
         });
 
-        // Load students for this admin on page load
+        // Load classroom dropdown on page load
         window.onload = function() {
-            loadAdminStudents();
+            populateClassroomDropdown();
         };
     </script>
 </body>
