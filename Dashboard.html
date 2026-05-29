@@ -210,37 +210,88 @@
             });
         }
 
-        onValue(classroomsRef, (snapshot) => {
-            const classrooms = snapshot.val();
+        // Fetch the student's admin VR link
+        let studentAdminVrLink = '';
 
-            // Clear existing content
-            classroomContainer.innerHTML = "";
+        // First, fetch the admin who owns this student
+        if (studentKey) {
+            const adminRef = ref(database, "ADMIN");
+            onValue(adminRef, (adminSnapshot) => {
+                if (adminSnapshot.exists()) {
+                    const admins = adminSnapshot.val();
+                    for (const key in admins) {
+                        const adminStudents = admins[key].STUDENTS || '';
+                        if (adminStudents.includes(studentKey)) {
+                            studentAdminVrLink = admins[key].VR_LINK || '';
+                            console.log('Found admin VR link:', studentAdminVrLink);
+                            break;
+                        }
+                    }
+                }
 
-            // Iterate over classrooms and filter by allowed IDs
-            Object.values(classrooms).forEach((classroom) => {
-                if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
-                    // Generate the VR link dynamically
-                    const classroomLinkKey = `VR_LINK`;
-                    const classroomLink = classroom[classroomLinkKey] || "#";
+                // Now fetch and render classrooms after we have the admin VR link
+                renderClassrooms();
+            });
+        } else {
+            // If no student key, still render classrooms but without VR link
+            renderClassrooms();
+        }
+
+        function renderClassrooms() {
+            onValue(classroomsRef, (snapshot) => {
+                const classrooms = snapshot.val();
+
+                // Clear existing content
+                classroomContainer.innerHTML = "";
+
+                // Iterate over classrooms and filter by allowed IDs
+                Object.values(classrooms).forEach((classroom) => {
+                    if (allowedClassroomIds.includes(classroom.CLASSROOM_ID)) {
+                        // Use admin's VR_LINK instead of classroom's VR_LINK
+                        const classroomLink = studentAdminVrLink || "#";
                    // Create the card
                     const card = document.createElement("div");
                     card.className = "card bg-purple-800 text-white w-96 h-64 shadow-lg cursor-pointer";
                     card.innerHTML = `
-                        <div class="card-body flex flex-col justify-between" onclick="redirectToClassroomCommentForStudent(${classroom.CLASSROOM_ID})">
+                        <div class="card-body flex flex-col justify-between">
                             <h1 class="card-title text-3xl">${classroom.TITLE}</h1>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); openModal('${classroomLink}')">Join VR Class</button>
+                                <button class="btn btn-outline text-white border-white join-vr-btn">Join VR Class</button>
                             </div>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-outline text-white border-white" onclick="event.stopPropagation(); storeStorageFolder('${classroom.STORAGE_FOLDER}')">View Notes</button>
+                                <button class="btn btn-outline text-white border-white view-notes-btn">View Notes</button>
                             </div>
                         </div>
                     `;
+
+                    // Add event listeners after creating the card
+                    const cardBody = card.querySelector('.card-body');
+                    const joinVrBtn = card.querySelector('.join-vr-btn');
+                    const viewNotesBtn = card.querySelector('.view-notes-btn');
+
+                    // Card body click - redirect to comments
+                    cardBody.addEventListener('click', () => {
+                        redirectToClassroomCommentForStudent(classroom.CLASSROOM_ID);
+                    });
+
+                    // Join VR button - prevent propagation and open modal
+                    joinVrBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openModal(classroomLink);
+                    });
+
+                    // View Notes button - prevent propagation and store folder
+                    viewNotesBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        storeStorageFolder(classroom.STORAGE_FOLDER);
+                    });
+
                     classroomContainer.appendChild(card);
                 }
             });
 
         });
+        } // End of renderClassrooms function
 
         // Define the function in the global scope
         window.storeStorageFolder = function(storageFolder) {
@@ -249,8 +300,13 @@
         };
 
         window.openModal = function(url) {
-            document.getElementById('vrIframe').src = url;
-            document.getElementById('vrModal').classList.add('modal-open');
+            // Validate VR link before opening
+            if (!url || url.trim() === '' || url.trim() === '#') {
+                alert('VR Link is not configured for this classroom. Please contact your administrator.');
+                return;
+            }
+
+            window.open(url, '_blank');
         };
 
         window.closeModal = function() {
